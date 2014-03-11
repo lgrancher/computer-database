@@ -29,8 +29,11 @@ public class ListeComputer extends HttpServlet
 			
 			Requetes computer = new Requetes(st);
 			ArrayList<ComputerDAO> listeComputer = computer.getListComputers();
-	
+			int nbComputer = computer.nombreComputer();
+			
 			request.setAttribute("listeComputer", listeComputer);
+			request.setAttribute("nombreComputer", nbComputer);
+			
 			ConnectionJDBC.fermerConnection(connection);	
 		} 
 		

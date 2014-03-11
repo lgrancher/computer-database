@@ -3,7 +3,7 @@
 
 <%@ page import="java.util.ArrayList" %>
 <section id="main">
-	<h1 id="homeTitle">456 Computers found</h1>
+	<h1 id="homeTitle"><c:out value="${nombreComputer}"/> computers</h1>
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search"

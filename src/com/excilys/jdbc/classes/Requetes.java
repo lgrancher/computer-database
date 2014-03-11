@@ -52,4 +52,12 @@ public class Requetes
 
 		return listeCompany;
 	}
+	
+	public int nombreComputer() throws SQLException
+	{
+		ResultSet rs = st.executeQuery("select count(*) from computer");
+		rs.next();
+
+		return rs.getInt(1);
+	}
 }
