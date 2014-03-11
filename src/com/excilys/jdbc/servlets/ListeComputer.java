@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.jdbc.classes.Computer;
+import com.excilys.jdbc.classes.ComputerDAO;
+import com.excilys.jdbc.classes.Requetes;
 import com.excilys.jdbc.classes.ConnectionJDBC;
 
-public class DataBase extends HttpServlet 
+public class ListeComputer extends HttpServlet 
 {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
@@ -26,10 +27,10 @@ public class DataBase extends HttpServlet
 			connection = ConnectionJDBC.connection();
 			Statement st = connection.createStatement();
 			
-			Computer computer = new Computer(st);
-			ArrayList<String[]> listeComputer = computer.getListComputers();
-			
-			request.setAttribute("reponse", listeComputer);
+			Requetes computer = new Requetes(st);
+			ArrayList<ComputerDAO> listeComputer = computer.getListComputers();
+	
+			request.setAttribute("listeComputer", listeComputer);
 			ConnectionJDBC.fermerConnection(connection);	
 		} 
 		

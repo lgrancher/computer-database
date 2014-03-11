@@ -12,23 +12,23 @@
 				value="Filter by name"
 				class="btn primary">
 		</form>
-		<a class="btn success" id="add" href="addComputer.jsp">Add Computer</a>
+		<a class="btn success" id="add" href="ListeCompany">Add Computer</a>
 	</div>
-
 		<table>
 			<thead>
-				<tr>
-					<c:forEach var="titres" items="${reponse[0]}" >
-					<th>${titres}</th>
-					</c:forEach>
-				</tr>
+				<tr><c:set var="attribut" value="${listeComputer[0]['class']['declaredFields']}"/>
+					<c:forEach var="titre" items="${attribut}">
+						<th>${titre.name}</th>			
+				</c:forEach>
 			</thead>
 			<tbody>
-				<c:forEach var="tableau" items="${reponse}" begin="1">
+				<c:forEach var="computer" items="${listeComputer}">
 				<tr>
-					<c:forEach var="ligne" items="${tableau}" >
-					<td>${ligne}</td>
-					</c:forEach>
+					<td>${computer.id}</td>
+					<td>${computer.name}</td>
+					<td>${computer.introduced}</td>
+					<td>${computer.discontinued}</td>
+					<td>${computer.company_id}</td>
 				</tr>
 				</c:forEach>
 			</tbody>
