@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,8 +73,20 @@ public class ComputerDAO
 		st.setString(1,computer.getName());
 		st.setDate(2, introducedDate);
 		st.setDate(3,(Date) discontinuedDate);
-		st.setLong(4, computer.getCompany().getId());
+		
+		if(computer.getCompany().getId()>0)
+		{
+			st.setLong(4, computer.getCompany().getId());
+		}
+		
+		else
+		{
+			st.setNull(4, Types.BIGINT);
+		}
+		
 		st.executeUpdate();	
+		
+		ConnectionJDBC.close(connection);
 	}
 	
 	public List<Computer> find(String name) throws SQLException
@@ -110,5 +123,50 @@ public class ComputerDAO
 		ConnectionJDBC.close(connection);
 		
 		return listeComputers;
+	}
+	
+	public Computer find(Long id) throws SQLException
+	{
+		Connection connection = ConnectionJDBC.getInstance();
+		String sql = "select * from computer where id=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setLong(1, id);
+		
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		
+		Computer computer = new Computer();
+		Company company = new Company();
+		
+		computer.setId(rs.getLong(1));
+		computer.setName(rs.getString(2));
+		computer.setIntroduced(rs.getDate(3));
+		computer.setDiscontinued(rs.getDate(4));
+		company.setId(rs.getLong(5));		
+		computer.setCompany(company);
+		
+		ConnectionJDBC.close(connection);
+		
+		return computer;
+	}
+	
+	public void update(Computer computer) throws SQLException
+	{
+		Connection connection = ConnectionJDBC.getInstance();
+		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
+		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
+		
+		st.setString(1, computer.getName());
+		st.setDate(2, introducedDate);
+		st.setDate(3, discontinuedDate);
+		st.setLong(4, computer.getCompany().getId());
+		st.setLong(5, computer.getId());
+		
+		st.executeUpdate();
+		
+		ConnectionJDBC.close(connection);
 	}
 }

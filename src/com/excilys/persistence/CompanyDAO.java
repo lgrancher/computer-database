@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.om.Company;
+import com.excilys.om.Computer;
 
 public class CompanyDAO 
 {
@@ -51,6 +52,26 @@ public class CompanyDAO
 		ConnectionJDBC.close(connection);
 		
 		return listeCompany;
+	}
+	
+	public Company find(Long id) throws SQLException
+	{
+		Connection connection = ConnectionJDBC.getInstance();
+		String sql = "select * from computer where id=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setLong(1, id);
+		
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		
+		Company company = new Company();
+		
+		company.setId(rs.getLong(1));
+		company.setName(rs.getString(2));
+		
+		ConnectionJDBC.close(connection);
+		
+		return company;
 	}
 	
 }

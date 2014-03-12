@@ -31,7 +31,7 @@ public class ListeComputer extends HttpServlet
 		
 		catch (SQLException e)
 		{
-			request.setAttribute("listeComputer", "Problème de connexion");
+			request.setAttribute("listeComputer", new ArrayList<Computer>());
 			e.printStackTrace();
 		} 
 		

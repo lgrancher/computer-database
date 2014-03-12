@@ -36,4 +36,12 @@
     <servlet-name>FilterByName</servlet-name>
     <url-pattern>/FilterByName</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>UpdateComputer</servlet-name>
+    <servlet-class>com.excilys.servlets.UpdateComputer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateComputer</servlet-name>
+    <url-pattern>/UpdateComputer</url-pattern>
+  </servlet-mapping>
 </web-app>

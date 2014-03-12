@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Company;
+import com.excilys.om.Computer;
 import com.excilys.persistence.CompanyDAO;
 
 public class ListeCompany extends HttpServlet
@@ -28,7 +29,7 @@ public class ListeCompany extends HttpServlet
 		
 		catch (SQLException e)
 		{
-			request.setAttribute("reponse", "Problème de connexion");
+			request.setAttribute("listeCompany", new ArrayList<Company>());
 			e.printStackTrace();
 		} 
 		

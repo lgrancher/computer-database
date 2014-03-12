@@ -20,7 +20,9 @@
 				<tr><c:set var="attribut" value="${listeComputer[0]['class']['declaredFields']}"/>
 					<c:forEach var="titre" items="${attribut}">
 						<th>${titre.name}</th>			
-				</c:forEach>
+					</c:forEach>
+					<th>Modifier</th>
+				</tr>
 			</thead>
 			<tbody>
 				<c:forEach var="computer" items="${listeComputer}">
@@ -30,6 +32,7 @@
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name}</td>
+					<td><a class="btn success" id="modif" href="UpdateComputer?id=${computer.id}">Modifier</a></td>
 				</tr>
 				</c:forEach>
 			</tbody>
