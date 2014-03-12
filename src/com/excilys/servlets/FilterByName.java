@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,32 +13,38 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.om.Computer;
 import com.excilys.persistence.ComputerDAO;
 
-public class ListeComputer extends HttpServlet 
-{
-	private static final long serialVersionUID = 4062844883931660436L;
+/**
+ * Servlet implementation class FilterByName
+ */
+@WebServlet("/FilterByName")
+public class FilterByName extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{	
+	{
+		ComputerDAO computerDAO = ComputerDAO.getInstance();
+		String search = request.getParameter("search");
+
 		try 
 		{
-			ComputerDAO computerDAO = ComputerDAO.getInstance();
+			ArrayList<Computer> listeComputers = (ArrayList<Computer>) computerDAO.find(search);
+			request.setAttribute("listeComputer", listeComputers);
 			
-			ArrayList<Computer> listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll();
-			int nbComputer = 0;
-			
-			request.setAttribute("listeComputer", listeComputer);
-			request.setAttribute("nombreComputer", nbComputer);
 		} 
 		
-		catch (SQLException e)
+		catch (SQLException e) 
 		{
 			request.setAttribute("listeComputer", "Problème de connexion");
 			e.printStackTrace();
-		} 
+		}
 		
 		finally
 		{
 			request.getRequestDispatcher("Affichage.jsp").forward(request, response);
 		}
 	}
+
 }

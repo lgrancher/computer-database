@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>index</welcome-file>
   </welcome-file-list>
- 
   <servlet>
     <servlet-name>ListeComputer</servlet-name>
     <servlet-class>com.excilys.servlets.ListeComputer</servlet-class>
@@ -13,7 +12,6 @@
     <servlet-name>ListeComputer</servlet-name>
     <url-pattern>/index</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>ListeCompany</servlet-name>
     <servlet-class>com.excilys.servlets.ListeCompany</servlet-class>
@@ -22,7 +20,6 @@
     <servlet-name>ListeCompany</servlet-name>
     <url-pattern>/ListeCompany</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>AjouterComputer</servlet-name>
     <servlet-class>com.excilys.servlets.AjouterComputer</servlet-class>
@@ -31,5 +28,12 @@
     <servlet-name>AjouterComputer</servlet-name>
     <url-pattern>/AjouterComputer</url-pattern>
   </servlet-mapping>
-
+  <servlet>
+    <servlet-name>FilterByName</servlet-name>
+    <servlet-class>com.excilys.servlets.FilterByName</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FilterByName</servlet-name>
+    <url-pattern>/FilterByName</url-pattern>
+  </servlet-mapping>
 </web-app>

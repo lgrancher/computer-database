@@ -62,9 +62,45 @@ public class ComputerDAO
 	public void create(Computer computer) throws SQLException
 	{
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "insert into computer values(\""+computer.getName()+"\",\""+computer.getIntroduced()+"\",\""+computer.getDiscontinued()+"\",\""+computer.getCompany()+"\"";
+		String sql = "insert into computer values(\""+computer.getName()+"\",\""+computer.getIntroduced()+"\",\""+computer.getDiscontinued()+"\",\""+computer.getCompany().getId()+"\"";
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		st.executeUpdate();	
+	}
+	
+	public List<Computer> find(String name) throws SQLException
+	{
+		Connection connection = ConnectionJDBC.getInstance();
+		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		StringBuilder search = new StringBuilder("%");
+		search.append(name);
+		search.append("%");
+		
+		st.setString(1,search.toString());
+		
+		ResultSet rs = st.executeQuery();
+		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
+		
+		while(rs.next())
+		{
+			Computer computer = new Computer();
+			Company company = new Company();
+			
+			computer.setId(rs.getLong(1));
+			computer.setName(rs.getString(2));
+			computer.setIntroduced(rs.getDate(3));
+			computer.setDiscontinued(rs.getDate(4));
+			company.setId(rs.getLong(5));
+			company.setName(rs.getString(6));			
+			computer.setCompany(company);
+			
+			listeComputers.add(computer); 
+		}
+
+		ConnectionJDBC.close(connection);
+		
+		return listeComputers;
 	}
 }
