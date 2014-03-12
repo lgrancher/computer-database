@@ -4,24 +4,32 @@
   <welcome-file-list>
     <welcome-file>index</welcome-file>
   </welcome-file-list>
-  
+ 
   <servlet>
     <servlet-name>ListeComputer</servlet-name>
-    <servlet-class>com.excilys.jdbc.servlets.ListeComputer</servlet-class>
+    <servlet-class>com.excilys.servlets.ListeComputer</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ListeComputer</servlet-name>
     <url-pattern>/index</url-pattern>
   </servlet-mapping>
-  
-   <servlet>
+
+  <servlet>
     <servlet-name>ListeCompany</servlet-name>
-    <servlet-class>com.excilys.jdbc.servlets.ListeCompany</servlet-class>
+    <servlet-class>com.excilys.servlets.ListeCompany</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ListeCompany</servlet-name>
     <url-pattern>/ListeCompany</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+    <servlet-name>AjouterComputer</servlet-name>
+    <servlet-class>com.excilys.servlets.AjouterComputer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AjouterComputer</servlet-name>
+    <url-pattern>/AjouterComputer</url-pattern>
+  </servlet-mapping>
+
 </web-app>

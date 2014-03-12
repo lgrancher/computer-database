@@ -1,30 +1,26 @@
-package com.excilys.jdbc.classes;
+package com.excilys.om;
 
 import java.util.Date;
 
-public class ComputerDAO 
+public class Computer 
 {
-	private int id;
+	private long id;
 	private String name;
 	private Date introduced;
 	private Date discontinued;
-	private String company_name;
+	private Company company;
 	
-	public ComputerDAO(int id, String name, Date introduced, Date discontinued, String company_name)
+	public Computer()
 	{
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.company_name = company_name;
+
 	}
 
-	public int getId() 
+	public long getId() 
 	{
 		return id;
 	}
 
-	public void setId(int id) 
+	public void setId(long id) 
 	{
 		this.id = id;
 	}
@@ -59,14 +55,14 @@ public class ComputerDAO
 		this.discontinued = discontinued;
 	}
 
-	public String getCompany_name() 
+	public Company getCompany() 
 	{
-		return company_name;
+		return company;
 	}
 
-	public void setCompany_name(String company_name) 
+	public void setCompany(Company company) 
 	{
-		this.company_name = company_name;
+		this.company = company;
 	}
 	
 	

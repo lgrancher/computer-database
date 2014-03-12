@@ -1,9 +1,10 @@
 <jsp:include page="include/header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ page import="java.util.ArrayList" %>
 <section id="main">
-	<h1 id="homeTitle"><c:out value="${nombreComputer}"/> computers</h1>
+	<h1 id="homeTitle">${fn:length(listeComputer)} computers</h1>
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search"
@@ -28,7 +29,7 @@
 					<td>${computer.name}</td>
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
-					<td>${computer.company_name}</td>
+					<td>${computer.company.name}</td>
 				</tr>
 				</c:forEach>
 			</tbody>
