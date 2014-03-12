@@ -1,6 +1,7 @@
 package com.excilys.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -62,9 +63,16 @@ public class ComputerDAO
 	public void create(Computer computer) throws SQLException
 	{
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "insert into computer values(\""+computer.getName()+"\",\""+computer.getIntroduced()+"\",\""+computer.getDiscontinued()+"\",\""+computer.getCompany().getId()+"\"";
+		String sql = "insert into computer values(default,?,?,?,?)";
 		PreparedStatement st = connection.prepareStatement(sql);
-		
+ 
+		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
+		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
+
+		st.setString(1,computer.getName());
+		st.setDate(2, introducedDate);
+		st.setDate(3,(Date) discontinuedDate);
+		st.setLong(4, computer.getCompany().getId());
 		st.executeUpdate();	
 	}
 	
