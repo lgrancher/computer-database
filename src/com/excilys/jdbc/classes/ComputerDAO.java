@@ -8,15 +8,15 @@ public class ComputerDAO
 	private String name;
 	private Date introduced;
 	private Date discontinued;
-	private int company_id;
+	private String company_name;
 	
-	public ComputerDAO(int id, String name, Date introduced, Date discontinued, int company_id)
+	public ComputerDAO(int id, String name, Date introduced, Date discontinued, String company_name)
 	{
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company_id = company_id;
+		this.company_name = company_name;
 	}
 
 	public int getId() 
@@ -59,14 +59,14 @@ public class ComputerDAO
 		this.discontinued = discontinued;
 	}
 
-	public int getCompany_id() 
+	public String getCompany_name() 
 	{
-		return company_id;
+		return company_name;
 	}
 
-	public void setCompany_id(int company_id) 
+	public void setCompany_name(String company_name) 
 	{
-		this.company_id = company_id;
+		this.company_name = company_name;
 	}
 	
 	
