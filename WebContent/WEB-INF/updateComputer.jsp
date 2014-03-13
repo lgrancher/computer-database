@@ -4,29 +4,26 @@
 <section id="main">
 
 	<h1>Update Computer</h1>
-	
-	<form action="UpdateComputer" method="POST">
+
+	<form id="form" method="POST" action="">
 		<fieldset>
 			<div class="clearfix">
-				<label for="name">Computer name:</label>
+				<label for="name">Computer name :</label>
 				<div class="input">
-					<input type="text" name="name" value="<c:out value="${computer.name}"/>" required />
-					<span class="help-inline">Required</span>
+					<input type="text" name="name" data-validation="required" value="<c:out value="${computer.name}"/>" class="required"/>
 				</div>
 			</div>
 	
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input">
-					<input type="date" name="introducedDate" value="<c:out value="${computer.introduced}"/>"pattern="YY-MM-dd"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+					<input type="date" name="introducedDate" data-validation="date" data-validation-help="yyyy-mm-dd" value="<c:out value="${computer.introduced}"/>"/>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" value="<c:out value="${computer.discontinued}"/>" pattern="YY-MM-dd"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+					<input type="date" name="discontinuedDate" data-validation="date" data-validation-help="yyyy-mm-dd" value="<c:out value="${computer.discontinued}"/>"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -49,10 +46,18 @@
 			<input type="hidden" value="${computer.id}" name="id"/>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Update" class="btn primary">
+			<input type="submit" name="submit" value="Update" class="btn primary">
 			or <a href="index" class="btn">Cancel</a>
 		</div>
 	</form>
 </section>
+<script>
+ 
+$.validate
+({
+	modules : 'location, date, security, file'
+});
+  
+</script>
 
 <jsp:include page="../include/footer.jsp" />

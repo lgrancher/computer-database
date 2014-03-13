@@ -9,23 +9,20 @@
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
 				<div class="input">
-					<input type="text" name="name" required/>
-					<span class="help-inline">Required</span>
+					<input type="text" name="name" data-validation="required"/>
 				</div>
 			</div>
 	
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input">
-					<input type="date" name="introducedDate" pattern="YY-MM-dd"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+					<input type="date" name="introducedDate"  data-validation="date" data-validation-help="yyyy-mm-dd"/>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" pattern="YY-MM-dd"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+					<input type="date" name="discontinuedDate" data-validation="date" data-validation-help="yyyy-mm-dd"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -46,5 +43,14 @@
 		</div>
 	</form>
 </section>
+
+<script>
+ 
+$.validate
+({
+	modules : 'location, date, security, file'
+});
+  
+</script>
 
 <jsp:include page="../include/footer.jsp" />
