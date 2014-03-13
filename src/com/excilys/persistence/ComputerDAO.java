@@ -92,7 +92,7 @@ public class ComputerDAO
 	public List<Computer> find(String name, int offset, int noOfRecords) throws SQLException
 	{
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? limit ?, ?";
+		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? limit ?, ?";
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		StringBuilder search = new StringBuilder("%");
@@ -100,8 +100,9 @@ public class ComputerDAO
 		search.append("%");
 		
 		st.setString(1,search.toString());
-		st.setInt(2, offset);
-		st.setInt(3, noOfRecords);
+		st.setString(2,search.toString());
+		st.setInt(3, offset);
+		st.setInt(4, noOfRecords);
 		
 		ResultSet rs = st.executeQuery();
 		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
@@ -215,7 +216,7 @@ public class ComputerDAO
 	public int size(String name) throws SQLException
 	{
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "select count(*) from computer where name like ?";
+		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		StringBuilder search = new StringBuilder("%");
@@ -223,6 +224,7 @@ public class ComputerDAO
 		search.append("%");
 		
 		st.setString(1,search.toString());
+		st.setString(2,search.toString());
 		
 		ResultSet rs = st.executeQuery();
 		rs.next();	
