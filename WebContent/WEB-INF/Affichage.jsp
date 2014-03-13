@@ -6,14 +6,14 @@
 <section id="main">
 	<h1 id="homeTitle">${fn:length(listeComputer)} computers</h1>
 	<div id="actions">
-		<form action="FilterByName" method="GET">
+		<form action="index" method="GET">
 			<input type="search" id="searchbox" name="search"
 				value="" placeholder="Search name">
 			<input type="submit" id="searchsubmit"
 				value="Filter by name"
 				class="btn primary">
 		</form>
-		<a class="btn success" id="add" href="ListeCompany">Add Computer</a>
+		<a class="btn success" id="add" href="AddComputer">Add Computer</a>
 	</div>
 		<table>
 			<thead>
@@ -33,7 +33,7 @@
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name}</td>
 					<td>
-						<a class="btn success" id="modif" href="FindComputer?id=${computer.id}">Update</a>
+						<a class="btn success" id="modif" href="UpdateComputer?id=${computer.id}">Update</a>
 						<a class="btn danger" id="supp" href=DeleteComputer?id=${computer.id} OnClick="return confirm('Do you want to delete the computer ${computer.name} ?')">Delete</a>
 					</td>
 				</tr>

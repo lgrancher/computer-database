@@ -13,36 +13,12 @@
     <url-pattern>/index</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>ListeCompany</servlet-name>
-    <servlet-class>com.excilys.servlets.ListeCompany</servlet-class>
+    <servlet-name>AddComputer</servlet-name>
+    <servlet-class>com.excilys.servlets.AddComputer</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ListeCompany</servlet-name>
-    <url-pattern>/ListeCompany</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>AjouterComputer</servlet-name>
-    <servlet-class>com.excilys.servlets.AjouterComputer</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AjouterComputer</servlet-name>
-    <url-pattern>/AjouterComputer</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>FilterByName</servlet-name>
-    <servlet-class>com.excilys.servlets.FilterByName</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FilterByName</servlet-name>
-    <url-pattern>/FilterByName</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>FindComputer</servlet-name>
-    <servlet-class>com.excilys.servlets.FindComputer</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FindComputer</servlet-name>
-    <url-pattern>/FindComputer</url-pattern>
+    <servlet-name>AddComputer</servlet-name>
+    <url-pattern>/AddComputer</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>UpdateComputer</servlet-name>

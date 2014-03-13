@@ -22,11 +22,21 @@ public class ListeComputer extends HttpServlet
 		{
 			ComputerDAO computerDAO = ComputerDAO.getInstance();
 			
-			ArrayList<Computer> listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll();
-			int nbComputer = 0;
+			String param = request.getParameter("search");
+			
+			ArrayList<Computer> listeComputer;
+			
+			if(param==null)
+			{
+				listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll();
+			}
+			
+			else
+			{
+				listeComputer = (ArrayList<Computer>) computerDAO.find(param);
+			}
 			
 			request.setAttribute("listeComputer", listeComputer);
-			request.setAttribute("nombreComputer", nbComputer);
 		} 
 		
 		catch (SQLException e)
