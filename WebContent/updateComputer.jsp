@@ -5,7 +5,7 @@
 
 	<h1>Update Computer</h1>
 	
-	<form action="AjoutComputer" method="POST">
+	<form action="UpdateComputer" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
@@ -45,6 +45,8 @@
 					</select>
 				</div>
 			</div>
+			
+			<input type="hidden" value="${computer.id}" name="id"/>
 		</fieldset>
 		<div class="actions">
 			<input type="submit" value="Update" class="btn primary">

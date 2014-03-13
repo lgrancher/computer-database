@@ -32,7 +32,7 @@
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name}</td>
-					<td><a class="btn success" id="modif" href="UpdateComputer?id=${computer.id}">Modifier</a></td>
+					<td><a class="btn success" id="modif" href="FindComputer?id=${computer.id}">Modifier</a></td>
 				</tr>
 				</c:forEach>
 			</tbody>
