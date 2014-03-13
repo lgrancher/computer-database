@@ -10,10 +10,53 @@ public class Computer
 	private Date discontinued;
 	private Company company;
 	
-	public Computer()
-	{
+	 public static class Builder 
+	 {
+        Computer computer;
+ 
+        private Builder() 
+        {
+            computer = new Computer();
+        }
+ 
+        public Builder id(Long id) 
+        {
+            if(id != null)
+                this.computer.id = id;
+            return this;
+        }
+ 
+        public Builder name(String name) 
+        {
+            this.computer.name = name;
+            return this;
+        }
+ 
+        public Builder introduced(Date introduced) 
+        {
+            this.computer.introduced = introduced;
+            return this;
+        }
+ 
+        public Builder discontinued(Date discontinued) 
+        {
+            this.computer.discontinued = discontinued;
+            return this;
+        }
+ 
+        public Builder company(Company company) 
+        {
+            this.computer.company = company;
+            return this;
+        }
+ 
+        public Computer build() 
+        {
+            return this.computer;
+        }
+	 }
 
-	}
+	public Computer(){}
 
 	public long getId() 
 	{
@@ -65,5 +108,8 @@ public class Computer
 		this.company = company;
 	}
 	
-	
+	public static Builder builder() 
+	{
+	   return new Builder();
+	}
 }

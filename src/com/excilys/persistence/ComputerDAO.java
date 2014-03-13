@@ -16,10 +16,7 @@ public class ComputerDAO
 {
 	private static ComputerDAO computerDAO;
 	
-	private ComputerDAO()
-	{
-		
-	}
+	private ComputerDAO(){}
 	
 	public static ComputerDAO getInstance()
 	{
@@ -44,16 +41,17 @@ public class ComputerDAO
 		
 		while(rs.next())
 		{
-			Computer computer = new Computer();
 			Company company = new Company();
-			
-			computer.setId(rs.getLong(1));
-			computer.setName(rs.getString(2));
-			computer.setIntroduced(rs.getDate(3));
-			computer.setDiscontinued(rs.getDate(4));
 			company.setId(rs.getLong(5));
-			company.setName(rs.getString(6));			
-			computer.setCompany(company);
+			company.setName(rs.getString(6));	
+			
+			Computer computer = Computer.builder()
+					.id(rs.getLong(1))
+	                .name(rs.getString(2))
+	                .introduced(rs.getDate(3))
+	                .discontinued(rs.getDate(4))
+	                .company(company)
+	                .build();
 			
 			listeComputers.add(computer); 
 		}
@@ -110,16 +108,17 @@ public class ComputerDAO
 		
 		while(rs.next())
 		{
-			Computer computer = new Computer();
 			Company company = new Company();
-			
-			computer.setId(rs.getLong(1));
-			computer.setName(rs.getString(2));
-			computer.setIntroduced(rs.getDate(3));
-			computer.setDiscontinued(rs.getDate(4));
 			company.setId(rs.getLong(5));
-			company.setName(rs.getString(6));			
-			computer.setCompany(company);
+			company.setName(rs.getString(6));
+			
+			Computer computer = Computer.builder()
+					.id(rs.getLong(1))
+	                .name(rs.getString(2))
+	                .introduced(rs.getDate(3))
+	                .discontinued(rs.getDate(4))
+	                .company(company)
+	                .build();
 			
 			listeComputers.add(computer); 
 		}
@@ -139,15 +138,17 @@ public class ComputerDAO
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		
-		Computer computer = new Computer();
-		Company company = new Company();
 		
-		computer.setId(rs.getLong(1));
-		computer.setName(rs.getString(2));
-		computer.setIntroduced(rs.getDate(3));
-		computer.setDiscontinued(rs.getDate(4));
+		Company company = new Company();
+
 		company.setId(rs.getLong(5));		
-		computer.setCompany(company);
+		Computer computer = Computer.builder()
+				.id(rs.getLong(1))
+                .name(rs.getString(2))
+                .introduced(rs.getDate(3))
+                .discontinued(rs.getDate(4))
+                .company(company)
+                .build();
 		
 		ConnectionJDBC.close(connection);
 		

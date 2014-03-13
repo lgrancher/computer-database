@@ -20,6 +20,7 @@ public class DeleteComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
+	// supprime le computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
@@ -27,6 +28,7 @@ public class DeleteComputer extends HttpServlet
 		
 		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		Computer computer;
+		
 		try 
 		{
 			computer = computerDAO.find(idComputer);

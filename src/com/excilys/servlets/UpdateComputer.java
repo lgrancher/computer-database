@@ -82,7 +82,8 @@ public class UpdateComputer extends HttpServlet
 		String discontinued = request.getParameter("discontinuedDate");
 		String company = request.getParameter("company");
 
-		Long idComputer = Long.parseLong(id);
+		long idComputer = Long.parseLong(id);
+		long companyId = Long.parseLong(company);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
 		
@@ -109,16 +110,17 @@ public class UpdateComputer extends HttpServlet
 			discontinuedDate = new Date(0);
 		}
 		
-		long companyId = Long.parseLong(company);
-		Company uneCompany = new Company();
-		uneCompany.setId(companyId);
+		Company uneCompany = Company.builder()
+			    .id(companyId)
+				.build();
 		
-		Computer computer = new Computer();
-		computer.setId(idComputer);
-		computer.setName(name);
-		computer.setIntroduced(introducedDate);
-		computer.setDiscontinued(discontinuedDate);
-		computer.setCompany(uneCompany);
+		Computer computer = Computer.builder()
+				.id(idComputer)
+                .name(name)
+                .introduced(introducedDate)
+                .discontinued(discontinuedDate)
+                .company(uneCompany)
+                .build();
 		
 		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		

@@ -5,10 +5,35 @@ public class Company
 	private long id;
 	private String name;
 	
-	public Company() 
-	{
-
-	}
+	 public static class Builder 
+	 {
+        Company company;
+ 
+        private Builder() 
+        {
+            company = new Company();
+        }
+ 
+        public Builder id(Long id) 
+        {
+            if(id != null)
+                this.company.id = id;
+            return this;
+        }
+ 
+        public Builder name(String name) 
+        {
+            this.company.name = name;
+            return this;
+        }
+ 
+        public Company build() 
+        {
+            return this.company;
+        }
+	 }
+	 
+	public Company() {}
 
 	public long getId() 
 	{
@@ -28,5 +53,10 @@ public class Company
 	public void setName(String name) 
 	{
 		this.name = name;
+	}
+	
+	public static Builder builder() 
+	{
+	   return new Builder();
 	}
 }

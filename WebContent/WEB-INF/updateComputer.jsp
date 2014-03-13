@@ -17,13 +17,13 @@
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input">
-					<input type="date" name="introducedDate" data-validation="date" data-validation-help="yyyy-mm-dd" value="<c:out value="${computer.introduced}"/>"/>
+					<input type="date" name="introducedDate" data-validation="date" data-validation-help="yyyy-mm-dd" data-validation-optional="true" value="<c:out value="${computer.introduced}"/>"/>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" data-validation="date" data-validation-help="yyyy-mm-dd" value="<c:out value="${computer.discontinued}"/>"/>
+					<input type="date" name="discontinuedDate" data-validation="date" data-validation-help="yyyy-mm-dd" data-validation-optional="true" value="<c:out value="${computer.discontinued}"/>"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -54,9 +54,7 @@
 <script>
  
 $.validate
-({
-	modules : 'location, date, security, file'
-});
+({});
   
 </script>
 

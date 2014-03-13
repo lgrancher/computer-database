@@ -13,10 +13,7 @@ public class CompanyDAO
 {
 	private static CompanyDAO companyDAO;
 	
-	private CompanyDAO()
-	{
-		
-	}
+	private CompanyDAO(){}
 	
 	public static CompanyDAO getInstance()
 	{
@@ -40,10 +37,10 @@ public class CompanyDAO
 		
 		while(rs.next())
 		{
-			Company company = new Company();
-			
-			company.setId(rs.getLong(1));
-			company.setName(rs.getString(2));
+			Company company = Company.builder()
+				    .id(rs.getLong(1))
+					.name(rs.getString(2))
+					.build();
 			
 			listeCompany.add(company);
 		}
@@ -63,10 +60,10 @@ public class CompanyDAO
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		
-		Company company = new Company();
-		
-		company.setId(rs.getLong(1));
-		company.setName(rs.getString(2));
+		Company company = Company.builder()
+			    .id(rs.getLong(1))
+				.name(rs.getString(2))
+				.build();
 		
 		ConnectionJDBC.close(connection);
 		

@@ -16,6 +16,7 @@ public class ListeComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 4062844883931660436L;
 
+	// affiche la liste des computers
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		try 
@@ -35,12 +36,14 @@ public class ListeComputer extends HttpServlet
 
 			ArrayList<Computer> listeComputer;
 			
+			// tous les computers
 			if(param==null)
 			{
 				listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll((currentPage-1)*recordsPerPage, recordsPerPage);			
 				noOfRecords = computerDAO.sizeAll();
 			}
 			
+			// filter by name
 			else
 			{
 				listeComputer = (ArrayList<Computer>) computerDAO.find(param, (currentPage-1)*recordsPerPage, recordsPerPage);

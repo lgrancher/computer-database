@@ -26,6 +26,7 @@ public class AddComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
+	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		try 
@@ -48,6 +49,7 @@ public class AddComputer extends HttpServlet
 		}
 	}
 	
+	// ajoute le computer dans la base
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String name = request.getParameter("name");
@@ -81,14 +83,17 @@ public class AddComputer extends HttpServlet
 		}
 		
 		long companyId = Long.parseLong(company);
-		Company uneCompany = new Company();
-		uneCompany.setId(companyId);
 		
-		Computer computer = new Computer();
-		computer.setName(name);
-		computer.setIntroduced(introducedDate);
-		computer.setDiscontinued(discontinuedDate);
-		computer.setCompany(uneCompany);
+		Company uneCompany = Company.builder()
+			    .id(companyId)
+				.build();
+		
+		Computer computer = Computer.builder()
+                .name(name)
+                .introduced(introducedDate)
+                .discontinued(discontinuedDate)
+                .company(uneCompany)
+                .build();
 		
 		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		
