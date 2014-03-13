@@ -76,18 +76,16 @@ public class UpdateComputer extends HttpServlet
 		try 
 		{
 			computerDAO.update(computer);
-			request.setAttribute("listeComputer", computerDAO.retrieveAll());
 		} 
 		
 		catch (SQLException e) 
 		{
-			request.setAttribute("listeComputer", new ArrayList<Computer>());
 			e.printStackTrace();
 		}
 		
 		finally
 		{
-			request.getRequestDispatcher("WEB-INF/Affichage.jsp").forward(request, response);
+			response.sendRedirect("index");
 		}
 	}
 }

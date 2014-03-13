@@ -21,7 +21,7 @@
 					<c:forEach var="titre" items="${attribut}">
 						<th>${titre.name}</th>			
 					</c:forEach>
-					<th>Modifier</th>
+					<th>Operations</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,7 +32,10 @@
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name}</td>
-					<td><a class="btn success" id="modif" href="FindComputer?id=${computer.id}">Modifier</a></td>
+					<td>
+						<a class="btn success" id="modif" href="FindComputer?id=${computer.id}">Update</a>
+						<a class="btn danger" id="supp" href=DeleteComputer?id=${computer.id} OnClick="return confirm('Do you want to delete the computer ${computer.name} ?')">Delete</a>
+					</td>
 				</tr>
 				</c:forEach>
 			</tbody>

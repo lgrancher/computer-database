@@ -179,4 +179,16 @@ public class ComputerDAO
 		
 		ConnectionJDBC.close(connection);
 	}
+	
+	public void delete(Computer computer) throws SQLException
+	{
+		Connection connection = ConnectionJDBC.getInstance();
+		String sql = "delete from computer where id=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setLong(1, computer.getId());
+		st.executeUpdate();
+		
+		ConnectionJDBC.close(connection);		
+	}
 }

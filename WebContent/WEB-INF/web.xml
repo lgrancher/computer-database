@@ -52,4 +52,12 @@
     <servlet-name>UpdateComputer</servlet-name>
     <url-pattern>/UpdateComputer</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <servlet-name>DeleteComputer</servlet-name>
+    <servlet-class>com.excilys.servlets.DeleteComputer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteComputer</servlet-name>
+    <url-pattern>/DeleteComputer</url-pattern>
+  </servlet-mapping>
 </web-app>
