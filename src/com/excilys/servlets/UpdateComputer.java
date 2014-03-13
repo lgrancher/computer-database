@@ -26,6 +26,7 @@ public class UpdateComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
  
+	// cherche la liste des company a proposer a l'utilisateur
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
@@ -72,6 +73,7 @@ public class UpdateComputer extends HttpServlet
 		}
 	}
 	
+	// modifie le computer
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");

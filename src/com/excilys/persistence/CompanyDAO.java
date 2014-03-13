@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.om.Company;
-import com.excilys.om.Computer;
 
 public class CompanyDAO 
 {
