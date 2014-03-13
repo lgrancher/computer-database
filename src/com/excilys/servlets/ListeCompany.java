@@ -35,7 +35,7 @@ public class ListeCompany extends HttpServlet
 		
 		finally
 		{
-			request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
 		}
 	}
 }

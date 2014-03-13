@@ -66,7 +66,7 @@ public class FindComputer extends HttpServlet
 		
 		finally
 		{
-			request.getRequestDispatcher("updateComputer.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
 		}
 	}
 }

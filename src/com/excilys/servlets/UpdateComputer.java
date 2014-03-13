@@ -32,7 +32,7 @@ public class UpdateComputer extends HttpServlet
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
 		String company = request.getParameter("company");
-		System.out.println("company "+company);
+
 		Long idComputer = Long.parseLong(id);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
@@ -87,7 +87,7 @@ public class UpdateComputer extends HttpServlet
 		
 		finally
 		{
-			request.getRequestDispatcher("Affichage.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/Affichage.jsp").forward(request, response);
 		}
 	}
 }

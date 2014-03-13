@@ -158,9 +158,7 @@ public class ComputerDAO
 		
 		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
 		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
-		System.out.println(computer.getName());
-		System.out.println(computer.getId());
-		System.out.println(computer.getCompany().getId());
+
 		st.setString(1, computer.getName());
 		st.setDate(2, introducedDate);
 		st.setDate(3, discontinuedDate);

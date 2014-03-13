@@ -83,7 +83,7 @@ public class AddComputer extends HttpServlet
 		
 		finally
 		{
-			request.getRequestDispatcher("Affichage.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/Affichage.jsp").forward(request, response);
 		}
 	}
 }
