@@ -32,7 +32,7 @@ public class ListeComputer extends HttpServlet
 			}
 			
 			int currentPage = 1;
-		    int recordsPerPage = 15;
+		    int recordsPerPage = 14;
 		    int noOfRecords;
 		    
 		    if(request.getParameter("currentPage") != null)
