@@ -9,12 +9,15 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.*;
+
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
 
 public class ComputerDAO
 {
 	private static ComputerDAO computerDAO;
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private ComputerDAO(){}
 	
@@ -23,13 +26,14 @@ public class ComputerDAO
 		if(computerDAO==null)
 		{
 			computerDAO = new ComputerDAO();
+			logger.info("Initialisation de computerDAO");
 		}
 		
 		return computerDAO;
 	}
 	
 	public List<Computer> retrieveAll(String sort, int offset, int noOfRecords) throws SQLException
-	{		
+	{				
 		switch(sort)
 		{
 			case "name" :
@@ -65,6 +69,7 @@ public class ComputerDAO
 		ResultSet rs = st.executeQuery();
 		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
 		
+		logger.info("Listing computers");
 		while(rs.next())
 		{
 			Company company = new Company();
@@ -110,13 +115,14 @@ public class ComputerDAO
 			st.setNull(4, Types.BIGINT);
 		}
 		
+		logger.info("Création d'un computer "+computer.getName());
 		st.executeUpdate();	
 		
 		ConnectionJDBC.close(connection);
 	}
 	
 	public List<Computer> find(String sort, String name, int offset, int noOfRecords) throws SQLException
-	{
+	{		
 		switch(sort)
 		{
 			case "name" :
@@ -159,6 +165,8 @@ public class ComputerDAO
 		ResultSet rs = st.executeQuery();
 		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
 		
+		logger.info("Search by name "+name);
+		
 		while(rs.next())
 		{
 			Company company = new Company();
@@ -182,19 +190,19 @@ public class ComputerDAO
 	}
 	
 	public Computer find(Long id) throws SQLException
-	{
+	{		
 		Connection connection = ConnectionJDBC.getInstance();
 		String sql = "select * from computer where id=?";
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, id);
 		
+		logger.info("Recherche computer n° "+id);
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		
-		
 		Company company = new Company();
-
-		company.setId(rs.getLong(5));		
+		company.setId(rs.getLong(5));	
+		
 		Computer computer = Computer.builder()
 				.id(rs.getLong(1))
                 .name(rs.getString(2))
@@ -231,6 +239,7 @@ public class ComputerDAO
 			st.setNull(4, Types.BIGINT);
 		}
 		
+		logger.info("Update computer "+computer.getId());
 		st.setLong(5, computer.getId());
 		
 		st.executeUpdate();
@@ -245,6 +254,8 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		st.setLong(1, computer.getId());
+		
+		logger.info("Delete computer n°"+computer.getId());
 		st.executeUpdate();
 		
 		ConnectionJDBC.close(connection);		
@@ -256,6 +267,7 @@ public class ComputerDAO
 		String sql = "select count(*) from computer";
 		PreparedStatement st = connection.prepareStatement(sql);
 		
+		logger.info("Recherche du nombre de computers");
 		ResultSet rs = st.executeQuery();
 		rs.next();	
 		int nbLignes = rs.getInt(1);
@@ -278,6 +290,7 @@ public class ComputerDAO
 		st.setString(1,search.toString());
 		st.setString(2,search.toString());
 		
+		logger.info("Recherche du nombre de computer correspondant à "+name);
 		ResultSet rs = st.executeQuery();
 		rs.next();	
 		int nbLignes = rs.getInt(1);

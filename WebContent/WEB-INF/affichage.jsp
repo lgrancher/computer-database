@@ -4,7 +4,7 @@
 
 <%@ page import="java.util.ArrayList"%>
 <section id="main">
-	<h2 id="homeTitle">${noOfRecords}computers</h2>
+	<h2 id="homeTitle">${noOfRecords} computers</h2>
 	<div id="actions">
 		<form action="index" method="GET">
 			<input type="search" id="searchbox" name="search" value=""

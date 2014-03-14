@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.*;
+
 import com.excilys.om.Company;
 
 public class CompanyDAO 
 {
 	private static CompanyDAO companyDAO;
+	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	private CompanyDAO(){}
 	
@@ -19,6 +22,7 @@ public class CompanyDAO
 	{
 		if(companyDAO==null)
 		{
+			logger.info("Initialisation de companyDAO");
 			companyDAO = new CompanyDAO();
 		}
 		
@@ -26,7 +30,7 @@ public class CompanyDAO
 	}
 	
 	public List<Company> retrieveAll() throws SQLException
-	{
+	{		
 		Connection connection = ConnectionJDBC.getInstance();
 		String sql = "select * from company";
 		
@@ -35,6 +39,7 @@ public class CompanyDAO
 		
 		ArrayList<Company> listeCompany = new ArrayList<Company>();
 		
+		logger.info("Listing company");
 		while(rs.next())
 		{
 			Company company = Company.builder()
@@ -57,6 +62,7 @@ public class CompanyDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, id);
 		
+		logger.info("Recherche de la company n°"+id);
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		
