@@ -7,10 +7,11 @@
 	<h1 id="homeTitle">${noOfRecords} computers</h1>
 	<div id="actions">
 		<form action="index" method="GET">
-			<input type="search" id="searchbox" name="search" value=""
-				placeholder="Search name"> <input type="submit"
-				id="searchsubmit" value="Filter by name" class="btn primary">
+			<input type="search" id="searchbox" name="search" value="" placeholder="Search name"> 
+			<input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
+			<a class="btn primary" id="all" href="index">All Computers</a>
 		</form>
+		
 		<a class="btn success" id="add" href="AddComputer">Add Computer</a>
 	</div>
 	<table>

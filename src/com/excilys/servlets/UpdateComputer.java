@@ -52,7 +52,6 @@ public class UpdateComputer extends HttpServlet
 		{
 			request.setAttribute("computer", new Computer());
 			request.setAttribute("company", new Company());
-			e.printStackTrace();
 		}
 		
 		try 
@@ -64,7 +63,6 @@ public class UpdateComputer extends HttpServlet
 		catch (SQLException e) 
 		{
 			request.setAttribute("listeCompany", new ArrayList<Company>());
-			e.printStackTrace();
 		}
 		
 		finally

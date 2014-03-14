@@ -40,7 +40,6 @@ public class AddComputer extends HttpServlet
 		catch (SQLException e)
 		{
 			request.setAttribute("listeCompany", new ArrayList<Company>());
-			e.printStackTrace();
 		} 
 		
 		finally

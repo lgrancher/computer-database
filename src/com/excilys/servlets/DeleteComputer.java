@@ -35,10 +35,7 @@ public class DeleteComputer extends HttpServlet
 			computerDAO.delete(computer);
 		} 
 		
-		catch (SQLException e) 
-		{
-			
-		}
+		catch (SQLException e) {}
 		
 		finally
 		{

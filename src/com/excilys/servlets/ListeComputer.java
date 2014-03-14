@@ -37,7 +37,15 @@ public class ListeComputer extends HttpServlet
 		    
 		    if(request.getParameter("currentPage") != null)
 		    {
-		    	currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		    	try
+		    	{
+		    		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		    	}
+		    	
+		    	catch(NumberFormatException e)
+		    	{
+		    		currentPage = 1;
+		    	}
 		    }
 
 			ArrayList<Computer> listeComputer;
@@ -69,7 +77,6 @@ public class ListeComputer extends HttpServlet
 		catch (SQLException e)
 		{
 			request.setAttribute("listeComputer", new ArrayList<Computer>());
-			e.printStackTrace();
 		} 
 		
 		finally
