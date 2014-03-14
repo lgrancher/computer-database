@@ -28,11 +28,37 @@ public class ComputerDAO
 		return computerDAO;
 	}
 	
-	public List<Computer> retrieveAll(int offset, int noOfRecords) throws SQLException
-	{
+	public List<Computer> retrieveAll(String sort, int offset, int noOfRecords) throws SQLException
+	{		
+		switch(sort)
+		{
+			case "name" :
+				sort="computer.name";
+				break;
+				
+			case "introduced" :
+				sort="computer.introduced";
+				break;
+			
+			case "discontinued" :
+				sort="computer.discontinued";
+				break;
+				
+			case "company" :
+				sort = "company.name";
+				break;
+				
+			default :
+				sort = "computer.id";	
+				break;
+		}
+		
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id limit ?, ?";
-		PreparedStatement st = connection.prepareStatement(sql);
+		StringBuilder sql = new StringBuilder ("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id order by ");
+		sql.append(sort);
+		sql.append(" limit ?, ?");
+		
+		PreparedStatement st = connection.prepareStatement(sql.toString());
 		st.setInt(1, offset);
 		st.setInt(2, noOfRecords);
 		
@@ -89,11 +115,37 @@ public class ComputerDAO
 		ConnectionJDBC.close(connection);
 	}
 	
-	public List<Computer> find(String name, int offset, int noOfRecords) throws SQLException
+	public List<Computer> find(String sort, String name, int offset, int noOfRecords) throws SQLException
 	{
+		switch(sort)
+		{
+			case "name" :
+				sort="computer.name";
+				break;
+				
+			case "introduced" :
+				sort="computer.introduced";
+				break;
+			
+			case "discontinued" :
+				sort="computer.discontinued";
+				break;
+				
+			case "company" :
+				sort = "company.name";
+				break;
+				
+			default :
+				sort = "computer.id";	
+				break;
+		}
+				
 		Connection connection = ConnectionJDBC.getInstance();
-		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? limit ?, ?";
-		PreparedStatement st = connection.prepareStatement(sql);
+		StringBuilder sql = new StringBuilder("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? order by ");
+		sql.append(sort);
+		sql.append(" limit ?, ?");
+		
+		PreparedStatement st = connection.prepareStatement(sql.toString());
 		
 		StringBuilder search = new StringBuilder("%");
 		search.append(name);

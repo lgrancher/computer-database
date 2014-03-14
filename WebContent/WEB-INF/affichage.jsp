@@ -19,7 +19,7 @@
 				<c:set var="attribut"
 					value="${listeComputer[0]['class']['declaredFields']}" />
 				<c:forEach var="titre" items="${attribut}">
-					<th>${titre.name}</th>
+					<th><a href="index?sort=${titre.name}&currentPage=1&search=${search}">${titre.name}</a></th>
 				</c:forEach>
 				<th>Operations</th>
 			</tr>
@@ -48,7 +48,7 @@
 
 			<%--For displaying Previous link except for the 1st page --%>
 			<c:if test="${currentPage != 1}">
-				<td><a href="index?currentPage=${currentPage - 1}&search=${search}" style="cursor: pointer; color: grey">Previous</a></td>
+				<td><a href="index?sort=${sort}&currentPage=${currentPage - 1}&search=${search}" style="cursor: pointer; color: grey">Previous</a></td>
 			</c:if>
 			
 			<c:forEach begin="1" end="${noOfPages}" var="i">
@@ -57,7 +57,7 @@
 						<td>${i}</td>
 					</c:when>
 					<c:otherwise>
-						<td><a href="index?currentPage=${i}&search=${search}" style="cursor: pointer; color: grey">${i}</a></td>
+						<td><a href="index?sort=${sort}&currentPage=${i}&search=${search}" style="cursor: pointer; color: grey">${i}</a></td>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -65,7 +65,7 @@
 
 			<%--For displaying Next link --%>
 			<c:if test="${currentPage lt noOfPages}">
-				<td><a href="index?currentPage=${currentPage + 1}&search=${search}" style="cursor: pointer; color: grey">Next</a></td>
+				<td><a href="index?sort=${sort}&currentPage=${currentPage + 1}&search=${search}" style="cursor: pointer; color: grey">Next</a></td>
 			</c:if>
 			
 		</tr>

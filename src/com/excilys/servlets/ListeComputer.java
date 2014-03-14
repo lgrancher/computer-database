@@ -24,6 +24,12 @@ public class ListeComputer extends HttpServlet
 			ComputerDAO computerDAO = ComputerDAO.getInstance();
 			
 			String param = request.getParameter("search");
+			String sort = request.getParameter("sort");
+			
+			if(sort==null)
+			{
+				sort="id";
+			}
 			
 			int currentPage = 1;
 		    int recordsPerPage = 15;
@@ -39,19 +45,20 @@ public class ListeComputer extends HttpServlet
 			// tous les computers
 			if(param==null)
 			{
-				listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll((currentPage-1)*recordsPerPage, recordsPerPage);			
+				listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll(sort,(currentPage-1)*recordsPerPage, recordsPerPage);			
 				noOfRecords = computerDAO.sizeAll();
 			}
 			
 			// filter by name
 			else
 			{
-				listeComputer = (ArrayList<Computer>) computerDAO.find(param, (currentPage-1)*recordsPerPage, recordsPerPage);
+				listeComputer = (ArrayList<Computer>) computerDAO.find(sort,param, (currentPage-1)*recordsPerPage, recordsPerPage);
 				noOfRecords = computerDAO.size(param); 
 			}
 			 
 			int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 		    
+			request.setAttribute("sort", sort);
 			request.setAttribute("search", param);
 			request.setAttribute("listeComputer", listeComputer);
 		    request.setAttribute("noOfPages", noOfPages);
