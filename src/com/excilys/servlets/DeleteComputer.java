@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Computer;
-import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.ComputerService;
 
 /**
  * Servlet implementation class DeleteComputer
@@ -26,13 +26,13 @@ public class DeleteComputer extends HttpServlet
 		String id = request.getParameter("id");
 		Long idComputer = Long.parseLong(id);
 		
-		ComputerDAO computerDAO = ComputerDAO.getInstance();
+		ComputerService computerService = ComputerService.getInstance();
 		Computer computer;
 		
 		try 
 		{
-			computer = computerDAO.find(idComputer);
-			computerDAO.delete(computer);
+			computer = computerService.find(idComputer);
+			computerService.delete(computer);
 		} 
 		
 		catch (SQLException e) {}

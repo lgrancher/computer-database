@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
-import com.excilys.persistence.CompanyDAO;
-import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 
 /**
  * Servlet implementation class AjoutComputer
@@ -31,8 +31,8 @@ public class AddComputer extends HttpServlet
 	{
 		try 
 		{
-			CompanyDAO companyDAO = CompanyDAO.getInstance();
-			ArrayList<Company> listeCompany = (ArrayList<Company>) companyDAO.retrieveAll();
+			CompanyService companyService = CompanyService.getInstance();
+			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
 	
 			request.setAttribute("listeCompany", listeCompany);
 		} 
@@ -94,11 +94,11 @@ public class AddComputer extends HttpServlet
                 .company(uneCompany)
                 .build();
 		
-		ComputerDAO computerDAO = ComputerDAO.getInstance();
+		ComputerService computerService = ComputerService.getInstance();
 		
 		try 
 		{
-			computerDAO.create(computer);
+			computerService.create(computer);
 		} 
 		
 		catch (SQLException e) 

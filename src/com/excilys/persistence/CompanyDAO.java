@@ -29,49 +29,94 @@ public class CompanyDAO
 		return companyDAO;
 	}
 	
-	public List<Company> retrieveAll() throws SQLException
+	public List<Company> retrieveAll(Connection connection)
 	{		
-		Connection connection = ConnectionJDBC.getInstance();
 		String sql = "select * from company";
 		
-		PreparedStatement st = connection.prepareStatement(sql);
-		ResultSet rs = st.executeQuery();
-		
+		PreparedStatement st=null;
+		ResultSet rs=null;
 		ArrayList<Company> listeCompany = new ArrayList<Company>();
 		
-		logger.info("Listing company");
-		while(rs.next())
+		try
 		{
-			Company company = Company.builder()
-				    .id(rs.getLong(1))
-					.name(rs.getString(2))
-					.build();
+			st = connection.prepareStatement(sql);
+			rs = st.executeQuery();
 			
-			listeCompany.add(company);
+			logger.info("Listing company");
+			while(rs.next())
+			{
+				Company company = Company.builder()
+					    .id(rs.getLong(1))
+						.name(rs.getString(2))
+						.build();
+				
+				listeCompany.add(company);
+			}
+		} 
+		
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
 		}
 		
-		ConnectionJDBC.close(connection);
+		finally
+		{
+			try 
+			{
+				rs.close();
+				st.close();
+			} 
+			
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}	
+		}	
 		
 		return listeCompany;
 	}
 	
-	public Company find(Long id) throws SQLException
+	public Company find(Connection connection, Long id)
 	{
-		Connection connection = ConnectionJDBC.getInstance();
 		String sql = "select * from computer where id=?";
-		PreparedStatement st = connection.prepareStatement(sql);
-		st.setLong(1, id);
+	
+		PreparedStatement st=null;
+		ResultSet rs=null;
+		Company company=null;
 		
-		logger.info("Recherche de la company n°"+id);
-		ResultSet rs = st.executeQuery();
-		rs.next();
+		try 
+		{
+			st = connection.prepareStatement(sql);
+			st.setLong(1, id);
+			
+			logger.info("Recherche de la company n°"+id);
+			rs = st.executeQuery();
+			rs.next();
+			
+			company = Company.builder()
+				    .id(rs.getLong(1))
+					.name(rs.getString(2))
+					.build();
+		} 
 		
-		Company company = Company.builder()
-			    .id(rs.getLong(1))
-				.name(rs.getString(2))
-				.build();
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
 		
-		ConnectionJDBC.close(connection);
+		finally
+		{
+			try 
+			{
+				rs.close();
+				st.close();
+			} 
+			
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}	
+		}
 		
 		return company;
 	}

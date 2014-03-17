@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Computer;
-import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.ComputerService;
 
 public class ListeComputer extends HttpServlet 
 {
@@ -21,7 +21,7 @@ public class ListeComputer extends HttpServlet
 	{	
 		try 
 		{
-			ComputerDAO computerDAO = ComputerDAO.getInstance();
+			ComputerService computerService = ComputerService.getInstance();
 			
 			String param = request.getParameter("search");
 			String sort = request.getParameter("sort");
@@ -53,15 +53,15 @@ public class ListeComputer extends HttpServlet
 			// tous les computers
 			if(param==null)
 			{
-				listeComputer = (ArrayList<Computer>) computerDAO.retrieveAll(sort,(currentPage-1)*recordsPerPage, recordsPerPage);			
-				noOfRecords = computerDAO.sizeAll();
+				listeComputer = (ArrayList<Computer>) computerService.retrieveAll(sort,(currentPage-1)*recordsPerPage, recordsPerPage);			
+				noOfRecords = computerService.sizeAll();
 			}
 			
 			// filter by name
 			else
 			{
-				listeComputer = (ArrayList<Computer>) computerDAO.find(sort,param, (currentPage-1)*recordsPerPage, recordsPerPage);
-				noOfRecords = computerDAO.size(param); 
+				listeComputer = (ArrayList<Computer>) computerService.find(sort,param, (currentPage-1)*recordsPerPage, recordsPerPage);
+				noOfRecords = computerService.size(param); 
 			}
 			 
 			int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
