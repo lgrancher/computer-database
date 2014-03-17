@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.om.Computer;
+import com.excilys.om.ComputerWrapper;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.ConnectionJDBC;
 
@@ -28,10 +29,10 @@ public class ComputerService
 		return computerService;
 	}
 	
-	public List<Computer> retrieveAll(String sort, int offset, int noOfRecords) throws SQLException
+	public List<Computer> retrieve(ComputerWrapper computerWrapper) throws SQLException
 	{
 		Connection connection = ConnectionJDBC.getConnection();
-		List<Computer> listComputer = computerDAO.retrieveAll(connection, sort, offset, noOfRecords);
+		List<Computer> listComputer = computerDAO.retrieve(connection, computerWrapper);
 		ConnectionJDBC.close(connection);
 		
 		return listComputer;
@@ -42,15 +43,6 @@ public class ComputerService
 		Connection connection = ConnectionJDBC.getConnection();
 		computerDAO.create(connection, computer);
 		ConnectionJDBC.close(connection);
-	}
-	
-	public List<Computer> find(String sort, String name, int offset, int noOfRecords) throws SQLException
-	{
-		Connection connection = ConnectionJDBC.getConnection();
-		List<Computer> listComputer = computerDAO.find(connection, sort, name, offset, noOfRecords);
-		ConnectionJDBC.close(connection);
-		
-		return listComputer;
 	}
 	
 	public Computer find(Long id) throws SQLException
@@ -74,15 +66,6 @@ public class ComputerService
 		Connection connection = ConnectionJDBC.getConnection();
 		computerDAO.delete(connection, computer);
 		ConnectionJDBC.close(connection);
-	}
-	
-	public int sizeAll() throws SQLException
-	{
-		Connection connection = ConnectionJDBC.getConnection();
-		int size= computerDAO.sizeAll(connection);
-		ConnectionJDBC.close(connection);
-		
-		return size;
 	}
 	
 	public int size(String name) throws SQLException

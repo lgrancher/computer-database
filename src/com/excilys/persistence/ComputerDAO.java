@@ -13,6 +13,7 @@ import org.slf4j.*;
 
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
+import com.excilys.om.ComputerWrapper;
 
 public class ComputerDAO
 {
@@ -32,33 +33,50 @@ public class ComputerDAO
 		return computerDAO;
 	}
 	
-	public List<Computer> retrieveAll(Connection connection, String sort, int offset, int noOfRecords)
+	public List<Computer> retrieve(Connection connection, ComputerWrapper computerWrapper)
 	{				
-		switch(sort)
+		switch(computerWrapper.getSort())
 		{
 			case "name" :
-				sort="computer.name";
+				computerWrapper.setSort("computer.name");
 				break;
 				
 			case "introduced" :
-				sort="computer.introduced";
+				computerWrapper.setSort("computer.introduced");
 				break;
 			
 			case "discontinued" :
-				sort="computer.discontinued";
+				computerWrapper.setSort("computer.discontinued");
 				break;
 				
 			case "company" :
-				sort = "company.name";
+				computerWrapper.setSort("company.name");
 				break;
 				
 			default :
-				sort = "computer.id";	
+				computerWrapper.setSort("computer.id");	
 				break;
 		}
 		
-		StringBuilder sql = new StringBuilder ("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id order by ");
-		sql.append(sort);
+		// on affiche tous les computers		
+		if(computerWrapper.getName()==null)
+		{
+			computerWrapper.setName("%");
+		}
+		
+		// filter by name
+		else
+		{
+			StringBuilder search = new StringBuilder("%");
+			search.append(computerWrapper.getName());
+			search.append("%");
+			
+			computerWrapper.setName(search.toString());
+		}
+		
+		// requete
+		StringBuilder sql = new StringBuilder ("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? order by ");
+		sql.append(computerWrapper.getSort());
 		sql.append(" limit ?, ?");
 		
 		PreparedStatement st=null;
@@ -69,8 +87,10 @@ public class ComputerDAO
 		{
 			st = connection.prepareStatement(sql.toString());
 			
-			st.setInt(1, offset);
-			st.setInt(2, noOfRecords);
+			st.setString(1,computerWrapper.getName());
+			st.setString(2,computerWrapper.getName());
+			st.setInt(3, computerWrapper.getOffset());
+			st.setInt(4, computerWrapper.getRecordsPerPage());
 			
 			rs = st.executeQuery();
 			
@@ -162,96 +182,6 @@ public class ComputerDAO
 				e.printStackTrace();
 			}
 		}		
-	}
-	
-	public List<Computer> find(Connection connection, String sort, String name, int offset, int noOfRecords) 
-	{		
-		switch(sort)
-		{
-			case "name" :
-				sort="computer.name";
-				break;
-				
-			case "introduced" :
-				sort="computer.introduced";
-				break;
-			
-			case "discontinued" :
-				sort="computer.discontinued";
-				break;
-				
-			case "company" :
-				sort = "company.name";
-				break;
-				
-			default :
-				sort = "computer.id";	
-				break;
-		}
-				
-		StringBuilder sql = new StringBuilder("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? order by ");
-		sql.append(sort);
-		sql.append(" limit ?, ?");
-		
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
-	
-		try 
-		{
-			st = connection.prepareStatement(sql.toString());
-			
-			StringBuilder search = new StringBuilder("%");
-			search.append(name);
-			search.append("%");
-			
-			st.setString(1,search.toString());
-			st.setString(2,search.toString());
-			st.setInt(3, offset);
-			st.setInt(4, noOfRecords);
-			
-			rs = st.executeQuery();
-			
-			logger.info("Search by name "+name);
-			
-			while(rs.next())
-			{
-				Company company = new Company();
-				company.setId(rs.getLong(5));
-				company.setName(rs.getString(6));
-				
-				Computer computer = Computer.builder()
-						.id(rs.getLong(1))
-		                .name(rs.getString(2))
-		                .introduced(rs.getDate(3))
-		                .discontinued(rs.getDate(4))
-		                .company(company)
-		                .build();
-				
-				listeComputers.add(computer); 
-			}
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-
-		finally
-		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}	
-		
-		return listeComputers;
 	}
 	
 	public Computer find(Connection connection, Long id) 
@@ -387,45 +317,7 @@ public class ComputerDAO
 			}
 		}	
 	}
-	
-	public int sizeAll(Connection connection)
-	{
-		String sql = "select count(*) from computer";
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		int nbLignes=0;
-		
-		try 
-		{
-			st = connection.prepareStatement(sql);
-			logger.info("Recherche du nombre de computers");
-			rs = st.executeQuery();
-			rs.next();	
-			nbLignes = rs.getInt(1);
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		finally
-		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}			
-		
-		return nbLignes;		
-	}
-	
+
 	public int size(Connection connection, String name)
 	{
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
@@ -436,13 +328,25 @@ public class ComputerDAO
 		try 
 		{
 			st = connection.prepareStatement(sql);
-			StringBuilder search = new StringBuilder("%");
-			search.append(name);
-			search.append("%");
 			
-			st.setString(1,search.toString());
-			st.setString(2,search.toString());
+			// nombre de computers en tout
+			if(name==null)
+			{
+				st.setString(1,"%");
+				st.setString(2,"%");
+			}
 			
+			// nombre de computers qui correspondent a la recherche
+			else
+			{
+				StringBuilder search = new StringBuilder("%");
+				search.append(name);
+				search.append("%");
+				
+				st.setString(1,search.toString());	
+				st.setString(2,search.toString());
+			}
+		
 			logger.info("Recherche du nombre de computer correspondant à "+name);
 			rs = st.executeQuery();
 			rs.next();	
