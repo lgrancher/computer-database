@@ -67,6 +67,7 @@ public class UpdateComputer extends HttpServlet
 		
 		finally
 		{
+			request.setAttribute("currentPage", request.getParameter("currentPage"));
 			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
 		}
 	}
@@ -79,6 +80,7 @@ public class UpdateComputer extends HttpServlet
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
 		String company = request.getParameter("company");
+		String currentPage = request.getParameter("currentPage");
 
 		long idComputer = Long.parseLong(id);
 		long companyId = Long.parseLong(company);
@@ -134,7 +136,7 @@ public class UpdateComputer extends HttpServlet
 		
 		finally
 		{
-			response.sendRedirect("index");
+			response.sendRedirect("index?currentPage="+currentPage);
 		}
 	}	
 }

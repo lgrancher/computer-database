@@ -2,12 +2,8 @@ package com.excilys.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import com.excilys.om.Computer;
 import com.excilys.om.ComputerWrapper;

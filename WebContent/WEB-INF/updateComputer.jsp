@@ -9,7 +9,7 @@
 			</div>
 			<fieldset>
 				<div class="form-group">
-					<label for="name">Computer name :</label>
+					<label for="name">Computer name : </label>
 					<div class="input">
 						<input type="text" name="name" data-validation="required"
 							value="<c:out value="${computer.name}"/>" class="required" />
@@ -50,12 +50,13 @@
 				</div>
 
 				<input type="hidden" value="${computer.id}" name="id">
+				<input type="hidden" value="${currentPage}" name="currentPage">
 			</fieldset>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<input type="submit" name="submit" value="Update"
-						class="btn btn-success"> or <a href="index"
-						class="btn btn-danger">Cancel</a>
+						class="btn btn-success"> or <a href="index?currentPage=${currentPage}"
+						class="btn btn-danger"> Cancel</a>
 				</div>
 			</div>
 		</form>

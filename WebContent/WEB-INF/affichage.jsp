@@ -27,7 +27,8 @@
 
 		</form>
 
-		<a type="button" class="btn btn-warning" id="add" href="AddComputer">Add
+		<a type="button" class="btn btn-warning" id="add" href="AddComputer?currentPage= ${currentPage}"><span
+					class="glyphicon glyphicon-plus"></span> Add
 			Computer</a>
 	</div>
 	<table class="table table-hover">
@@ -52,7 +53,7 @@
 					<td class="name">${computer.company.name}</td>
 					<td class="operations"><a type="button"
 						class="btn btn-success" id="modif"
-						href="UpdateComputer?id=${computer.id}"><span
+						href="UpdateComputer?id=${computer.id}&currentPage=${currentPage}"><span
 							class="glyphicon glyphicon-pencil"></span> Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
 						href=DeleteComputer?id=${computer.id}
