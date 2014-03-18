@@ -6,8 +6,9 @@ html {
 }
 body {
   margin: 0;
-  min-height:1050px;
+  min-height:1088px;
 }
+
 article,
 aside,
 details,
@@ -1534,6 +1535,70 @@ table th[class*="col-"] {
 .table > tfoot > tr.info > th {
   background-color:#ECE8DD;
 }
+<<<<<<< HEAD
+
+.table > thead > tr > td.id,
+.table > tbody > tr > td.id,
+.table > tfoot > tr > td.id,
+.table > thead > tr > th.id,
+.table > tbody > tr > th.id,
+.table > tfoot > tr > th.id,
+.table > thead > tr.id > td,
+.table > tbody > tr.id > td,
+.table > tfoot > tr.id > td,
+.table > thead > tr.id > th,
+.table > tbody > tr.id > th,
+.table > tfoot > tr.id > th {
+  width:5%;
+}
+
+.table > thead > tr > td.name,
+.table > tbody > tr > td.name,
+.table > tfoot > tr > td.name,
+.table > thead > tr > th.name,
+.table > tbody > tr > th.name,
+.table > tfoot > tr > th.name,
+.table > thead > tr.name > td,
+.table > tbody > tr.name > td,
+.table > tfoot > tr.name > td,
+.table > thead > tr.name > th,
+.table > tbody > tr.name > th,
+.table > tfoot > tr.name > th {
+  width:20%;
+}
+
+.table > thead > tr > td.date,
+.table > tbody > tr > td.date,
+.table > tfoot > tr > td.date,
+.table > thead > tr > th.date,
+.table > tbody > tr > th.date,
+.table > tfoot > tr > th.date,
+.table > thead > tr.date > td,
+.table > tbody > tr.date > td,
+.table > tfoot > tr.date > td,
+.table > thead > tr.date > th,
+.table > tbody > tr.date > th,
+.table > tfoot > tr.date > th {
+  width:10%;
+}
+
+.table > thead > tr > td.operations,
+.table > tbody > tr > td.operations,
+.table > tfoot > tr > td.operations,
+.table > thead > tr > th.operations,
+.table > tbody > tr > th.operations,
+.table > tfoot > tr > th.operations,
+.table > thead > tr.operations > td,
+.table > tbody > tr.operations > td,
+.table > tfoot > tr.operations > td,
+.table > thead > tr.operations > th,
+.table > tbody > tr.operations > th,
+.table > tfoot > tr.operations > th {
+  width:15%;
+}
+
+=======
+>>>>>>> 39c2e954ab94171d4bb729603c0cd5082e8667f4
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
 .table-hover > tbody > tr.info:hover > td,
@@ -5797,4 +5862,82 @@ button.close {
 	background-color: #F2F0ED;
 }
 
+
+<<<<<<< HEAD
+html {
+    background: #eee;
+}
+
+header h1 {
+    padding: 0.4em 1.1em;
+    color: white;
+    font-weight: normal;
+    font-size: 24px;
+}
+
+section#main {
+    position: relative;
+    padding: 5em 2em;
+    min-height: 600px;
+} 
+
+section#main .topRight {
+    position: absolute;
+    right: 20px;
+    top: 70px;
+}
+
+table.computers em {
+    color: #aaa;
+}
+
+table.computers .introduced, table.computers .discontinued {
+    width: 10%;
+    min-width: 100px;
+}
+
+table.computers .company_name {
+    width: 30%;
+    min-width: 300px;
+}
+
+table.computers .header a {
+}
+
+#actions {
+    position: relative;
+}
+
+#actions #add {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#pagination 
+{
+    position: absolute;
+    top:950px;
+}
+	
+@-moz-document url-prefix()
+{
+	#pagination {
+	    position: absolute;
+	    top:950px;
+	    left:2em;
+	    right:2em;
+	    width:97%;
+	}
+}
+
+.col2 {
+	width: 50%;
+}
+.col3, .col4 {
+	width: 10%;
+}
+.col5 {
+	width: 30%;
+}
 

@@ -32,12 +32,12 @@
 		<tbody>
 			<c:forEach var="computer" items="${listeComputer}">
 				<tr>
-					<td>${computer.id}</td>
-					<td>${computer.name}</td>
-					<td>${computer.introduced}</td>
-					<td>${computer.discontinued}</td>
-					<td>${computer.company.name}</td>
-					<td><a type="button" class="btn btn-success" id="modif"
+					<td class="id">${computer.id}</td>
+					<td class="name">${computer.name}</td>
+					<td class="date">${computer.introduced}</td>
+					<td class="date">${computer.discontinued}</td>
+					<td class="name">${computer.company.name}</td>
+					<td class="operations"><a type="button" class="btn btn-success" id="modif"
 						href="UpdateComputer?id=${computer.id}">Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
 						href=DeleteComputer?id=${computer.id}
@@ -49,7 +49,8 @@
 	</table>
 
 	<!-- pagination -->
-	<table class="table">
+
+	<table class="table" id="pagination">
 		<tr>
 
 			<%--For displaying Previous link except for the 1st page --%>
@@ -58,6 +59,12 @@
 					href="index?sort=${sort}&currentPage=${currentPage - 1}&search=${search}"
 					style="cursor: pointer; color: grey">Previous</a></td>
 			</c:if>
+
+			
+			<c:if test="${currentPage == 1}">
+				<td>Previous</td>
+			</c:if>
+
 
 			<c:forEach begin="1" end="${noOfPages}" var="i">
 				<c:choose>
@@ -78,6 +85,10 @@
 				<td><a
 					href="index?sort=${sort}&currentPage=${currentPage + 1}&search=${search}"
 					style="cursor: pointer; color: grey">Next</a></td>
+			</c:if>
+			
+			<c:if test="${currentPage == noOfPages}">
+				<td>Next</td>
 			</c:if>
 
 		</tr>
