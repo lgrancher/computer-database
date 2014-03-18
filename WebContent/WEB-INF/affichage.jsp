@@ -32,49 +32,49 @@
 		<tbody>
 			<c:forEach var="computer" items="${listeComputer}">
 				<tr>
-					<td class="id">${computer.id}</td>
-					<td class="name">${computer.name}</td>
-					<td class="date">${computer.introduced}</td>
-					<td class="date">${computer.discontinued}</td>
-					<td class="name">${computer.company.name}</td>
+					<td class="id">${computer.id}</span>
+					<td class="name">${computer.name}</span>
+					<td class="date">${computer.introduced}</span>
+					<td class="date">${computer.discontinued}</span>
+					<td class="name">${computer.company.name}</span>
 					<td class="operations"><a type="button" class="btn btn-success" id="modif"
 						href="UpdateComputer?id=${computer.id}">Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
 						href=DeleteComputer?id=${computer.id}
 						OnClick="return confirm('Do you want to delete the computer ${computer.name} ?')">Delete</a>
-					</td>
+					</span>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 
 	<!-- pagination -->
-
-	<table class="table" id="pagination">
-		<tr>
+	<div class="navbar navbar-default navbar-fixed-bottom">
+	 <div class="container-fluid">
+	<div class="pagination">
 
 			<%--For displaying Previous link except for the 1st page --%>
 			<c:if test="${currentPage != 1}">
-				<td><a
+				<span class="num"><a
 					href="index?sort=${sort}&currentPage=${currentPage - 1}&search=${search}"
-					style="cursor: pointer; color: grey">Previous</a></td>
+					style="cursor: pointer; color: grey">Previous</a></span>
 			</c:if>
 
 			
 			<c:if test="${currentPage == 1}">
-				<td>Previous</td>
+				<span class="num">Previous</span>
 			</c:if>
 
 
 			<c:forEach begin="1" end="${noOfPages}" var="i">
 				<c:choose>
 					<c:when test="${currentPage eq i}">
-						<td>${i}</td>
+						<span class="num">${i}</span>
 					</c:when>
 					<c:otherwise>
-						<td><a
+						<span class="num"><a
 							href="index?sort=${sort}&currentPage=${i}&search=${search}"
-							style="cursor: pointer; color: grey">${i}</a></td>
+							style="cursor: pointer; color: grey">${i}</a></span>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -82,17 +82,18 @@
 
 			<%--For displaying Next link --%>
 			<c:if test="${currentPage lt noOfPages}">
-				<td><a
+				<span class="num"><a
 					href="index?sort=${sort}&currentPage=${currentPage + 1}&search=${search}"
-					style="cursor: pointer; color: grey">Next</a></td>
+					style="cursor: pointer; color: grey">Next</a></span>
 			</c:if>
 			
 			<c:if test="${currentPage == noOfPages}">
-				<td>Next</td>
+				<span class="num">Next</span>
 			</c:if>
 
-		</tr>
-	</table>
+		</div>
+	</div>
+	</div>
 
 </section>
 <jsp:include page="../include/footer.jsp" />

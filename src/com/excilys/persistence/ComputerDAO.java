@@ -50,7 +50,7 @@ public class ComputerDAO
 				break;
 				
 			case "company" :
-				computerWrapper.setSort("company.name");
+				computerWrapper.setSort("company.name, computer.name");
 				break;
 				
 			default :
@@ -330,10 +330,11 @@ public class ComputerDAO
 			st = connection.prepareStatement(sql);
 			
 			// nombre de computers en tout
-			if(name==null)
+			if(name==null || name.equals(""))
 			{
 				st.setString(1,"%");
 				st.setString(2,"%");
+				logger.info("Recherche du nombre de computers en tout");
 			}
 			
 			// nombre de computers qui correspondent a la recherche
@@ -345,9 +346,9 @@ public class ComputerDAO
 				
 				st.setString(1,search.toString());	
 				st.setString(2,search.toString());
+				logger.info("Recherche du nombre de computer correspondant à "+name);
 			}
 		
-			logger.info("Recherche du nombre de computer correspondant à "+name);
 			rs = st.executeQuery();
 			rs.next();	
 			nbLignes = rs.getInt(1);
