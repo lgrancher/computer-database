@@ -59,9 +59,9 @@ public class ComputerDAO
 		}
 		
 		// on affiche tous les computers		
-		if(computerWrapper.getName()==null)
+		if(computerWrapper.getName().equals("%"))
 		{
-			computerWrapper.setName("%");
+			logger.info("Listing de tous les computers");
 		}
 		
 		// filter by name
@@ -71,6 +71,7 @@ public class ComputerDAO
 			search.append(computerWrapper.getName());
 			search.append("%");
 			
+			logger.info("Listing des computers avec la recherche "+computerWrapper.getName());
 			computerWrapper.setName(search.toString());
 		}
 		
@@ -94,8 +95,6 @@ public class ComputerDAO
 			
 			rs = st.executeQuery();
 			
-			logger.info("Listing computers");
-			
 			while(rs.next())
 			{
 				Company company = new Company();
@@ -112,6 +111,8 @@ public class ComputerDAO
 				
 				listeComputers.add(computer); 
 			}
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
@@ -163,11 +164,21 @@ public class ComputerDAO
 			
 			logger.info("Création d'un computer "+computer.getName());
 			st.executeUpdate();	
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
+			try 
+			{
+				connection.rollback();
+			} 
+			
+			catch (SQLException e1) 
+			{
+				e1.printStackTrace();
+			}
 		}
  
 		finally
@@ -210,6 +221,8 @@ public class ComputerDAO
 	                .discontinued(rs.getDate(4))
 	                .company(company)
 	                .build();
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
@@ -260,15 +273,26 @@ public class ComputerDAO
 				st.setNull(4, Types.BIGINT);
 			}
 			
-			logger.info("Update computer "+computer.getId());
+			logger.info("Mise à jour du computer "+computer.getId());
 			st.setLong(5, computer.getId());
 			
 			st.executeUpdate();
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
+			try 
+			{
+				connection.rollback();
+			} 
+			
+			catch (SQLException e1) 
+			{
+				e1.printStackTrace();
+			}
 		}
 		
 		finally
@@ -295,13 +319,25 @@ public class ComputerDAO
 			st = connection.prepareStatement(sql);
 			st.setLong(1, computer.getId());
 		
-			logger.info("Delete computer n°"+computer.getId());
+			logger.info("Suppression du computer n°"+computer.getId());
 			st.executeUpdate();
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
+			
+			try 
+			{
+				connection.rollback();
+			} 
+			
+			catch (SQLException e1) 
+			{
+				e1.printStackTrace();
+			}
 		}
 		
 		finally
@@ -330,7 +366,7 @@ public class ComputerDAO
 			st = connection.prepareStatement(sql);
 			
 			// nombre de computers en tout
-			if(name==null || name.equals(""))
+			if(name.equals("%") || name.equals(""))
 			{
 				st.setString(1,"%");
 				st.setString(2,"%");
@@ -352,6 +388,8 @@ public class ComputerDAO
 			rs = st.executeQuery();
 			rs.next();	
 			nbLignes = rs.getInt(1);
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 

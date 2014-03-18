@@ -48,7 +48,9 @@ public class ConnectionJDBC
 		
 		Connection connection = connectionPool.getConnection();
 
-		logger.info("Ouverture de la connection");
+		logger.info("Ouverture de la connexion");
+		connection.setAutoCommit(false);
+		
 		return connection;
 	}
 	

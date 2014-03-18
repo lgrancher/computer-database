@@ -108,7 +108,22 @@ public class AddComputer extends HttpServlet
 		
 		finally
 		{
-			response.sendRedirect("index");
+			int recordsPerPage=14;
+			int noOfRecords;
+			int noOfPages = 1;
+			
+			try 
+			{
+				noOfRecords = computerService.size("");
+				noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+			} 
+			
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+			
+			response.sendRedirect("index?currentPage="+noOfPages);
 		}
 	}
 }

@@ -32,17 +32,17 @@
 		<tbody>
 			<c:forEach var="computer" items="${listeComputer}">
 				<tr>
-					<td class="id">${computer.id}</span>
-					<td class="name">${computer.name}</span>
-					<td class="date">${computer.introduced}</span>
-					<td class="date">${computer.discontinued}</span>
-					<td class="name">${computer.company.name}</span>
+					<td class="id">${computer.id}</td>
+					<td class="name">${computer.name}</td>
+					<td class="date">${computer.introduced}</td>
+					<td class="date">${computer.discontinued}</td>
+					<td class="name">${computer.company.name}</td>
 					<td class="operations"><a type="button" class="btn btn-success" id="modif"
 						href="UpdateComputer?id=${computer.id}">Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
 						href=DeleteComputer?id=${computer.id}
 						OnClick="return confirm('Do you want to delete the computer ${computer.name} ?')">Delete</a>
-					</span>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

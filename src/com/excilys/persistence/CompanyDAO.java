@@ -52,6 +52,8 @@ public class CompanyDAO
 				
 				listeCompany.add(company);
 			}
+			
+			connection.commit();
 		} 
 		
 		catch (SQLException e) 
@@ -75,50 +77,4 @@ public class CompanyDAO
 		
 		return listeCompany;
 	}
-	
-	public Company find(Connection connection, Long id)
-	{
-		String sql = "select * from computer where id=?";
-	
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		Company company=null;
-		
-		try 
-		{
-			st = connection.prepareStatement(sql);
-			st.setLong(1, id);
-			
-			logger.info("Recherche de la company n°"+id);
-			rs = st.executeQuery();
-			rs.next();
-			
-			company = Company.builder()
-				    .id(rs.getLong(1))
-					.name(rs.getString(2))
-					.build();
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		finally
-		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}	
-		}
-		
-		return company;
-	}
-	
 }

@@ -47,6 +47,11 @@ public class ListeComputer extends HttpServlet
 		    	}
 		    }
 		    
+		    if(param==null)
+		    {
+		    	param="%";
+		    }
+		    
 		    ComputerService computerService = ComputerService.getInstance();
 
 		    ComputerWrapper computerWrapper = ComputerWrapper.builder()
@@ -56,14 +61,9 @@ public class ListeComputer extends HttpServlet
 		    												 .recordsPerPage(recordsPerPage)
 		    												 .build();
 		    		
-			ArrayList<Computer> listeComputer;
-			
-			
-			listeComputer = (ArrayList<Computer>) computerService.retrieve(computerWrapper);			
+			ArrayList<Computer> listeComputer = (ArrayList<Computer>) computerService.retrieve(computerWrapper);			
 			noOfRecords = computerService.size(param);
 		
-			
-			 
 			int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 		    
 			request.setAttribute("sort", sort);
