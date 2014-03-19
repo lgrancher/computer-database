@@ -33,7 +33,7 @@ public class ComputerDAO
 		return computerDAO;
 	}
 	
-	public List<Computer> retrieve(Connection connection, ComputerWrapper computerWrapper)
+	public List<Computer> retrieve(Connection connection, ComputerWrapper computerWrapper) throws SQLException
 	{				
 		switch(computerWrapper.getSort())
 		{
@@ -80,141 +80,24 @@ public class ComputerDAO
 		sql.append(computerWrapper.getSort());
 		sql.append(" limit ?, ?");
 		
-		PreparedStatement st=null;
-		ResultSet rs=null;
 		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
 		
-		try
-		{
-			st = connection.prepareStatement(sql.toString());
-			
-			st.setString(1,computerWrapper.getName());
-			st.setString(2,computerWrapper.getName());
-			st.setInt(3, computerWrapper.getOffset());
-			st.setInt(4, computerWrapper.getRecordsPerPage());
-			
-			rs = st.executeQuery();
-			
-			while(rs.next())
-			{
-				Company company = new Company();
-				company.setId(rs.getLong(5));
-				company.setName(rs.getString(6));	
-				
-				Computer computer = Computer.builder()
-						.id(rs.getLong(1))
-		                .name(rs.getString(2))
-		                .introduced(rs.getDate(3))
-		                .discontinued(rs.getDate(4))
-		                .company(company)
-		                .build();
-				
-				listeComputers.add(computer); 
-			}
-			
-			connection.commit();
-		} 
+		PreparedStatement st = connection.prepareStatement(sql.toString());
 		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
+		st.setString(1,computerWrapper.getName());
+		st.setString(2,computerWrapper.getName());
+		st.setInt(3, computerWrapper.getOffset());
+		st.setInt(4, computerWrapper.getRecordsPerPage());
 		
-		finally
-		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}	
-		}	
+		ResultSet rs = st.executeQuery();
 		
-		return listeComputers;
-	}
-	
-	public void create(Connection connection, Computer computer)
-	{
-		String sql = "insert into computer values(default,?,?,?,?)";
-		PreparedStatement st=null;
-		
-		try 
+		while(rs.next())
 		{
-			st = connection.prepareStatement(sql);
-			java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
-			java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
-
-			st.setString(1,computer.getName());
-			st.setDate(2, introducedDate);
-			st.setDate(3,(Date) discontinuedDate);
-			
-			if(computer.getCompany().getId()>0)
-			{
-				st.setLong(4, computer.getCompany().getId());
-			}
-			
-			else
-			{
-				st.setNull(4, Types.BIGINT);
-			}
-			
-			logger.info("Création d'un computer "+computer.getName());
-			st.executeUpdate();	
-			connection.commit();
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			try 
-			{
-				connection.rollback();
-			} 
-			
-			catch (SQLException e1) 
-			{
-				e1.printStackTrace();
-			}
-		}
- 
-		finally
-		{
-			try 
-			{
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}		
-	}
-	
-	public Computer find(Connection connection, Long id) 
-	{		
-		String sql = "select * from computer where id=?";
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		Computer computer=null;
-		
-		try 
-		{
-			st = connection.prepareStatement(sql);
-			st.setLong(1, id);
-		
-			logger.info("Recherche computer n° "+id);
-			rs = st.executeQuery();
-			rs.next();
-			
 			Company company = new Company();
-			company.setId(rs.getLong(5));	
+			company.setId(rs.getLong(5));
+			company.setName(rs.getString(6));	
 			
-			computer = Computer.builder()
+			Computer computer = Computer.builder()
 					.id(rs.getLong(1))
 	                .name(rs.getString(2))
 	                .introduced(rs.getDate(3))
@@ -222,194 +105,144 @@ public class ComputerDAO
 	                .company(company)
 	                .build();
 			
-			connection.commit();
-		} 
+			listeComputers.add(computer); 
+		}
+
+		ConnectionJDBC.close(rs,st);
 		
-		catch (SQLException e) 
+		return listeComputers;
+	}
+	
+	public void create(Connection connection, Computer computer) throws SQLException
+	{
+		String sql = "insert into computer values(default,?,?,?,?)";
+		PreparedStatement st = connection.prepareStatement(sql);
+		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
+		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
+
+		st.setString(1,computer.getName());
+		st.setDate(2, introducedDate);
+		st.setDate(3,(Date) discontinuedDate);
+		
+		if(computer.getCompany().getId()>0)
 		{
-			e.printStackTrace();
+			st.setLong(4, computer.getCompany().getId());
 		}
 		
-		finally
+		else
 		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}	
+			st.setNull(4, Types.BIGINT);
+		}
+		
+		logger.info("Création d'un computer "+computer.getName());
+		st.executeUpdate();
+		
+		ConnectionJDBC.close(null,st);
+	}
+	
+	public Computer find(Connection connection, Long id) throws SQLException 
+	{		
+		String sql = "select * from computer where id=?";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setLong(1, id);
+	
+		logger.info("Recherche computer n° "+id);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		
+		Company company = new Company();
+		company.setId(rs.getLong(5));	
+		
+		Computer computer = Computer.builder()
+				.id(rs.getLong(1))
+                .name(rs.getString(2))
+                .introduced(rs.getDate(3))
+                .discontinued(rs.getDate(4))
+                .company(company)
+                .build();
+		
+		ConnectionJDBC.close(rs,st);
 		
 		return computer;
 	}
 	
-	public void update(Connection connection, Computer computer)
+	public void update(Connection connection, Computer computer) throws SQLException
 	{
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
-		PreparedStatement st=null;
-		try 
-		{
-			st = connection.prepareStatement(sql);
+		PreparedStatement st = connection.prepareStatement(sql);
 			
-			java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
-			java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
+		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
+		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
 
-			st.setString(1, computer.getName());
-			st.setDate(2, introducedDate);
-			st.setDate(3, discontinuedDate);
-			
-			if(computer.getCompany().getId()>0)
-			{
-				st.setLong(4, computer.getCompany().getId());
-			}
-			
-			else
-			{
-				st.setNull(4, Types.BIGINT);
-			}
-			
-			logger.info("Mise à jour du computer "+computer.getId());
-			st.setLong(5, computer.getId());
-			
-			st.executeUpdate();
-			
-			connection.commit();
-		} 
+		st.setString(1, computer.getName());
+		st.setDate(2, introducedDate);
+		st.setDate(3, discontinuedDate);
 		
-		catch (SQLException e) 
+		if(computer.getCompany().getId()>0)
 		{
-			e.printStackTrace();
-			try 
-			{
-				connection.rollback();
-			} 
-			
-			catch (SQLException e1) 
-			{
-				e1.printStackTrace();
-			}
+			st.setLong(4, computer.getCompany().getId());
 		}
 		
-		finally
+		else
 		{
-			try 
-			{
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}			
+			st.setNull(4, Types.BIGINT);
+		}
+		
+		logger.info("Mise à jour du computer "+computer.getId());
+		st.setLong(5, computer.getId());
+		
+		st.executeUpdate();
+ 
+		ConnectionJDBC.close(null,st);
 	}
 	
-	public void delete(Connection connection, Computer computer) 
+	public void delete(Connection connection, Computer computer) throws SQLException 
 	{
 		String sql = "delete from computer where id=?";
 		PreparedStatement st=null;
 		
-		try 
-		{
-			st = connection.prepareStatement(sql);
-			st.setLong(1, computer.getId());
+		st = connection.prepareStatement(sql);
+		st.setLong(1, computer.getId());
+	
+		logger.info("Suppression du computer n°"+computer.getId());
+		st.executeUpdate();
 		
-			logger.info("Suppression du computer n°"+computer.getId());
-			st.executeUpdate();
-			
-			connection.commit();
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			
-			try 
-			{
-				connection.rollback();
-			} 
-			
-			catch (SQLException e1) 
-			{
-				e1.printStackTrace();
-			}
-		}
-		
-		finally
-		{
-			try 
-			{
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}	
+		ConnectionJDBC.close(null,st);
 	}
 
-	public int size(Connection connection, String name)
+	public int size(Connection connection, String name) throws SQLException
 	{
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		int nbLignes=0;
+
+		PreparedStatement st = connection.prepareStatement(sql);
 		
-		try 
+		// nombre de computers en tout
+		if(name.equals("%") || name.equals(""))
 		{
-			st = connection.prepareStatement(sql);
-			
-			// nombre de computers en tout
-			if(name.equals("%") || name.equals(""))
-			{
-				st.setString(1,"%");
-				st.setString(2,"%");
-				logger.info("Recherche du nombre de computers en tout");
-			}
-			
-			// nombre de computers qui correspondent a la recherche
-			else
-			{
-				StringBuilder search = new StringBuilder("%");
-				search.append(name);
-				search.append("%");
-				
-				st.setString(1,search.toString());	
-				st.setString(2,search.toString());
-				logger.info("Recherche du nombre de computer correspondant à "+name);
-			}
-		
-			rs = st.executeQuery();
-			rs.next();	
-			nbLignes = rs.getInt(1);
-			
-			connection.commit();
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
+			st.setString(1,"%");
+			st.setString(2,"%");
+			logger.info("Recherche du nombre de computers en tout");
 		}
 		
-		finally
+		// nombre de computers qui correspondent a la recherche
+		else
 		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
+			StringBuilder search = new StringBuilder("%");
+			search.append(name);
+			search.append("%");
 			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}	
+			st.setString(1,search.toString());	
+			st.setString(2,search.toString());
+			logger.info("Recherche du nombre de computer correspondant à "+name);
+		}
+	
+		ResultSet rs = st.executeQuery();
+		rs.next();	
+		int nbLignes = rs.getInt(1);
+		
+		ConnectionJDBC.close(rs,st);
 		
 		return nbLignes;		
 	}

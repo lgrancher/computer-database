@@ -1,7 +1,6 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,36 +39,19 @@ public class UpdateComputer extends HttpServlet
 		
 		ArrayList<Company> listeCompany;
 		
-		try 
-		{
-			computer = computerService.find(numId);
-			company = computer.getCompany();
-			request.setAttribute("computer", computer);
-			request.setAttribute("company", company);
-		} 
+		computer = computerService.find(numId);
+		company = computer.getCompany();
+		request.setAttribute("computer", computer);
+		request.setAttribute("company", company);
 		
-		catch (SQLException e) 
-		{
-			request.setAttribute("computer", new Computer());
-			request.setAttribute("company", new Company());
-		}
 		
-		try 
-		{
 			listeCompany = (ArrayList<Company>) companyService.retrieveAll();
 			request.setAttribute("listeCompany", listeCompany);
-		} 
 		
-		catch (SQLException e) 
-		{
-			request.setAttribute("listeCompany", new ArrayList<Company>());
-		}
 		
-		finally
-		{
 			request.setAttribute("currentPage", request.getParameter("currentPage"));
 			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
-		}
+		
 	}
 	
 	// modifie le computer
@@ -123,20 +105,8 @@ public class UpdateComputer extends HttpServlet
                 .build();
 		
 		ComputerService computerService = ComputerService.getInstance();
-		
-		try 
-		{
-			computerService.update(computer);
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		finally
-		{
-			response.sendRedirect("index?currentPage="+currentPage);
-		}
+		computerService.update(computer);
+	
+		response.sendRedirect("index?currentPage="+currentPage);	
 	}	
 }

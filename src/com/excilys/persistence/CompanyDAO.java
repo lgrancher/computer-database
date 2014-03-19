@@ -29,7 +29,7 @@ public class CompanyDAO
 		return companyDAO;
 	}
 	
-	public List<Company> retrieveAll(Connection connection)
+	public List<Company> retrieveAll(Connection connection) throws SQLException
 	{		
 		String sql = "select * from company";
 		
@@ -37,43 +37,21 @@ public class CompanyDAO
 		ResultSet rs=null;
 		ArrayList<Company> listeCompany = new ArrayList<Company>();
 		
-		try
-		{
-			st = connection.prepareStatement(sql);
-			rs = st.executeQuery();
-			
-			logger.info("Listing company");
-			while(rs.next())
-			{
-				Company company = Company.builder()
-					    .id(rs.getLong(1))
-						.name(rs.getString(2))
-						.build();
-				
-				listeCompany.add(company);
-			}
-			
-			connection.commit();
-		} 
+		st = connection.prepareStatement(sql);
+		rs = st.executeQuery();
 		
-		catch (SQLException e) 
+		logger.info("Listing company");
+		while(rs.next())
 		{
-			e.printStackTrace();
+			Company company = Company.builder()
+				    .id(rs.getLong(1))
+					.name(rs.getString(2))
+					.build();
+			
+			listeCompany.add(company);
 		}
 		
-		finally
-		{
-			try 
-			{
-				rs.close();
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}	
-		}	
+		ConnectionJDBC.close(rs,st);
 		
 		return listeCompany;
 	}

@@ -22,37 +22,16 @@ public class LogDAO
 		return logDAO;
 	}
 	
-	public void create(Connection connection, Log log)
+	public void create(Connection connection, Log log) throws SQLException
 	{
 		String sql = "insert into log values(default,?,?,NOW())";
 		PreparedStatement st=null;
 		
-		try 
-		{
-			st = connection.prepareStatement(sql);
-			st.setString(1, log.getTypeLog());
-			st.setString(2, log.getOperation());
-			
-			st.executeUpdate();
-		} 
+		st = connection.prepareStatement(sql);
+		st.setString(1, log.getTypeLog());
+		st.setString(2, log.getOperation());
 		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		finally
-		{
-			try 
-			{
-				st.close();
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-		}		
-		
+		st.executeUpdate();	
+		ConnectionJDBC.close(null,st);
 	}
 }

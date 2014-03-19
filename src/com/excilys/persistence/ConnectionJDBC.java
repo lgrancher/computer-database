@@ -1,6 +1,8 @@
 package com.excilys.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.jolbox.bonecp.BoneCP;
@@ -65,6 +67,35 @@ public class ConnectionJDBC
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public static void close(ResultSet rs, PreparedStatement ps)
+	{
+		if(rs!=null)
+		{
+			try 
+			{
+				rs.close();
+			} 
+			
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		if(ps!=null)
+		{
+			try 
+			{
+				ps.close();
+			} 
+			
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }

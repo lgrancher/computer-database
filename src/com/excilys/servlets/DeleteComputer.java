@@ -1,7 +1,6 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,17 +28,10 @@ public class DeleteComputer extends HttpServlet
 		ComputerService computerService = ComputerService.getInstance();
 		Computer computer;
 		
-		try 
-		{
-			computer = computerService.find(idComputer);
-			computerService.delete(computer);
-		} 
-		
-		catch (SQLException e) {}
-		
-		finally
-		{
-			response.sendRedirect("index");
-		}
+		computer = computerService.find(idComputer);
+		computerService.delete(computer);
+	
+
+		response.sendRedirect("index");
 	}
 }

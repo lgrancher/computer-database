@@ -1,7 +1,6 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,23 +28,12 @@ public class AddComputer extends HttpServlet
 	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		try 
-		{
-			CompanyService companyService = CompanyService.getInstance();
-			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
-	
-			request.setAttribute("listeCompany", listeCompany);
-		} 
-		
-		catch (SQLException e)
-		{
-			request.setAttribute("listeCompany", new ArrayList<Company>());
-		} 
-		
-		finally
-		{
-			request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
-		}
+		CompanyService companyService = CompanyService.getInstance();
+		ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+
+		request.setAttribute("listeCompany", listeCompany);
+
+		request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);	
 	}
 	
 	// ajoute le computer dans la base
@@ -95,35 +83,15 @@ public class AddComputer extends HttpServlet
                 .build();
 		
 		ComputerService computerService = ComputerService.getInstance();
+		computerService.create(computer);
+	
+		int recordsPerPage=14;
+		int noOfRecords;
+		int noOfPages = 1;
 		
-		try 
-		{
-			computerService.create(computer);
-		} 
+		noOfRecords = computerService.size("%");
+		noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		finally
-		{
-			int recordsPerPage=14;
-			int noOfRecords;
-			int noOfPages = 1;
-			
-			try 
-			{
-				noOfRecords = computerService.size("");
-				noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-			} 
-			
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			response.sendRedirect("index?currentPage="+noOfPages);
-		}
+		response.sendRedirect("index?currentPage="+noOfPages);	
 	}
 }

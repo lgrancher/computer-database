@@ -11,42 +11,55 @@ import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
-public class CompanyService 
-{
+public class CompanyService {
 	private static CompanyService companyService;
 	private static CompanyDAO companyDAO;
 	private static LogDAO logDAO;
-	
-	private CompanyService()
-	{
+
+	private CompanyService() {
 		companyDAO = CompanyDAO.getInstance();
 		logDAO = LogDAO.getInstance();
 	}
-	
-	public static CompanyService getInstance()
-	{
-		if(companyService==null)
-		{
+
+	public static CompanyService getInstance() {
+		if (companyService == null) {
 			companyService = new CompanyService();
 		}
-		
+
 		return companyService;
 	}
-	
-	public List<Company> retrieveAll() throws SQLException
+
+	public List<Company> retrieveAll()
 	{
-		Connection connection = ConnectionJDBC.getConnection();
-		
 		Log log = Log.builder()
 				 .typeLog("retrieve")
 				 .operation("Listing des company")
 				 .dateLog(new Date())
 				 .build();
-	
-		logDAO.create(connection, log);
 		
-		List<Company> listCompany = companyDAO.retrieveAll(connection);
-		ConnectionJDBC.close(connection);
+		Connection connection=null;
+		List<Company> listCompany=null;
+		
+		try 
+		{
+			connection = ConnectionJDBC.getConnection();
+			listCompany = companyDAO.retrieveAll(connection);
+			logDAO.create(connection, log);
+			connection.commit();
+		} 
+		
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		finally
+		{
+			if(connection!=null)
+			{
+				ConnectionJDBC.close(connection);
+			}
+		}
 		
 		return listCompany;
 	}
