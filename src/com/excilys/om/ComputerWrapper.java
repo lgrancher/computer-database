@@ -1,6 +1,5 @@
 package com.excilys.om;
 
-
 import java.util.List;
 
 public class ComputerWrapper 

@@ -116,7 +116,7 @@ public class ComputerDAO
 		return listeComputers;
 	}
 	
-	public void create(Connection connection, Computer computer) throws SQLException
+	public int create(Connection connection, Computer computer) throws SQLException
 	{
 		String sql = "insert into computer values(default,?,?,?,?)";
 		PreparedStatement st = connection.prepareStatement(sql);
@@ -137,10 +137,21 @@ public class ComputerDAO
 			st.setNull(4, Types.BIGINT);
 		}
 		
-		logger.info("Création d'un computer "+computer.getName());
 		st.executeUpdate();
 		
-		ConnectionJDBC.close(null,st);
+		ResultSet rs = st.getGeneratedKeys();
+	
+		int idAdd=0;
+		
+		if( rs.next() ) 
+		{
+			idAdd = rs.getInt(1);
+		}
+		
+		logger.info("Création d'un computer "+computer.getName() + ", id = "+idAdd);
+		ConnectionJDBC.close(rs,st);
+		
+		return idAdd;
 	}
 	
 	public Computer find(Connection connection, Long id) throws SQLException 

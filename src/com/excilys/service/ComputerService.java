@@ -80,19 +80,20 @@ public class ComputerService
 	}
 	
 	public void create(Computer computer) 
-	{
-		Log log = Log.builder()
-					 .typeLog("create")
-					 .operation("Ajout du computer "+computer.getName())
-					 .dateLog(new Date())
-					 .build();
-		
+	{		
 		Connection connection=null;
 		
 		try 
 		{
 			connection = ConnectionJDBC.getConnection();
-			computerDAO.create(connection, computer);
+			int idAdd = computerDAO.create(connection, computer);
+			
+			Log log = Log.builder()
+					 .typeLog("create")
+					 .operation("Ajout du computer "+computer.getName()+", id = "+idAdd)
+					 .dateLog(new Date())
+					 .build();
+			
 			logDAO.create(connection, log);
 			connection.commit();
 		} 
