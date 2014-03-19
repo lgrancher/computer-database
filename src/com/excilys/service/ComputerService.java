@@ -3,7 +3,6 @@ package com.excilys.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 import com.excilys.om.Computer;
 import com.excilys.om.ComputerWrapper;
@@ -34,18 +33,18 @@ public class ComputerService
 		return computerService;
 	}
 	
-	public List<Computer> retrieve(ComputerWrapper computerWrapper)
+	public ComputerWrapper retrieve(ComputerWrapper computerWrapper)
 	{
 		String operation;
 		
-		if(computerWrapper.getName().equals("%"))
+		if(computerWrapper.getSearch().equals("%"))
 		{
-			operation = "Listing de tous les computers";
+			operation = "Listing de tous les computers page " + computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages();
 		}
 		
 		else
 		{
-			operation = "Listing des computers avec la recherche "+computerWrapper.getName();
+			operation = "Listing des computers avec la recherche "+computerWrapper.getSearch()+" page " + computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages();
 		}
 		
 		Log log = Log.builder()
@@ -54,13 +53,13 @@ public class ComputerService
 				 .build();
 		
 		Connection connection=null;
-		List<Computer> listComputer=null;
 		
 		try 
 		{
 			connection = ConnectionJDBC.getConnection();
-			listComputer = computerDAO.retrieve(connection, computerWrapper);
-			logDAO.create(connection, log);
+			computerWrapper.setListeComputer(computerDAO.retrieve(connection, computerWrapper));
+			
+		    logDAO.create(connection, log);
 			connection.commit();
 		} 
 		
@@ -77,7 +76,7 @@ public class ComputerService
 			}
 		}
 		
-		return listComputer;
+		return computerWrapper;
 	}
 	
 	public void create(Computer computer) 

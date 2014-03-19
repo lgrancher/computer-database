@@ -1,14 +1,12 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.om.Computer;
 import com.excilys.om.ComputerWrapper;
 import com.excilys.service.ComputerService;
 
@@ -19,20 +17,20 @@ public class ListeComputer extends HttpServlet
 	// affiche la liste des computers
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
-		
-		String param = request.getParameter("search");
+		ComputerService computerService = ComputerService.getInstance();
+		String search = request.getParameter("search");
 		String sort = request.getParameter("sort");
 		int currentPage = 1;
 	    int recordsPerPage = 14;
-	    int noOfRecords;
 	    
-	    if(param==null)
+	    if(search==null)
 	    {
-	    	param="%";
+	    	search="%";
 	    }
 	    
+	    int noOfRecords = computerService.size(search);
+	    
 		if(sort==null)
-			
 		{
 			sort="id";
 		}
@@ -50,27 +48,19 @@ public class ListeComputer extends HttpServlet
 	    	}
 	    }
 	    
-	    ComputerService computerService = ComputerService.getInstance();
-
 	    ComputerWrapper computerWrapper = ComputerWrapper.builder()
 	    												 .sort(sort)
-	    												 .name(param)
+	    												 .search(search)
 	    												 .offset((currentPage-1)*recordsPerPage)
+	    												 .currentPage(currentPage)
 	    												 .recordsPerPage(recordsPerPage)
+	    												 .noOfRecords(noOfRecords)
+	    												 .noOfPages((int) Math.ceil(noOfRecords * 1.0 / recordsPerPage))
 	    												 .build();
 	    		
-		ArrayList<Computer> listeComputer = (ArrayList<Computer>) computerService.retrieve(computerWrapper);			
-		noOfRecords = computerService.size(param);
-	
-		int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-	    
-		request.setAttribute("sort", sort);
-		request.setAttribute("search", param);
-		request.setAttribute("listeComputer", listeComputer);
-	    request.setAttribute("noOfPages", noOfPages);
-	    request.setAttribute("currentPage", currentPage);
-	    request.setAttribute("noOfRecords", noOfRecords);
-	
+		computerService.retrieve(computerWrapper);			
+		
+		request.setAttribute("computerWrapper", computerWrapper);
 		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
 	}
 }

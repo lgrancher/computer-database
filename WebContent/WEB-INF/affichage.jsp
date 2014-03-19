@@ -4,7 +4,7 @@
 
 <%@ page import="java.util.ArrayList"%>
 <section id="main">
-	<h2 id="homeTitle">${noOfRecords} computers</h2>
+	<h2 id="homeTitle">${computerWrapper.noOfRecords} computers</h2>
 	<div id="actions">
 		<form action="index" method="GET">
 			<div class="row">
@@ -27,7 +27,7 @@
 
 		</form>
 
-		<a type="button" class="btn btn-warning" id="add" href="AddComputer?currentPage= ${currentPage}"><span
+		<a type="button" class="btn btn-warning" id="add" href="AddComputer?currentPage= ${computerWrapper.currentPage}"><span
 					class="glyphicon glyphicon-plus"></span> Add
 			Computer</a>
 	</div>
@@ -35,16 +35,16 @@
 		<thead>
 			<tr>
 				<c:set var="attribut"
-					value="${listeComputer[0]['class']['declaredFields']}" />
+					value="${computerWrapper.listeComputer[0]['class']['declaredFields']}" />
 				<c:forEach var="titre" items="${attribut}">
 					<th><a
-						href="index?sort=${titre.name}&currentPage=1&search=${search}">${titre.name}</a></th>
+						href="index?sort=${titre.name}&currentPage=1&search=${computerWrapper.search}">${titre.name}</a></th>
 				</c:forEach>
 				<th>Operations</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="computer" items="${listeComputer}">
+			<c:forEach var="computer" items="${computerWrapper.listeComputer}">
 				<tr>
 					<td class="id">${computer.id}</td>
 					<td class="name">${computer.name}</td>
@@ -53,7 +53,7 @@
 					<td class="name">${computer.company.name}</td>
 					<td class="operations"><a type="button"
 						class="btn btn-success" id="modif"
-						href="UpdateComputer?id=${computer.id}&currentPage=${currentPage}"><span
+						href="UpdateComputer?id=${computer.id}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"><span
 							class="glyphicon glyphicon-pencil"></span> Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
 						href=DeleteComputer?id=${computer.id}
@@ -70,28 +70,28 @@
 			<div class="pagination">
 
 				<%--For displaying Previous link except for the 1st page --%>
-				<c:if test="${currentPage != 1}">
+				<c:if test="${computerWrapper.currentPage != 1}">
 					<span class="num"><a
-						href="index?sort=${sort}&currentPage=${currentPage - 1}&search=${search}"
+						href="index?sort=${sort}&currentPage=${computerWrapper.currentPage - 1}&search=${computerWrapper.search}"
 						style="cursor: pointer; color: grey"><span
 							class="glyphicon glyphicon-chevron-left"></span> Previous</a></span>
 				</c:if>
 
 
-				<c:if test="${currentPage == 1}">
+				<c:if test="${computerWrapper.currentPage == 1}">
 					<span class="num"><span
 						class="glyphicon glyphicon-chevron-left"></span> Previous</span>
 				</c:if>
 
 
-				<c:forEach begin="1" end="${noOfPages}" var="i">
+				<c:forEach begin="1" end="${computerWrapper.noOfPages}" var="i">
 					<c:choose>
-						<c:when test="${currentPage eq i}">
+						<c:when test="${computerWrapper.currentPage eq i}">
 							<span class="num">${i}</span>
 						</c:when>
 						<c:otherwise>
 							<span class="num"><a
-								href="index?sort=${sort}&currentPage=${i}&search=${search}"
+								href="index?sort=${computerWrapper.sort}&currentPage=${i}&search=${computerWrapper.search}"
 								style="cursor: pointer; color: grey">${i}</a></span>
 						</c:otherwise>
 					</c:choose>
@@ -99,14 +99,14 @@
 
 
 				<%--For displaying Next link --%>
-				<c:if test="${currentPage lt noOfPages}">
+				<c:if test="${computerWrapper.currentPage lt computerWrapper.noOfPages}">
 					<span class="num"><a
-						href="index?sort=${sort}&currentPage=${currentPage + 1}&search=${search}"
+						href="index?sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage + 1}&search=${computerWrapper.search}"
 						style="cursor: pointer; color: grey">Next <span
 							class="glyphicon glyphicon-chevron-right"></span></a></span>
 				</c:if>
 
-				<c:if test="${currentPage == noOfPages}">
+				<c:if test="${computerWrapper.currentPage == computerWrapper.noOfPages}">
 					<span class="num">Next <span
 						class="glyphicon glyphicon-chevron-right"></span></span>
 				</c:if>

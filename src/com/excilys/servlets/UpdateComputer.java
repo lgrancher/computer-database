@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
+import com.excilys.om.ComputerWrapper;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
@@ -34,24 +35,34 @@ public class UpdateComputer extends HttpServlet
 		ComputerService computerService = ComputerService.getInstance();
 		CompanyService companyService = CompanyService.getInstance();
 		
-		Computer computer;
-		Company company;
+		Computer computer = computerService.find(numId);
+		Company company = computer.getCompany();	
+		ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+	
+		int curPage;
 		
-		ArrayList<Company> listeCompany;
+		try
+		{
+			curPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
 		
-		computer = computerService.find(numId);
-		company = computer.getCompany();
+		catch(NumberFormatException e)
+		{
+			curPage = 1;
+		}
+		
+		ComputerWrapper computerWrapper = ComputerWrapper.builder()
+														 .currentPage(curPage)
+														 .search(request.getParameter("search"))
+														 .build();
+				
+		request.setAttribute("computerWrapper", computerWrapper);
 		request.setAttribute("computer", computer);
 		request.setAttribute("company", company);
+		request.setAttribute("listeCompany", listeCompany);
 		
-		
-			listeCompany = (ArrayList<Company>) companyService.retrieveAll();
-			request.setAttribute("listeCompany", listeCompany);
-		
-		
-			request.setAttribute("currentPage", request.getParameter("currentPage"));
-			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
-		
+		request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
+	
 	}
 	
 	// modifie le computer
@@ -63,6 +74,7 @@ public class UpdateComputer extends HttpServlet
 		String discontinued = request.getParameter("discontinuedDate");
 		String company = request.getParameter("company");
 		String currentPage = request.getParameter("currentPage");
+		String search = request.getParameter("search");
 
 		long idComputer = Long.parseLong(id);
 		long companyId = Long.parseLong(company);
@@ -107,6 +119,6 @@ public class UpdateComputer extends HttpServlet
 		ComputerService computerService = ComputerService.getInstance();
 		computerService.update(computer);
 	
-		response.sendRedirect("index?currentPage="+currentPage);	
+		response.sendRedirect("index?currentPage="+currentPage+"&search="+search);	
 	}	
 }

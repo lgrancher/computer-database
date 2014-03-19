@@ -58,21 +58,24 @@ public class ComputerDAO
 				break;
 		}
 		
+		String search;
+		
 		// on affiche tous les computers		
-		if(computerWrapper.getName().equals("%"))
+		if(computerWrapper.getSearch().equals("%"))
 		{
-			logger.info("Listing de tous les computers");
+			logger.info("Listing de tous les computers page "+computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages());
+			search = "%";
 		}
 		
 		// filter by name
 		else
 		{
-			StringBuilder search = new StringBuilder("%");
-			search.append(computerWrapper.getName());
-			search.append("%");
+			StringBuilder builder = new StringBuilder("%");
+			builder.append(computerWrapper.getSearch());
+			builder.append("%");
+			search = builder.toString();
 			
-			logger.info("Listing des computers avec la recherche "+computerWrapper.getName());
-			computerWrapper.setName(search.toString());
+			logger.info("Listing des computers avec la recherche "+computerWrapper.getSearch()+" page "+computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages());
 		}
 		
 		// requete
@@ -84,8 +87,8 @@ public class ComputerDAO
 		
 		PreparedStatement st = connection.prepareStatement(sql.toString());
 		
-		st.setString(1,computerWrapper.getName());
-		st.setString(2,computerWrapper.getName());
+		st.setString(1,search);
+		st.setString(2,search);
 		st.setInt(3, computerWrapper.getOffset());
 		st.setInt(4, computerWrapper.getRecordsPerPage());
 		

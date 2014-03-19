@@ -26,11 +26,8 @@ public class DeleteComputer extends HttpServlet
 		Long idComputer = Long.parseLong(id);
 		
 		ComputerService computerService = ComputerService.getInstance();
-		Computer computer;
-		
-		computer = computerService.find(idComputer);
+		Computer computer = computerService.find(idComputer);
 		computerService.delete(computer);
-	
 
 		response.sendRedirect("index");
 	}

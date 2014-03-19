@@ -20,7 +20,7 @@ import com.excilys.service.ComputerService;
 /**
  * Servlet implementation class AjoutComputer
  */
-@WebServlet("/AjoutComputer")
+@WebServlet("/AddComputer")
 public class AddComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -85,12 +85,9 @@ public class AddComputer extends HttpServlet
 		ComputerService computerService = ComputerService.getInstance();
 		computerService.create(computer);
 	
-		int recordsPerPage=14;
-		int noOfRecords;
-		int noOfPages = 1;
-		
-		noOfRecords = computerService.size("%");
-		noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+		int recordsPerPage=14;		
+		int noOfRecords = computerService.size("%");
+		int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 		
 		response.sendRedirect("index?currentPage="+noOfPages);	
 	}

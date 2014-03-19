@@ -1,11 +1,18 @@
 package com.excilys.om;
 
+
+import java.util.List;
+
 public class ComputerWrapper 
 {
 	private String sort;
-	private String name;
+	private String search;
 	private int offset;
 	private int recordsPerPage;
+	private int currentPage;
+	private int noOfPages;
+	private int noOfRecords;
+	private List<Computer> listeComputer;
 	
 	public static class Builder 
 	{
@@ -22,9 +29,9 @@ public class ComputerWrapper
            return this;
        }
  
-       public Builder name(String name) 
+       public Builder search(String search) 
        {
-           this.computerWrapper.name = name;
+           this.computerWrapper.search = search;
            return this;
        }
        
@@ -38,6 +45,31 @@ public class ComputerWrapper
        {
            this.computerWrapper.recordsPerPage = recordsPerPage;
            return this;
+       }
+       
+       public Builder currentPage(int currentPage) 
+       {
+           this.computerWrapper.currentPage = currentPage;
+           return this;
+       }
+       
+       public Builder noOfPages(int noOfPages) 
+       {
+           this.computerWrapper.noOfPages = noOfPages;
+           return this;
+       }
+       
+       public Builder noOfRecords(int noOfRecords) 
+       {
+           this.computerWrapper.noOfRecords = noOfRecords;
+           return this;
+       }
+       
+       
+       public Builder listeComputer(List<Computer> listeComputer)
+       {
+    	   this.computerWrapper.setListeComputer(listeComputer);
+    	   return this;
        }
  
        public ComputerWrapper build() 
@@ -63,14 +95,14 @@ public class ComputerWrapper
 		this.sort = sort;
 	}
 
-	public String getName() 
+	public String getSearch() 
 	{
-		return name;
+		return search;
 	}
 
-	public void setName(String name) 
+	public void setSearch(String search) 
 	{
-		this.name = name;
+		this.search = search;
 	}
 
 	public int getOffset() 
@@ -92,13 +124,52 @@ public class ComputerWrapper
 	{
 		this.recordsPerPage = recordsPerPage;
 	}
+	
+	public int getCurrentPage() 
+	{
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) 
+	{
+		this.currentPage = currentPage;
+	}
+
+	public List<Computer> getListeComputer() 
+	{
+		return listeComputer;
+	}
+
+	public void setListeComputer(List<Computer> listeComputer) 
+	{
+		this.listeComputer = listeComputer;
+	}
+
+	public int getNoOfPages() 
+	{
+		return noOfPages;
+	}
+
+	public void setNoOfPages(int noOfPages) 
+	{
+		this.noOfPages = noOfPages;
+	}
+
+	public int getNoOfRecords() {
+		return noOfRecords;
+	}
+
+	public void setNoOfRecords(int noOfRecords)
+	{
+		this.noOfRecords = noOfRecords;
+	}
 
 	@Override
 	public int hashCode() 
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((search == null) ? 0 : search.hashCode());
 		result = prime * result + recordsPerPage;
 		result = prime * result + offset;
 		result = prime * result + ((sort == null) ? 0 : sort.hashCode());
@@ -115,10 +186,10 @@ public class ComputerWrapper
 		if (getClass() != obj.getClass())
 			return false;
 		ComputerWrapper other = (ComputerWrapper) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (search == null) {
+			if (other.search != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!search.equals(other.search))
 			return false;
 		if (recordsPerPage != other.recordsPerPage)
 			return false;
@@ -133,9 +204,12 @@ public class ComputerWrapper
 	}
 
 	@Override
-	public String toString()
+	public String toString() 
 	{
-		return "ComputerWrapper [sort=" + sort + ", name=" + name + ", offset="
-				+ offset + ", recordsPerPage=" + recordsPerPage + "]";
-	};
+		return "ComputerWrapper [sort=" + sort + ", search=" + search + ", offset="
+				+ offset + ", recordsPerPage=" + recordsPerPage
+				+ ", currentPage=" + currentPage + ", noOfPages=" + noOfPages
+				+ ", noOfRecords=" + noOfRecords + ", listeComputer="
+				+ listeComputer + "]";
+	}
 }
