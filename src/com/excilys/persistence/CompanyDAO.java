@@ -15,8 +15,12 @@ public class CompanyDAO
 {
 	private static CompanyDAO companyDAO;
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+	private static ConnectionJDBC connectionJDBC;
 	
-	private CompanyDAO(){}
+	private CompanyDAO()
+	{
+		connectionJDBC = ConnectionJDBC.getInstance();
+	}
 	
 	public static CompanyDAO getInstance()
 	{
@@ -29,9 +33,11 @@ public class CompanyDAO
 		return companyDAO;
 	}
 	
-	public List<Company> retrieveAll(Connection connection) throws SQLException
+	public List<Company> retrieveAll() throws SQLException
 	{		
 		String sql = "select * from company";
+		
+		Connection connection = connectionJDBC.getConnection();
 		
 		PreparedStatement st=null;
 		ResultSet rs=null;

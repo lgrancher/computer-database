@@ -18,6 +18,7 @@ public class ConnectionJDBC
 	private static String passwd = "excilys";
 	private static Logger logger = LoggerFactory.getLogger(ConnectionJDBC.class);
 	private static BoneCP connectionPool = null;
+	private static ThreadLocal<Connection> threadConnect;
 
 	private ConnectionJDBC()
 	{
@@ -32,6 +33,7 @@ public class ConnectionJDBC
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(1);
 			connectionPool = new BoneCP(config);	
+			threadConnect = new ThreadLocal<Connection>();
 			logger.info("Chargement du driver JDBC");
 		} 
 		
@@ -41,33 +43,45 @@ public class ConnectionJDBC
 		}	
 	}
 	
-	public static Connection getConnection() throws SQLException
-	{	
+	public static ConnectionJDBC getInstance()
+	{
 		if(connectionJDBC==null)
 		{
 			connectionJDBC = new ConnectionJDBC();
 		}
 		
-		Connection connection = connectionPool.getConnection();
-
-		logger.info("Ouverture de la connexion");
-		connection.setAutoCommit(false);
-		
-		return connection;
+		return connectionJDBC;
 	}
 	
-	public static void close(Connection connection)
+	public Connection getConnection() throws SQLException
+	{	
+		if(threadConnect.get() == null)
+		{
+			Connection connection = connectionPool.getConnection();
+			connection.setAutoCommit(false);
+			threadConnect.set(connection);
+		}
+		
+		logger.info("Ouverture de la connexion");
+		
+		return threadConnect.get();
+	}
+	
+	public void close(Connection connection)
 	{
 		try 
-		{
-			logger.info("Fermeture de la connexion");
+		{	
 			connection.close();
+			
+			logger.info("Fermeture de la connexion");
 		} 
 		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
+		
+		threadConnect.set(null);
 	}
 	
 	public static void close(ResultSet rs, PreparedStatement ps)

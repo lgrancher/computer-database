@@ -9,8 +9,12 @@ import com.excilys.om.Log;
 public class LogDAO 
 {
 	private static LogDAO logDAO;
+	private static ConnectionJDBC connectionJDBC;
 	
-	private LogDAO(){};
+	private LogDAO()
+	{
+		connectionJDBC = ConnectionJDBC.getInstance();
+	};
 	
 	public static LogDAO getInstance()
 	{
@@ -22,8 +26,9 @@ public class LogDAO
 		return logDAO;
 	}
 	
-	public void create(Connection connection, Log log) throws SQLException
+	public void create(Log log) throws SQLException
 	{
+		Connection connection = connectionJDBC.getConnection();
 		String sql = "insert into log values(default,?,?,NOW())";
 		PreparedStatement st=null;
 		

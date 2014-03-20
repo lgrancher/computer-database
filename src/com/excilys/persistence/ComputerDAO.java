@@ -19,10 +19,14 @@ public class ComputerDAO
 {
 	private static ComputerDAO computerDAO;
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	private static ConnectionJDBC connectionJDBC;
 	
-	private ComputerDAO(){}
+	private ComputerDAO()
+	{
+		connectionJDBC = ConnectionJDBC.getInstance();
+	}
 	
-	public static ComputerDAO getInstance()
+	public static ComputerDAO getInstance() throws SQLException
 	{
 		if(computerDAO==null)
 		{
@@ -33,8 +37,9 @@ public class ComputerDAO
 		return computerDAO;
 	}
 	
-	public List<Computer> retrieve(Connection connection, ComputerWrapper computerWrapper) throws SQLException
+	public List<Computer> retrieve(ComputerWrapper computerWrapper) throws SQLException
 	{				
+		Connection connection = connectionJDBC.getConnection();
 		switch(computerWrapper.getSort())
 		{
 			case "name" :
@@ -116,9 +121,11 @@ public class ComputerDAO
 		return listeComputers;
 	}
 	
-	public int create(Connection connection, Computer computer) throws SQLException
+	public int create(Computer computer) throws SQLException
 	{
 		String sql = "insert into computer values(default,?,?,?,?)";
+		
+		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
 		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
@@ -154,10 +161,11 @@ public class ComputerDAO
 		return idAdd;
 	}
 	
-	public Computer find(Connection connection, Long id) throws SQLException 
+	public Computer find(Long id) throws SQLException 
 	{		
 		String sql = "select * from computer where id=?";
 		
+		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, id);
 	
@@ -181,10 +189,11 @@ public class ComputerDAO
 		return computer;
 	}
 	
-	public void update(Connection connection, Computer computer) throws SQLException
+	public void update(Computer computer) throws SQLException
 	{
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
+		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 			
 		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
@@ -212,11 +221,12 @@ public class ComputerDAO
 		ConnectionJDBC.close(null,st);
 	}
 	
-	public void delete(Connection connection, Computer computer) throws SQLException 
+	public void delete(Computer computer) throws SQLException 
 	{
 		String sql = "delete from computer where id=?";
 		PreparedStatement st=null;
 		
+		Connection connection = connectionJDBC.getConnection();
 		st = connection.prepareStatement(sql);
 		st.setLong(1, computer.getId());
 	
@@ -226,10 +236,11 @@ public class ComputerDAO
 		ConnectionJDBC.close(null,st);
 	}
 
-	public int size(Connection connection, String name) throws SQLException
+	public int size(String name) throws SQLException
 	{
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
 
+		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		// nombre de computers en tout

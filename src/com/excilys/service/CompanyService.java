@@ -15,13 +15,17 @@ public class CompanyService {
 	private static CompanyService companyService;
 	private static CompanyDAO companyDAO;
 	private static LogDAO logDAO;
+	private static ConnectionJDBC connectionJDBC;
 
-	private CompanyService() {
+	private CompanyService() 
+	{
 		companyDAO = CompanyDAO.getInstance();
 		logDAO = LogDAO.getInstance();
+		connectionJDBC = ConnectionJDBC.getInstance();
 	}
 
-	public static CompanyService getInstance() {
+	public static CompanyService getInstance() 
+	{
 		if (companyService == null) {
 			companyService = new CompanyService();
 		}
@@ -42,9 +46,9 @@ public class CompanyService {
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			listCompany = companyDAO.retrieveAll(connection);
-			logDAO.create(connection, log);
+			connection = connectionJDBC.getConnection();
+			listCompany = companyDAO.retrieveAll();
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -57,7 +61,7 @@ public class CompanyService {
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		

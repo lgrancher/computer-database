@@ -16,10 +16,21 @@ public class ComputerService
 	private static ComputerService computerService;
 	private static ComputerDAO computerDAO;
 	private static LogDAO logDAO;
+	private static ConnectionJDBC connectionJDBC;
 	
 	private ComputerService()
 	{
-		computerDAO = ComputerDAO.getInstance();
+		try 
+		{
+			computerDAO = ComputerDAO.getInstance();
+		}
+		
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		connectionJDBC = ConnectionJDBC.getInstance();
 		logDAO = LogDAO.getInstance();
 	}
 	
@@ -56,10 +67,10 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			computerWrapper.setListeComputer(computerDAO.retrieve(connection, computerWrapper));
+			connection = connectionJDBC.getConnection();
+			computerWrapper.setListeComputer(computerDAO.retrieve(computerWrapper));
 			
-		    logDAO.create(connection, log);
+		    logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -72,7 +83,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
@@ -85,8 +96,8 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			int idAdd = computerDAO.create(connection, computer);
+			connection = connectionJDBC.getConnection();
+			int idAdd = computerDAO.create(computer);
 			
 			Log log = Log.builder()
 					 .typeLog("create")
@@ -94,7 +105,7 @@ public class ComputerService
 					 .dateLog(new Date())
 					 .build();
 			
-			logDAO.create(connection, log);
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -117,7 +128,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 	}
@@ -134,9 +145,9 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			computer = computerDAO.find(connection, id);
-			logDAO.create(connection, log);
+			connection = connectionJDBC.getConnection();
+			computer = computerDAO.find(id);
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -149,7 +160,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 
@@ -167,9 +178,9 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			computerDAO.update(connection, computer);
-			logDAO.create(connection, log);
+			connection = connectionJDBC.getConnection();
+			computerDAO.update(computer);
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -191,7 +202,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}	
 	}
@@ -207,9 +218,9 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			computerDAO.delete(connection, computer);
-			logDAO.create(connection, log);
+			connection = connectionJDBC.getConnection();
+			computerDAO.delete(computer);
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -231,7 +242,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 	}
@@ -260,9 +271,9 @@ public class ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.getConnection();
-			size= computerDAO.size(connection, name);
-			logDAO.create(connection, log);
+			connection = connectionJDBC.getConnection();
+			size= computerDAO.size(name);
+			logDAO.create(log);
 			connection.commit();
 		} 
 		
@@ -275,7 +286,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
