@@ -242,7 +242,7 @@ public class ComputerDAO
 	public int size(String search) throws SQLException
 	{
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
-
+	
 		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 		

@@ -86,7 +86,7 @@ public class AddComputer extends HttpServlet
 		computerService.create(computer);
 	
 		int recordsPerPage=14;		
-		int noOfRecords = computerService.size("%");
+		int noOfRecords = computerService.size("");
 		int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 		
 		response.sendRedirect("index?currentPage="+noOfPages);	

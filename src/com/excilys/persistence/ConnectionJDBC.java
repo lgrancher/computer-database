@@ -60,10 +60,9 @@ public class ConnectionJDBC
 			Connection connection = connectionPool.getConnection();
 			connection.setAutoCommit(false);
 			threadConnect.set(connection);
+			logger.info("Ouverture de la connexion");
 		}
-		
-		logger.info("Ouverture de la connexion");
-		
+				
 		return threadConnect.get();
 	}
 	

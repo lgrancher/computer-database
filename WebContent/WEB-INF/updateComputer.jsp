@@ -1,6 +1,6 @@
 <jsp:include page="../include/header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="import" tagdir="/WEB-INF/tags" %>
 <section id="main">
 	<div class="col-lg-4 col-lg-offset-4">
 		<form class="form-horizontal" id="form" method="POST" action="UpdateComputer">
@@ -57,8 +57,7 @@
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<input type="submit" name="submit" value="Update"
-						class="btn btn-success"> or <a href="index?sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"
-						class="btn btn-danger"> Cancel</a>
+						class="btn btn-success"> or <import:retrieve />
 				</div>
 			</div>
 		</form>
