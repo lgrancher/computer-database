@@ -53,10 +53,10 @@
 					<td class="name">${computer.company.name}</td>
 					<td class="operations"><a type="button"
 						class="btn btn-success" id="modif"
-						href="UpdateComputer?id=${computer.id}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"><span
+						href="UpdateComputer?id=${computer.id}&sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"><span
 							class="glyphicon glyphicon-pencil"></span> Update</a> <a
 						type="button" class="btn btn-danger" id="supp"
-						href=DeleteComputer?id=${computer.id}
+						href="DeleteComputer?id=${computer.id}&sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"
 						OnClick="return confirm('Do you want to delete the computer ${computer.name} ?')"><span
 							class="glyphicon glyphicon-remove"></span> Delete</a></td>
 				</tr>

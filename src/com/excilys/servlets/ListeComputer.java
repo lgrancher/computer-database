@@ -22,13 +22,15 @@ public class ListeComputer extends HttpServlet
 		String sort = request.getParameter("sort");
 		int currentPage = 1;
 	    int recordsPerPage = 14;
+	   
 	    
 	    if(search==null)
 	    {
-	    	search="%";
+	    	search="";
 	    }
 	    
-	    int noOfRecords = computerService.size(search);
+	    int noOfRecords = computerService.size(search); 
+	    int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 	    
 		if(sort==null)
 		{
@@ -40,6 +42,11 @@ public class ListeComputer extends HttpServlet
 	    	try
 	    	{
 	    		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+	    		
+	    		if(currentPage>noOfPages)
+	    		{
+	    			currentPage--;
+	    		}
 	    	}
 	    	
 	    	catch(NumberFormatException e)
@@ -55,7 +62,7 @@ public class ListeComputer extends HttpServlet
 	    												 .currentPage(currentPage)
 	    												 .recordsPerPage(recordsPerPage)
 	    												 .noOfRecords(noOfRecords)
-	    												 .noOfPages((int) Math.ceil(noOfRecords * 1.0 / recordsPerPage))
+	    												 .noOfPages(noOfPages)
 	    												 .build();
 	    		
 		computerService.retrieve(computerWrapper);			

@@ -52,11 +52,12 @@
 				<input type="hidden" value="${computer.id}" name="id">
 				<input type="hidden" value="${computerWrapper.currentPage}" name="currentPage">
 				<input type="hidden" value="${computerWrapper.search}" name="search">
+				<input type="hidden" value="${computerWrapper.sort}" name="sort">
 			</fieldset>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<input type="submit" name="submit" value="Update"
-						class="btn btn-success"> or <a href="index?currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"
+						class="btn btn-success"> or <a href="index?sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage}&search=${computerWrapper.search}"
 						class="btn btn-danger"> Cancel</a>
 				</div>
 			</div>

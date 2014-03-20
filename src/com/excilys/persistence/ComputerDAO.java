@@ -40,33 +40,36 @@ public class ComputerDAO
 	public List<Computer> retrieve(ComputerWrapper computerWrapper) throws SQLException
 	{				
 		Connection connection = connectionJDBC.getConnection();
+		
+		String sort;
+		
 		switch(computerWrapper.getSort())
 		{
 			case "name" :
-				computerWrapper.setSort("computer.name");
+				sort = "computer.name";
 				break;
 				
 			case "introduced" :
-				computerWrapper.setSort("computer.introduced");
+				sort = "computer.introduced";
 				break;
 			
 			case "discontinued" :
-				computerWrapper.setSort("computer.discontinued");
+				sort = "computer.discontinued";
 				break;
 				
 			case "company" :
-				computerWrapper.setSort("company.name, computer.name");
+				sort = "company.name, computer.name";
 				break;
 				
 			default :
-				computerWrapper.setSort("computer.id");	
+				sort = "computer.id";	
 				break;
 		}
 		
 		String search;
 		
 		// on affiche tous les computers		
-		if(computerWrapper.getSearch().equals("%"))
+		if(computerWrapper.getSearch().equals(""))
 		{
 			logger.info("Listing de tous les computers page "+computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages());
 			search = "%";
@@ -85,7 +88,7 @@ public class ComputerDAO
 		
 		// requete
 		StringBuilder sql = new StringBuilder ("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? order by ");
-		sql.append(computerWrapper.getSort());
+		sql.append(sort);
 		sql.append(" limit ?, ?");
 		
 		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
@@ -236,7 +239,7 @@ public class ComputerDAO
 		ConnectionJDBC.close(null,st);
 	}
 
-	public int size(String name) throws SQLException
+	public int size(String search) throws SQLException
 	{
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
 
@@ -244,7 +247,7 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		// nombre de computers en tout
-		if(name.equals("%") || name.equals(""))
+		if(search.equals(""))
 		{
 			st.setString(1,"%");
 			st.setString(2,"%");
@@ -254,13 +257,13 @@ public class ComputerDAO
 		// nombre de computers qui correspondent a la recherche
 		else
 		{
-			StringBuilder search = new StringBuilder("%");
-			search.append(name);
-			search.append("%");
+			StringBuilder builder = new StringBuilder("%");
+			builder.append(search);
+			builder.append("%");
 			
-			st.setString(1,search.toString());	
-			st.setString(2,search.toString());
-			logger.info("Recherche du nombre de computer correspondant à "+name);
+			st.setString(1,builder.toString());	
+			st.setString(2,builder.toString());
+			logger.info("Recherche du nombre de computer correspondant à "+search);
 		}
 	
 		ResultSet rs = st.executeQuery();

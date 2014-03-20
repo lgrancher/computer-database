@@ -23,12 +23,21 @@ public class DeleteComputer extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
+		String page = request.getParameter("currentPage");
+		String search = request.getParameter("search");
+		String sort = request.getParameter("sort");
 		Long idComputer = Long.parseLong(id);
+		int currentPage = Integer.parseInt(page);
 		
+		if(search==null)
+		{
+			search="";
+		}
+	
 		ComputerService computerService = ComputerService.getInstance();
 		Computer computer = computerService.find(idComputer);
 		computerService.delete(computer);
-
-		response.sendRedirect("index");
+		
+		response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);
 	}
 }

@@ -48,7 +48,7 @@ public class ComputerService
 	{
 		String operation;
 		
-		if(computerWrapper.getSearch().equals("%"))
+		if(computerWrapper.getSearch().equals(""))
 		{
 			operation = "Listing de tous les computers page " + computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages();
 		}
@@ -247,18 +247,18 @@ public class ComputerService
 		}
 	}
 	
-	public int size(String name)
+	public int size(String search)
 	{
 		String operation;
 		
-		if(name.equals("%"))
+		if(search.equals(""))
 		{
 			operation = "Recherche du nombre de computer en tout";
 		}
 		
 		else
 		{
-			operation = "Recherche du nombre de computer correspondant à "+name;
+			operation = "Recherche du nombre de computer correspondant à "+search;
 		}
 		
 		Log log = Log.builder()
@@ -272,7 +272,7 @@ public class ComputerService
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			size= computerDAO.size(name);
+			size= computerDAO.size(search);
 			logDAO.create(log);
 			connection.commit();
 		} 

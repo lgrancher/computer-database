@@ -31,7 +31,7 @@ public class UpdateComputer extends HttpServlet
 	{
 		String id = request.getParameter("id");
 		Long numId = Long.parseLong(id);
-		
+		System.out.println(request.getParameter("search"));
 		ComputerService computerService = ComputerService.getInstance();
 		CompanyService companyService = CompanyService.getInstance();
 		
@@ -54,6 +54,7 @@ public class UpdateComputer extends HttpServlet
 		ComputerWrapper computerWrapper = ComputerWrapper.builder()
 														 .currentPage(curPage)
 														 .search(request.getParameter("search"))
+														 .sort(request.getParameter("sort"))
 														 .build();
 				
 		request.setAttribute("computerWrapper", computerWrapper);
@@ -75,6 +76,7 @@ public class UpdateComputer extends HttpServlet
 		String company = request.getParameter("company");
 		String currentPage = request.getParameter("currentPage");
 		String search = request.getParameter("search");
+		String sort = request.getParameter("sort");
 
 		long idComputer = Long.parseLong(id);
 		long companyId = Long.parseLong(company);
@@ -119,6 +121,6 @@ public class UpdateComputer extends HttpServlet
 		ComputerService computerService = ComputerService.getInstance();
 		computerService.update(computer);
 	
-		response.sendRedirect("index?currentPage="+currentPage+"&search="+search);	
+		response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);	
 	}	
 }
