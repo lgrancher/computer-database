@@ -25,12 +25,12 @@ public class ComputerMapper
 		String idComputer = computerDTO.getId();
 		Long id;
 		
-		if(idComputer!=null)
+		try
 		{
 			id = Long.parseLong(idComputer);
 		}
 		
-		else
+		catch(NumberFormatException e)
 		{
 			id=(long) 0;
 		}

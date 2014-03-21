@@ -31,31 +31,6 @@ public class UpdateComputer extends HttpServlet
 	{
 		String id = request.getParameter("id");
 		Long numId = Long.parseLong(id);
-
-		String verifyName = request.getParameter("verifyName");
-		
-		if(verifyName!=null)
-		{
-			String verifyIntroduced = request.getParameter("verifyIntroduced");
-			String verifyDiscontinued = request.getParameter("verifyDiscontinued");
-			
-			String name = request.getParameter("name");
-			String introduced = request.getParameter("introduced");
-			String discontinued = request.getParameter("discontinued");
-			String company = request.getParameter("company");
-			
-			ComputerDTO computerDTO = ComputerDTO.builder()
-												 .name(name)
-												 .introduced(introduced)
-												 .discontinued(discontinued)
-												 .idCompany(company)
-												 .build();
-			
-			request.setAttribute("computerDTO", computerDTO);
-			request.setAttribute("verifyName", verifyName);
-			request.setAttribute("verifyIntroduced", verifyIntroduced);
-			request.setAttribute("verifyDiscontinued", verifyDiscontinued);
-		}
 		
 		ComputerService computerService = ComputerService.getInstance();
 		CompanyService companyService = CompanyService.getInstance();
@@ -111,20 +86,34 @@ public class UpdateComputer extends HttpServlet
 											 .idCompany(company)
 											 .build();
 
+		ComputerWrapper computerWrapper = ComputerWrapper.builder()
+														 .currentPage(Integer.parseInt(currentPage))
+														 .search(search)
+														 .sort(sort)
+														 .build();
+		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
 		
 		if(!computerValidator.verify())
 		{
-			response.sendRedirect("UpdateComputer?verifyName="+computerValidator.verifyName()+
-						 "&verifyIntroduced="+computerValidator.verifyIntroduced()+
-						 "&verifyDiscontinued="+computerValidator.verifyDiscontinued()+"&id="+id+
-						 "&name="+name+"&introduced="+introduced+"&discontinued="+discontinued+
-						 "&company="+company+"&sort="+sort+"&currentPage="+currentPage+"&search="+search);	
+			ComputerService computerService = ComputerService.getInstance();
+			CompanyService companyService = CompanyService.getInstance();
+			
+			Computer computer = computerService.find(Long.parseLong(id));
+			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+			
+			request.setAttribute("computer", computer);
+			request.setAttribute("computerDTO", computerDTO);
+			request.setAttribute("computerWrapper", computerWrapper);
+			request.setAttribute("verifyName", computerValidator.verifyName());
+			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
+			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
+			request.setAttribute("listeCompany", listeCompany);
+			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
 		}
 
 		else
-		{
-				
+		{	
 			Computer computer = ComputerMapper.mapping(computerDTO);
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.update(computer);

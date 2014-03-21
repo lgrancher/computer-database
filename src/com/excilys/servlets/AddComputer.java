@@ -27,32 +27,7 @@ public class AddComputer extends HttpServlet
 
 	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-		String verifyName = request.getParameter("verifyName");
-		
-		if(verifyName!=null)
-		{
-			String verifyIntroduced = request.getParameter("verifyIntroduced");
-			String verifyDiscontinued = request.getParameter("verifyDiscontinued");
-			
-			String name = request.getParameter("name");
-			String introduced = request.getParameter("introduced");
-			String discontinued = request.getParameter("discontinued");
-			String company = request.getParameter("company");
-			
-			ComputerDTO computerDTO = ComputerDTO.builder()
-												 .name(name)
-												 .introduced(introduced)
-												 .discontinued(discontinued)
-												 .idCompany(company)
-												 .build();
-			
-			request.setAttribute("computerDTO", computerDTO);
-			request.setAttribute("verifyName", verifyName);
-			request.setAttribute("verifyIntroduced", verifyIntroduced);
-			request.setAttribute("verifyDiscontinued", verifyDiscontinued);
-		}
-		
+	{		
 		CompanyService companyService = CompanyService.getInstance();
 		ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
 
@@ -80,11 +55,16 @@ public class AddComputer extends HttpServlet
 		
 		if(!computerValidator.verify())
 		{
-			response.sendRedirect("AddComputer?verifyName="+computerValidator.verifyName()+
-											 "&verifyIntroduced="+computerValidator.verifyIntroduced()+
-											 "&verifyDiscontinued="+computerValidator.verifyDiscontinued()+
-											 "&name="+name+"&introduced="+introduced+"&discontinued="+discontinued+
-											 "&company="+company);	
+			CompanyService companyService = CompanyService.getInstance();
+			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+
+			request.setAttribute("listeCompany", listeCompany);
+			request.setAttribute("computerDTO", computerDTO);
+			request.setAttribute("verifyName", computerValidator.verifyName());
+			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
+			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
+			
+			request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
 		}
 		
 		else
