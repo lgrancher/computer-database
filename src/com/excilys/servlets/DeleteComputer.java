@@ -26,17 +26,38 @@ public class DeleteComputer extends HttpServlet
 		String page = request.getParameter("currentPage");
 		String search = request.getParameter("search");
 		String sort = request.getParameter("sort");
-		Long idComputer = Long.parseLong(id);
-		int currentPage = Integer.parseInt(page);
+		
+		try
+		{
+			Long idComputer = Long.parseLong(id);
+			ComputerService computerService = ComputerService.getInstance();
+			Computer computer = computerService.find(idComputer);
+			
+			if(computer!=null)
+			{
+				computerService.delete(computer);
+			}
+		}
+		
+		catch(NumberFormatException e)
+		{}
+		
+		int currentPage;
+		
+		try
+		{
+			currentPage = Integer.parseInt(page);
+		}
+		
+		catch(NumberFormatException e)
+		{
+			currentPage=1;
+		}
 		
 		if(search==null)
 		{
 			search="";
 		}
-	
-		ComputerService computerService = ComputerService.getInstance();
-		Computer computer = computerService.find(idComputer);
-		computerService.delete(computer);
 		
 		response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);
 	}

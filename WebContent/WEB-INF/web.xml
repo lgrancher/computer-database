@@ -36,4 +36,11 @@
     <servlet-name>DeleteComputer</servlet-name>
     <url-pattern>/DeleteComputer</url-pattern>
   </servlet-mapping>
+  
+  <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/error.jsp</location>
+ </error-page>
 </web-app>
+
+

@@ -29,17 +29,9 @@ public class UpdateComputer extends HttpServlet
 	// cherche la liste des company a proposer a l'utilisateur
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String id = request.getParameter("id");
-		Long numId = Long.parseLong(id);
-		
-		ComputerService computerService = ComputerService.getInstance();
-		CompanyService companyService = CompanyService.getInstance();
-		
-		Computer computer = computerService.find(numId);
-		Company company = computer.getCompany();	
-		ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
-	
 		int curPage;
+		String sort = request.getParameter("sort");
+		String search = request.getParameter("search");
 		
 		try
 		{
@@ -51,19 +43,48 @@ public class UpdateComputer extends HttpServlet
 			curPage = 1;
 		}
 		
-		ComputerWrapper computerWrapper = ComputerWrapper.builder()
-														 .currentPage(curPage)
-														 .search(request.getParameter("search"))
-														 .sort(request.getParameter("sort"))
-														 .build();
-				
-		request.setAttribute("computerWrapper", computerWrapper);
-		request.setAttribute("computer", computer);
-		request.setAttribute("company", company);
-		request.setAttribute("listeCompany", listeCompany);
+		String id = request.getParameter("id");
 		
-		request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
-	
+		try
+		{	
+			Long numId = Long.parseLong(id);
+			
+			ComputerService computerService = ComputerService.getInstance();
+			CompanyService companyService = CompanyService.getInstance();
+			
+			Computer computer = computerService.find(numId);
+			
+			if(computer!=null)
+			{
+				Company company = computer.getCompany();	
+				ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+				
+				
+				
+				ComputerWrapper computerWrapper = ComputerWrapper.builder()
+																 .currentPage(curPage)
+																 .search(search)
+																 .sort(sort)
+																 .build();
+						
+				request.setAttribute("computerWrapper", computerWrapper);
+				request.setAttribute("computer", computer);
+				request.setAttribute("company", company);
+				request.setAttribute("listeCompany", listeCompany);
+				
+				request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
+			}
+			
+			else
+			{
+				response.sendRedirect("index?&currentPage="+curPage);
+			}
+		}
+		
+		catch(NumberFormatException e)
+		{
+			response.sendRedirect("index?currentPage="+curPage);	
+		}
 	}
 	
 	// modifie le computer

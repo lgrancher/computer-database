@@ -174,18 +174,28 @@ public class ComputerDAO
 	
 		logger.info("Recherche computer n° "+id);
 		ResultSet rs = st.executeQuery();
-		rs.next();
+		boolean existe = rs.next();
+	
+		Computer computer;
 		
-		Company company = new Company();
-		company.setId(rs.getLong(5));	
+		if(existe)
+		{
+			Company company = new Company();
+			company.setId(rs.getLong(5));	
+			
+			computer = Computer.builder()
+					.id(rs.getLong(1))
+	                .name(rs.getString(2))
+	                .introduced(rs.getDate(3))
+	                .discontinued(rs.getDate(4))
+	                .company(company)
+	                .build();
+		}
 		
-		Computer computer = Computer.builder()
-				.id(rs.getLong(1))
-                .name(rs.getString(2))
-                .introduced(rs.getDate(3))
-                .discontinued(rs.getDate(4))
-                .company(company)
-                .build();
+		else
+		{
+			computer = null;
+		}
 		
 		ConnectionJDBC.close(rs,st);
 		

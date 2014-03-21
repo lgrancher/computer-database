@@ -5941,3 +5941,10 @@ table.computers .header a {
  	vertical-align:middle;
     line-height:normal;
 }
+
+
+.error404
+{
+	padding:50px;
+	text-align:center;
+}
