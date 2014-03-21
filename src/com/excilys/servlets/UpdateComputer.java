@@ -1,10 +1,7 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,11 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.DTO.ComputerDTO;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
 import com.excilys.om.ComputerWrapper;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
+import com.excilys.validator.ComputerValidator;
 
 /**
  * Servlet implementation class UpdateComputer
@@ -31,7 +31,32 @@ public class UpdateComputer extends HttpServlet
 	{
 		String id = request.getParameter("id");
 		Long numId = Long.parseLong(id);
-		System.out.println(request.getParameter("search"));
+
+		String verifyName = request.getParameter("verifyName");
+		
+		if(verifyName!=null)
+		{
+			String verifyIntroduced = request.getParameter("verifyIntroduced");
+			String verifyDiscontinued = request.getParameter("verifyDiscontinued");
+			
+			String name = request.getParameter("name");
+			String introduced = request.getParameter("introduced");
+			String discontinued = request.getParameter("discontinued");
+			String company = request.getParameter("company");
+			
+			ComputerDTO computerDTO = ComputerDTO.builder()
+												 .name(name)
+												 .introduced(introduced)
+												 .discontinued(discontinued)
+												 .idCompany(company)
+												 .build();
+			
+			request.setAttribute("computerDTO", computerDTO);
+			request.setAttribute("verifyName", verifyName);
+			request.setAttribute("verifyIntroduced", verifyIntroduced);
+			request.setAttribute("verifyDiscontinued", verifyDiscontinued);
+		}
+		
 		ComputerService computerService = ComputerService.getInstance();
 		CompanyService companyService = CompanyService.getInstance();
 		
@@ -78,49 +103,33 @@ public class UpdateComputer extends HttpServlet
 		String search = request.getParameter("search");
 		String sort = request.getParameter("sort");
 
-		long idComputer = Long.parseLong(id);
-		long companyId = Long.parseLong(company);
+		ComputerDTO computerDTO = ComputerDTO.builder()
+											 .id(id)
+											 .name(name)
+											 .introduced(introduced)
+											 .discontinued(discontinued)
+											 .idCompany(company)
+											 .build();
+
+		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
-		
-		Date introducedDate;
-		Date discontinuedDate;
-		
-		try 
+		if(!computerValidator.verify())
 		{
-			introducedDate = sdf.parse(introduced);
-		} 
-		
-		catch (ParseException e) 
-		{
-			introducedDate = new Date(0);
+			response.sendRedirect("UpdateComputer?verifyName="+computerValidator.verifyName()+
+						 "&verifyIntroduced="+computerValidator.verifyIntroduced()+
+						 "&verifyDiscontinued="+computerValidator.verifyDiscontinued()+"&id="+id+
+						 "&name="+name+"&introduced="+introduced+"&discontinued="+discontinued+
+						 "&company="+company+"&sort="+sort+"&currentPage="+currentPage+"&search="+search);	
 		}
-		
-		try
+
+		else
 		{
-			discontinuedDate = sdf.parse(discontinued);
+				
+			Computer computer = ComputerMapper.mapping(computerDTO);
+			ComputerService computerService = ComputerService.getInstance();
+			computerService.update(computer);
+			
+			response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);	
 		}
-		
-		catch (ParseException e) 
-		{
-			discontinuedDate = new Date(0);
-		}
-		
-		Company uneCompany = Company.builder()
-			    .id(companyId)
-				.build();
-		
-		Computer computer = Computer.builder()
-				.id(idComputer)
-                .name(name)
-                .introduced(introducedDate)
-                .discontinued(discontinuedDate)
-                .company(uneCompany)
-                .build();
-		
-		ComputerService computerService = ComputerService.getInstance();
-		computerService.update(computer);
-	
-		response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);	
-	}	
+	}
 }

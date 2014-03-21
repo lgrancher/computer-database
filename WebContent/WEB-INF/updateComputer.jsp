@@ -8,45 +8,84 @@
 				<label class="btn btn-default btn-lg ">Update Computer</label>
 			</div>
 			<fieldset>
-				<div class="form-group">
-					<label for="name">Computer name : </label>
+			<div class="form-group">
+					<label for="name">Computer name*:</label>
 					<div class="input">
-						<input type="text" name="name" data-validation="required"
-							value="<c:out value="${computer.name}"/>" class="required" />
+					
+					<c:if test="${verifyName == 'true'}">
+						<input value="${computerDTO.name}" type="text" name="name" data-validation="required" />
+					</c:if>
+					
+					<c:if test="${verifyName != 'true'}">
+						<input value="${computer.name}" type="text" name="name" data-validation="required" />
+					</c:if>
 					</div>
+					<c:if test="${verifyName == 'false'}">
+						<span class="label label-danger">You have not answered all required fields</span>
+					</c:if>
 				</div>
-
+				
 				<div class="form-group">
 					<label for="introduced">Introduced date:</label>
 					<div class="input">
-						<input type="date" name="introducedDate" data-validation="date"
-							data-validation-help="yyyy-mm-dd" data-validation-optional="true"
-							value="<c:out value="${computer.introduced}"/>" />
+					
+					<c:if test="${verifyIntroduced == 'true'}">
+						<input type="date" name="introducedDate" value="${computerDTO.introduced}" data-validation="date"
+							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
+					</c:if>
+					
+					<c:if test="${verifyIntroduced != 'true'}">
+						<input type="date" name="introducedDate" value="${computer.introduced}" data-validation="date"
+							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
+					</c:if>
+					
 					</div>
+					<c:if test="${verifyIntroduced == 'false'}">
+						<span class="label label-danger">You have not given a correct introduced date (YYYY-MM-DD)</span>
+					</c:if>
 				</div>
 				<div class="form-group">
 					<label for="discontinued">Discontinued date:</label>
 					<div class="input">
-						<input type="date" name="discontinuedDate" data-validation="date"
-							data-validation-help="yyyy-mm-dd" data-validation-optional="true"
-							value="<c:out value="${computer.discontinued}"/>" />
+					
+					 <c:if test="${verifyDiscontinued == 'true'}">
+						<input type="date" name="discontinuedDate" value="${computerDTO.discontinued}" data-validation="date"
+							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
+					</c:if>
+					
+					 <c:if test="${verifyDiscontinued != 'true'}">
+						<input type="date" name="discontinuedDate" value="${computer.discontinued}" data-validation="date"
+							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
+					</c:if>
+					
 					</div>
+					 <c:if test="${verifyDiscontinued == 'false'}">
+						<span class="label label-danger">You have not given a correct introduced date (YYYY-MM-DD)</span>
+					</c:if>
 				</div>
 				<div class="form-group">
 					<label for="company">Company Name:</label>
 					<div class="input">
 						<select name="company">
-							<option value="0" selected></option>
+							<option value="0"></option>
 							<c:forEach var="companies" items="${listeCompany}">
-								<c:if test="${company.id == companies.id}">
-									<option value="${companies.id}" selected>${companies.name}</option>
-								</c:if>
-								<c:if test="${company.id != companies.id}">
-									<option value="${companies.id}">${companies.name}</option>
-								</c:if>
+							<c:choose>
+							 <c:when test="${verifyName!=null && computerDTO.idCompany == companies.id}">
+								<option value="${companies.id}" selected>${companies.name}</option>
+							</c:when>
+							
+							<c:when test="${verifyName==null && companies.id == company.id}">
+								<option value="${companies.id}" selected>${companies.name}</option>
+							</c:when>
+							
+							 <c:otherwise>
+								<option value="${companies.id}">${companies.name}</option>
+							</c:otherwise>
+							</c:choose>
 							</c:forEach>
 						</select>
 					</div>
+					<h6>*required fields</h6>
 				</div>
 
 				<input type="hidden" value="${computer.id}" name="id">
