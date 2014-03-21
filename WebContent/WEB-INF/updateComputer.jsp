@@ -30,12 +30,12 @@
 					<div class="input">
 					
 					<c:if test="${verifyIntroduced == 'true'}">
-						<input type="date" name="introducedDate" value="${computerDTO.introduced}" data-validation="date"
+						<input type="date" id="introducedDate" name="introducedDate" value="${computerDTO.introduced}" data-validation="date infDiscontinued"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
 					<c:if test="${verifyIntroduced != 'true'}">
-						<input type="date" name="introducedDate" value="${computer.introduced}" data-validation="date"
+						<input type="date" id="introducedDate" name="introducedDate" value="${computer.introduced}" data-validation="date infDiscontinued"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
@@ -49,18 +49,18 @@
 					<div class="input">
 					
 					 <c:if test="${verifyDiscontinued == 'true'}">
-						<input type="date" name="discontinuedDate" value="${computerDTO.discontinued}" data-validation="date"
+						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computerDTO.discontinued}" data-validation="date supIntroduced"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
 					 <c:if test="${verifyDiscontinued != 'true'}">
-						<input type="date" name="discontinuedDate" value="${computer.discontinued}" data-validation="date"
+						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computer.discontinued}" data-validation="date supIntroduced"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
 					</div>
 					 <c:if test="${verifyDiscontinued == 'false'}">
-						<span class="label label-danger">You have not given a correct introduced date (YYYY-MM-DD)</span>
+						<span class="label label-danger">You have not given a correct discontinued date (YYYY-MM-DD and later than the introduced date)</span>
 					</c:if>
 				</div>
 				<div class="form-group">
@@ -103,7 +103,33 @@
 	</div>
 </section>
 <script>
-	$.validate({});
+
+
+$.formUtils.addValidator
+({
+    name : 'supIntroduced',
+    validatorFunction : function(value, $el, config, language, $form) 
+    {
+        return value>=$('#introducedDate').val() || $('#discontinuedDate').val() === "";
+    },
+    errorMessage : 'The discontinued date must be later than the introduced date',
+    errorMessageKey: 'wrong date'
+});
+	
+$.formUtils.addValidator
+(
+{
+    name : 'infDiscontinued',
+    validatorFunction : function(value, $el, config, language, $form) 
+    {
+        return value<=$('#discontinuedDate').val() || $('#discontinuedDate').val() === "";
+    },
+    errorMessage : 'The introduced date must be ealier than the discontinued date',
+    errorMessageKey: 'wrong date'
+});
+
+$.validate();
+
 </script>
 
 <jsp:include page="../include/footer.jsp" />

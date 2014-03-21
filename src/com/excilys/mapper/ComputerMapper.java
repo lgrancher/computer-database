@@ -15,12 +15,12 @@ public class ComputerMapper
 	
 	private ComputerMapper(ComputerDTO computerDTO)
 	{
-		this.computerDTO = computerDTO;
+		this.setComputerDTO(computerDTO);
 	}
 	
 	public static Computer mapping(ComputerDTO computerDTO)
 	{
-		computerMapper = new ComputerMapper(computerDTO);
+		setComputerMapper(new ComputerMapper(computerDTO));
 		
 		String idComputer = computerDTO.getId();
 		Long id;
@@ -75,5 +75,21 @@ public class ComputerMapper
 									.company(company)
 									.build();		
 		return computer;
+	}
+
+	public static ComputerMapper getComputerMapper() {
+		return computerMapper;
+	}
+
+	public static void setComputerMapper(ComputerMapper computerMapper) {
+		ComputerMapper.computerMapper = computerMapper;
+	}
+
+	public ComputerDTO getComputerDTO() {
+		return computerDTO;
+	}
+
+	public void setComputerDTO(ComputerDTO computerDTO) {
+		this.computerDTO = computerDTO;
 	}
 }

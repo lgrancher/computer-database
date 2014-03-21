@@ -26,14 +26,19 @@ public class ComputerValidator
 	
 	public boolean verifyIntroduced()
 	{
-		return DateValidator.getInstance().isValid(computerDTO.getIntroduced(), "yyyy-MM-dd", true) ||
-				computerDTO.getIntroduced().equals(""); 
+		boolean vide = computerDTO.getIntroduced().equals("");
+		boolean dateValide = DateValidator.getInstance().isValid(computerDTO.getIntroduced(), "yyyy-MM-dd", true);
+		
+		return vide || dateValide;
 	}
 	
 	public boolean verifyDiscontinued()
 	{
-		return DateValidator.getInstance().isValid(computerDTO.getDiscontinued(), "yyyy-MM-dd", true) ||
-				computerDTO.getDiscontinued().equals(""); 
+		boolean vide = computerDTO.getDiscontinued().equals("");
+		boolean dateValide = DateValidator.getInstance().isValid(computerDTO.getDiscontinued(), "yyyy-MM-dd", true);
+		boolean superieurIntroduced = computerDTO.getIntroduced().compareTo(computerDTO.getDiscontinued()) <= 0;
+		
+		return vide || (dateValide && superieurIntroduced);
 	}
 	
 	public boolean verify()
