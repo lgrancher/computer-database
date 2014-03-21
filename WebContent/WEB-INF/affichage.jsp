@@ -8,7 +8,7 @@
 	<div id="actions">
 		<form action="index" method="GET">
 			<div class="row">
-				<div class="col-lg-2">
+				<div class="col-xs-6 col-sm-4">
 					<div class="input-group">
 						<input type="text" class="form-control" name="search"> <span
 							class="input-group-btn">

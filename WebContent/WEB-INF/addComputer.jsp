@@ -4,7 +4,7 @@
 	<div class="col-lg-4 col-lg-offset-4">
 		<form class="form-horizontal" action="AddComputer" method="POST">
 			<div class="text-center">
-				<label class="btn btn-default btn-lg ">Add Computer</label>
+				<h2><span class="label label-default">Add Computer</span></h2>
 			</div>
 			<fieldset>
 				<div class="form-group">
