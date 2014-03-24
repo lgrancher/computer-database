@@ -6,7 +6,7 @@ public class ComputerDTO
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private CompanyDTO companyDTO;
+	private CompanyDTO company;
 	
 	 public static class Builder 
 	 {
@@ -44,7 +44,7 @@ public class ComputerDTO
  
         public Builder companyDTO(CompanyDTO companyDTO) 
         {
-            this.computerDTO.companyDTO = companyDTO;
+            this.computerDTO.company = companyDTO;
             return this;
         }
  
@@ -98,12 +98,12 @@ public class ComputerDTO
 
 	public CompanyDTO getCompanyDTO() 
 	{
-		return companyDTO;
+		return company;
 	}
 
 	public void setCompanyDTO(CompanyDTO companyDTO) 
 	{
-		this.companyDTO = companyDTO;
+		this.company = companyDTO;
 	}
 	
 	@Override
@@ -111,15 +111,16 @@ public class ComputerDTO
 	{
 		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced="
 				+ introduced + ", discontinued=" + discontinued
-				+ ", companyDTO=" + companyDTO + "]";
+				+ ", companyDTO=" + company + "]";
 	}
 
 	
 	@Override
-	public int hashCode() {
+	public int hashCode() 
+	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((companyDTO == null) ? 0 : companyDTO.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result
 				+ ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -130,7 +131,8 @@ public class ComputerDTO
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj) 
+	{
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -138,10 +140,10 @@ public class ComputerDTO
 		if (getClass() != obj.getClass())
 			return false;
 		ComputerDTO other = (ComputerDTO) obj;
-		if (companyDTO == null) {
-			if (other.companyDTO != null)
+		if (company == null) {
+			if (other.company != null)
 				return false;
-		} else if (!companyDTO.equals(other.companyDTO))
+		} else if (!company.equals(other.company))
 			return false;
 		if (discontinued == null) {
 			if (other.discontinued != null)
@@ -170,5 +172,4 @@ public class ComputerDTO
 	{
 	   return new Builder();
 	}
-
 }

@@ -1537,7 +1537,7 @@ table th[class*="col-"] {
 .table > tfoot > tr.info > th {
   background-color:#ECE8DD;
 }
-<<<<<<< HEAD
+
 
 .table > thead > tr > td.id,
 .table > tbody > tr > td.id,
@@ -1566,7 +1566,7 @@ table th[class*="col-"] {
 .table > thead > tr.name > th,
 .table > tbody > tr.name > th,
 .table > tfoot > tr.name > th {
-  width:20%;
+  width:30%;
 }
 
 .table > thead > tr > td.date,
@@ -1596,7 +1596,7 @@ table th[class*="col-"] {
 .table > thead > tr.operations > th,
 .table > tbody > tr.operations > th,
 .table > tfoot > tr.operations > th {
-  width:15%;
+  width:5%;
 }
 
 .table-hover > tbody > tr > td.info:hover,
@@ -5861,10 +5861,7 @@ button.close {
 }
 
 
-<<<<<<< HEAD
-html {
-    background: #eee;
-}
+
 
 header h1 {
     padding: 0.4em 1.1em;
