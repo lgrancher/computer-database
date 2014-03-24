@@ -11,9 +11,11 @@ import java.util.List;
 
 import org.slf4j.*;
 
+import com.excilys.DTO.ComputerDTO;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
-import com.excilys.om.ComputerWrapper;
+import com.excilys.om.Page;
 
 public class ComputerDAO
 {
@@ -37,13 +39,13 @@ public class ComputerDAO
 		return computerDAO;
 	}
 	
-	public List<Computer> retrieve(ComputerWrapper computerWrapper) throws SQLException
+	public List<ComputerDTO> retrieve(Page<?> page) throws SQLException
 	{				
 		Connection connection = connectionJDBC.getConnection();
 		
 		String sort;
 		
-		switch(computerWrapper.getSort())
+		switch(page.getSort())
 		{
 			case "name" :
 				sort = "computer.name";
@@ -69,9 +71,9 @@ public class ComputerDAO
 		String search;
 		
 		// on affiche tous les computers		
-		if(computerWrapper.getSearch().equals(""))
+		if(page.getSearch().equals(""))
 		{
-			logger.info("Listing de tous les computers page "+computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages());
+			logger.info("Listing de tous les computers page "+page.getCurrentPage() + "/" + page.getNoOfPages());
 			search = "%";
 		}
 		
@@ -79,11 +81,11 @@ public class ComputerDAO
 		else
 		{
 			StringBuilder builder = new StringBuilder("%");
-			builder.append(computerWrapper.getSearch());
+			builder.append(page.getSearch());
 			builder.append("%");
 			search = builder.toString();
 			
-			logger.info("Listing des computers avec la recherche "+computerWrapper.getSearch()+" page "+computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages());
+			logger.info("Listing des computers avec la recherche "+page.getSearch()+" page "+page.getCurrentPage() + "/" + page.getNoOfPages());
 		}
 		
 		// requete
@@ -91,14 +93,14 @@ public class ComputerDAO
 		sql.append(sort);
 		sql.append(" limit ?, ?");
 		
-		ArrayList<Computer> listeComputers = new ArrayList<Computer>();
+		ArrayList<ComputerDTO> listeComputersDTO = new ArrayList<ComputerDTO>();
 		
 		PreparedStatement st = connection.prepareStatement(sql.toString());
 		
 		st.setString(1,search);
 		st.setString(2,search);
-		st.setInt(3, computerWrapper.getOffset());
-		st.setInt(4, computerWrapper.getRecordsPerPage());
+		st.setInt(3, page.getOffset());
+		st.setInt(4, page.getRecordsPerPage());
 		
 		ResultSet rs = st.executeQuery();
 		
@@ -116,20 +118,24 @@ public class ComputerDAO
 	                .company(company)
 	                .build();
 			
-			listeComputers.add(computer); 
+			listeComputersDTO.add(ComputerMapper.computerToDTO(computer)); 
 		}
 
+		page.setListeElements(listeComputersDTO);
 		ConnectionJDBC.close(rs,st);
 		
-		return listeComputers;
+		return listeComputersDTO;
 	}
 	
-	public int create(Computer computer) throws SQLException
+	public int create(ComputerDTO computerDTO) throws SQLException
 	{
+		Connection connection = connectionJDBC.getConnection();
+		
 		String sql = "insert into computer values(default,?,?,?,?)";
 		
-		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
+		
+		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
 		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
 		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
 
@@ -164,11 +170,12 @@ public class ComputerDAO
 		return idAdd;
 	}
 	
-	public Computer find(Long id) throws SQLException 
+	public ComputerDTO find(Long id) throws SQLException 
 	{		
+		Connection connection = connectionJDBC.getConnection();
+		
 		String sql = "select * from computer where id=?";
 		
-		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, id);
 	
@@ -176,39 +183,43 @@ public class ComputerDAO
 		ResultSet rs = st.executeQuery();
 		boolean existe = rs.next();
 	
-		Computer computer;
+		ComputerDTO computerDTO;
 		
 		if(existe)
 		{
 			Company company = new Company();
 			company.setId(rs.getLong(5));	
 			
-			computer = Computer.builder()
+			Computer computer = Computer.builder()
 					.id(rs.getLong(1))
 	                .name(rs.getString(2))
 	                .introduced(rs.getDate(3))
 	                .discontinued(rs.getDate(4))
 	                .company(company)
 	                .build();
+			
+			computerDTO = ComputerMapper.computerToDTO(computer);
 		}
 		
 		else
 		{
-			computer = null;
+			computerDTO = null;
 		}
 		
 		ConnectionJDBC.close(rs,st);
 		
-		return computer;
+		return computerDTO;
 	}
 	
-	public void update(Computer computer) throws SQLException
+	public void update(ComputerDTO computerDTO) throws SQLException
 	{
+		Connection connection = connectionJDBC.getConnection();
+		
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
-		Connection connection = connectionJDBC.getConnection();
 		PreparedStatement st = connection.prepareStatement(sql);
 			
+		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
 		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
 		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
 
@@ -234,13 +245,15 @@ public class ComputerDAO
 		ConnectionJDBC.close(null,st);
 	}
 	
-	public void delete(Computer computer) throws SQLException 
+	public void delete(ComputerDTO computerDTO) throws SQLException 
 	{
-		String sql = "delete from computer where id=?";
-		PreparedStatement st=null;
-		
 		Connection connection = connectionJDBC.getConnection();
-		st = connection.prepareStatement(sql);
+		
+		String sql = "delete from computer where id=?";
+		
+		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
+		
+		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, computer.getId());
 	
 		logger.info("Suppression du computer n°"+computer.getId());
@@ -251,9 +264,10 @@ public class ComputerDAO
 
 	public int size(String search) throws SQLException
 	{
-		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
-	
 		Connection connection = connectionJDBC.getConnection();
+				
+		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
+
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		// nombre de computers en tout

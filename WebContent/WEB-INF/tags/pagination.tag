@@ -4,28 +4,28 @@
 			<div class="pagination">
 
 				<%--For displaying Previous link except for the 1st page --%>
-				<c:if test="${computerWrapper.currentPage != 1}">
+				<c:if test="${page.currentPage != 1}">
 					<span class="num"><a
-						href="index?sort=${sort}&currentPage=${computerWrapper.currentPage - 1}&search=${computerWrapper.search}"
+						href="index?sort=${sort}&currentPage=${page.currentPage - 1}&search=${page.search}"
 						style="cursor: pointer; color: grey"><span
 							class="glyphicon glyphicon-chevron-left"></span> Previous</a></span>
 				</c:if>
 
 
-				<c:if test="${computerWrapper.currentPage == 1}">
+				<c:if test="${page.currentPage == 1}">
 					<span class="num"><span
 						class="glyphicon glyphicon-chevron-left"></span> Previous</span>
 				</c:if>
 
 
-				<c:forEach begin="1" end="${computerWrapper.noOfPages}" var="i">
+				<c:forEach begin="1" end="${page.noOfPages}" var="i">
 					<c:choose>
-						<c:when test="${computerWrapper.currentPage eq i}">
+						<c:when test="${page.currentPage eq i}">
 							<span class="num">${i}</span>
 						</c:when>
 						<c:otherwise>
 							<span class="num"><a
-								href="index?sort=${computerWrapper.sort}&currentPage=${i}&search=${computerWrapper.search}"
+								href="index?sort=${page.sort}&currentPage=${i}&search=${page.search}"
 								style="cursor: pointer; color: grey">${i}</a></span>
 						</c:otherwise>
 					</c:choose>
@@ -33,14 +33,14 @@
 
 
 				<%--For displaying Next link --%>
-				<c:if test="${computerWrapper.currentPage lt computerWrapper.noOfPages}">
+				<c:if test="${page.currentPage lt page.noOfPages}">
 					<span class="num"><a
-						href="index?sort=${computerWrapper.sort}&currentPage=${computerWrapper.currentPage + 1}&search=${computerWrapper.search}"
+						href="index?sort=${page.sort}&currentPage=${page.currentPage + 1}&search=${page.search}"
 						style="cursor: pointer; color: grey">Next <span
 							class="glyphicon glyphicon-chevron-right"></span></a></span>
 				</c:if>
 
-				<c:if test="${computerWrapper.currentPage == computerWrapper.noOfPages}">
+				<c:if test="${page.currentPage == page.noOfPages}">
 					<span class="num">Next <span
 						class="glyphicon glyphicon-chevron-right"></span></span>
 				</c:if>

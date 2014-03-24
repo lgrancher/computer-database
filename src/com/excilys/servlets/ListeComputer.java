@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.om.ComputerWrapper;
+import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 
 public class ListeComputer extends HttpServlet 
@@ -23,7 +23,6 @@ public class ListeComputer extends HttpServlet
 		int currentPage = 1;
 	    int recordsPerPage = 14;
 	   
-	    
 	    if(search==null)
 	    {
 	    	search="";
@@ -55,19 +54,19 @@ public class ListeComputer extends HttpServlet
 	    	}
 	    }
 	    
-	    ComputerWrapper computerWrapper = ComputerWrapper.builder()
-	    												 .sort(sort)
-	    												 .search(search)
-	    												 .offset((currentPage-1)*recordsPerPage)
-	    												 .currentPage(currentPage)
-	    												 .recordsPerPage(recordsPerPage)
-	    												 .noOfRecords(noOfRecords)
-	    												 .noOfPages(noOfPages)
-	    												 .build();
+	    Page<?> page = Page.builder()
+						   .sort(sort)
+						   .search(search)
+						   .offset((currentPage-1)*recordsPerPage)
+						   .currentPage(currentPage)
+						   .recordsPerPage(recordsPerPage)
+						   .noOfRecords(noOfRecords)
+						   .noOfPages(noOfPages)
+						   .build();
 	    		
-		computerService.retrieve(computerWrapper);			
+		computerService.retrieve(page);			
 		
-		request.setAttribute("computerWrapper", computerWrapper);
+		request.setAttribute("page", page);
 		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
 	}
 }

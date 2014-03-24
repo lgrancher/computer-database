@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.om.Computer;
+import com.excilys.DTO.ComputerDTO;
 import com.excilys.service.ComputerService;
 
 /**
@@ -31,11 +31,11 @@ public class DeleteComputer extends HttpServlet
 		{
 			Long idComputer = Long.parseLong(id);
 			ComputerService computerService = ComputerService.getInstance();
-			Computer computer = computerService.find(idComputer);
+			ComputerDTO computerDTO = computerService.find(idComputer);
 			
-			if(computer!=null)
+			if(computerDTO!=null)
 			{
-				computerService.delete(computer);
+				computerService.delete(computerDTO);
 			}
 		}
 		

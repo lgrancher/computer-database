@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import com.excilys.om.Company;
+import com.excilys.DTO.CompanyDTO;
 import com.excilys.om.Log;
 import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ConnectionJDBC;
@@ -33,7 +33,7 @@ public class CompanyService {
 		return companyService;
 	}
 
-	public List<Company> retrieveAll()
+	public List<CompanyDTO> retrieveAll()
 	{
 		Log log = Log.builder()
 				 .typeLog("retrieve")
@@ -42,12 +42,12 @@ public class CompanyService {
 				 .build();
 		
 		Connection connection=null;
-		List<Company> listCompany=null;
+		List<CompanyDTO> listCompanyDTO=null;
 		
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			listCompany = companyDAO.retrieveAll();
+			listCompanyDTO = companyDAO.retrieveAll();
 			logDAO.create(log);
 			connection.commit();
 		} 
@@ -65,6 +65,6 @@ public class CompanyService {
 			}
 		}
 		
-		return listCompany;
+		return listCompanyDTO;
 	}
 }

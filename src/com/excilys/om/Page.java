@@ -2,7 +2,7 @@ package com.excilys.om;
 
 import java.util.List;
 
-public class ComputerWrapper 
+public class Page<T>
 {
 	private String sort;
 	private String search;
@@ -11,73 +11,73 @@ public class ComputerWrapper
 	private int currentPage;
 	private int noOfPages;
 	private int noOfRecords;
-	private List<Computer> listeComputer;
+	private List<?> listeElements;
 	
 	public static class Builder 
 	{
-       ComputerWrapper computerWrapper;
+       Page<?> page;
        
        private Builder() 
        {
-           computerWrapper = new ComputerWrapper();
+    	   page = new Page<>();
        }
  
        public Builder sort(String sort) 
        {
-           this.computerWrapper.sort = sort;
+           this.page.sort = sort;
            return this;
        }
  
        public Builder search(String search) 
        {
-           this.computerWrapper.search = search;
+           this.page.search = search;
            return this;
        }
        
        public Builder offset(int offset) 
        {
-           this.computerWrapper.offset = offset;
+           this.page.offset = offset;
            return this;
        }
        
        public Builder recordsPerPage(int recordsPerPage) 
        {
-           this.computerWrapper.recordsPerPage = recordsPerPage;
+           this.page.recordsPerPage = recordsPerPage;
            return this;
        }
        
        public Builder currentPage(int currentPage) 
        {
-           this.computerWrapper.currentPage = currentPage;
+           this.page.currentPage = currentPage;
            return this;
        }
        
        public Builder noOfPages(int noOfPages) 
        {
-           this.computerWrapper.noOfPages = noOfPages;
+           this.page.noOfPages = noOfPages;
            return this;
        }
        
        public Builder noOfRecords(int noOfRecords) 
        {
-           this.computerWrapper.noOfRecords = noOfRecords;
+           this.page.noOfRecords = noOfRecords;
            return this;
        }
        
        
-       public Builder listeComputer(List<Computer> listeComputer)
+       public Builder listeElements(List<?> listeElements)
        {
-    	   this.computerWrapper.setListeComputer(listeComputer);
+    	   this.page.setListeElements(listeElements);
     	   return this;
        }
  
-       public ComputerWrapper build() 
+       public Page<?> build() 
        {
-           return this.computerWrapper;
+           return this.page;
        }
 	}
 	
-	public ComputerWrapper(){}
+	public Page(){}
 
 	public static Builder builder() 
 	{
@@ -134,14 +134,14 @@ public class ComputerWrapper
 		this.currentPage = currentPage;
 	}
 
-	public List<Computer> getListeComputer() 
+	public List<?> getListeElements() 
 	{
-		return listeComputer;
+		return listeElements;
 	}
 
-	public void setListeComputer(List<Computer> listeComputer) 
+	public void setListeElements(List<?> listeElements2) 
 	{
-		this.listeComputer = listeComputer;
+		this.listeElements = listeElements2;
 	}
 
 	public int getNoOfPages() 
@@ -184,7 +184,7 @@ public class ComputerWrapper
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ComputerWrapper other = (ComputerWrapper) obj;
+		Page<?> other = (Page<?>) obj;
 		if (search == null) {
 			if (other.search != null)
 				return false;
@@ -205,10 +205,10 @@ public class ComputerWrapper
 	@Override
 	public String toString() 
 	{
-		return "ComputerWrapper [sort=" + sort + ", search=" + search + ", offset="
+		return "Page [sort=" + sort + ", search=" + search + ", offset="
 				+ offset + ", recordsPerPage=" + recordsPerPage
 				+ ", currentPage=" + currentPage + ", noOfPages=" + noOfPages
 				+ ", noOfRecords=" + noOfRecords + ", listeComputer="
-				+ listeComputer + "]";
+				+ listeElements + "]";
 	}
 }

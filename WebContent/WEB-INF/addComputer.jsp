@@ -49,11 +49,11 @@
 							<option value="0"></option>
 							<c:forEach var="company" items="${listeCompany}">
 							
-							 <c:if test="${computerDTO.idCompany == company.id}">
+							 <c:if test="${computerDTO.companyDTO.id == company.id}">
 								<option value="${company.id}" selected>${company.name}</option>
 							</c:if>
 							
-							<c:if test="${computerDTO.idCompany != company.id}">
+							<c:if test="${computerDTO.companyDTO.id  != company.id}">
 								<option value="${company.id}">${company.name}</option>
 							</c:if>
 							

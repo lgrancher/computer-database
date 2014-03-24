@@ -6,7 +6,7 @@ public class ComputerDTO
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private String idCompany;
+	private CompanyDTO companyDTO;
 	
 	 public static class Builder 
 	 {
@@ -42,9 +42,9 @@ public class ComputerDTO
             return this;
         }
  
-        public Builder idCompany(String idCompany) 
+        public Builder companyDTO(CompanyDTO companyDTO) 
         {
-            this.computerDTO.idCompany = idCompany;
+            this.computerDTO.companyDTO = companyDTO;
             return this;
         }
  
@@ -96,14 +96,14 @@ public class ComputerDTO
 		this.discontinued = discontinued;
 	}
 
-	public String getIdCompany() 
+	public CompanyDTO getCompanyDTO() 
 	{
-		return idCompany;
+		return companyDTO;
 	}
 
-	public void setIdCompany(String idCompany) 
+	public void setCompanyDTO(CompanyDTO companyDTO) 
 	{
-		this.idCompany = idCompany;
+		this.companyDTO = companyDTO;
 	}
 	
 	@Override
@@ -111,19 +111,18 @@ public class ComputerDTO
 	{
 		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced="
 				+ introduced + ", discontinued=" + discontinued
-				+ ", idCompany=" + idCompany + "]";
+				+ ", companyDTO=" + companyDTO + "]";
 	}
 
+	
 	@Override
-	public int hashCode() 
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((companyDTO == null) ? 0 : companyDTO.hashCode());
 		result = prime * result
 				+ ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result
-				+ ((idCompany == null) ? 0 : idCompany.hashCode());
 		result = prime * result
 				+ ((introduced == null) ? 0 : introduced.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -131,8 +130,7 @@ public class ComputerDTO
 	}
 
 	@Override
-	public boolean equals(Object obj) 
-	{
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -140,6 +138,11 @@ public class ComputerDTO
 		if (getClass() != obj.getClass())
 			return false;
 		ComputerDTO other = (ComputerDTO) obj;
+		if (companyDTO == null) {
+			if (other.companyDTO != null)
+				return false;
+		} else if (!companyDTO.equals(other.companyDTO))
+			return false;
 		if (discontinued == null) {
 			if (other.discontinued != null)
 				return false;
@@ -149,11 +152,6 @@ public class ComputerDTO
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (idCompany == null) {
-			if (other.idCompany != null)
-				return false;
-		} else if (!idCompany.equals(other.idCompany))
 			return false;
 		if (introduced == null) {
 			if (other.introduced != null)

@@ -5,7 +5,7 @@
 <%@ page import="java.util.ArrayList"%>
 
 <section id="main">
-	<h2 id="homeTitle">${computerWrapper.noOfRecords} computers</h2>
+	<h2 id="homeTitle">${page.noOfRecords} computers</h2>
 	<div id="actions">
 		<form action="index" method="GET">
 			<div class="row">
@@ -26,7 +26,7 @@
 		<import:add />
 	</div>
 	<c:choose>
-		<c:when test="${fn:length(computerWrapper.listeComputer)>0}">
+		<c:when test="${fn:length(page.listeElements)>0}">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -35,13 +35,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="computer" items="${computerWrapper.listeComputer}">
+				<c:forEach var="computer" items="${page.listeElements}">
 					<tr>
 						<td class="id">${computer.id}</td>
 						<td class="name">${computer.name}</td>
 						<td class="date">${computer.introduced}</td>
 						<td class="date">${computer.discontinued}</td>
-						<td class="name">${computer.company.name}</td>
+						<td class="name">${computer.companyDTO.name}</td>
 						<td class="operations"><import:update
 								computerId="${computer.id}" /> <import:delete
 								computer="${computer}" /></td>

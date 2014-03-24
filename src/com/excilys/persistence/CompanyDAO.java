@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.slf4j.*;
 
+import com.excilys.DTO.CompanyDTO;
+import com.excilys.mapper.CompanyMapper;
 import com.excilys.om.Company;
 
 public class CompanyDAO 
@@ -33,7 +35,7 @@ public class CompanyDAO
 		return companyDAO;
 	}
 	
-	public List<Company> retrieveAll() throws SQLException
+	public List<CompanyDTO> retrieveAll() throws SQLException
 	{		
 		String sql = "select * from company";
 		
@@ -41,7 +43,7 @@ public class CompanyDAO
 		
 		PreparedStatement st=null;
 		ResultSet rs=null;
-		ArrayList<Company> listeCompany = new ArrayList<Company>();
+		ArrayList<CompanyDTO> listeCompanyDTO = new ArrayList<CompanyDTO>();
 		
 		st = connection.prepareStatement(sql);
 		rs = st.executeQuery();
@@ -54,11 +56,11 @@ public class CompanyDAO
 					.name(rs.getString(2))
 					.build();
 			
-			listeCompany.add(company);
+			listeCompanyDTO.add(CompanyMapper.companyToDTO(company));
 		}
 		
 		ConnectionJDBC.close(rs,st);
 		
-		return listeCompany;
+		return listeCompanyDTO;
 	}
 }

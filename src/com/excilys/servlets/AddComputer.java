@@ -9,10 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
-import com.excilys.mapper.ComputerMapper;
-import com.excilys.om.Company;
-import com.excilys.om.Computer;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
@@ -29,7 +27,7 @@ public class AddComputer extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{		
 		CompanyService companyService = CompanyService.getInstance();
-		ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
 		request.setAttribute("listeCompany", listeCompany);
 
@@ -44,11 +42,15 @@ public class AddComputer extends HttpServlet
 		String discontinued = request.getParameter("discontinuedDate");
 		String company = request.getParameter("company");
 		
+		CompanyDTO companyDTO = CompanyDTO.builder()
+										  .id(company)
+										  .build();
+		
 		ComputerDTO computerDTO = ComputerDTO.builder()
 											 .name(name)
 											 .introduced(introduced)
 											 .discontinued(discontinued)
-											 .idCompany(company)
+											 .companyDTO(companyDTO)
 											 .build();
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
@@ -56,7 +58,7 @@ public class AddComputer extends HttpServlet
 		if(!computerValidator.verify())
 		{
 			CompanyService companyService = CompanyService.getInstance();
-			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
 			request.setAttribute("listeCompany", listeCompany);
 			request.setAttribute("computerDTO", computerDTO);
@@ -69,9 +71,8 @@ public class AddComputer extends HttpServlet
 		
 		else
 		{
-			Computer computer = ComputerMapper.mapping(computerDTO);
 			ComputerService computerService = ComputerService.getInstance();
-			computerService.create(computer);
+			computerService.create(computerDTO);
 			
 			int recordsPerPage=14;		
 			int noOfRecords = computerService.size("");

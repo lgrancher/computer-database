@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
-import com.excilys.om.Computer;
-import com.excilys.om.ComputerWrapper;
+import com.excilys.DTO.ComputerDTO;
+import com.excilys.om.Page;
 import com.excilys.om.Log;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.ConnectionJDBC;
@@ -44,18 +44,18 @@ public class ComputerService
 		return computerService;
 	}
 	
-	public ComputerWrapper retrieve(ComputerWrapper computerWrapper)
+	public Page<?> retrieve(Page<?> page)
 	{
 		String operation;
 		
-		if(computerWrapper.getSearch().equals(""))
+		if(page.getSearch().equals(""))
 		{
-			operation = "Listing de tous les computers page " + computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages();
+			operation = "Listing de tous les computers page " + page.getCurrentPage() + "/" + page.getNoOfPages();
 		}
 		
 		else
 		{
-			operation = "Listing des computers avec la recherche "+computerWrapper.getSearch()+" page " + computerWrapper.getCurrentPage() + "/" + computerWrapper.getNoOfPages();
+			operation = "Listing des computers avec la recherche "+page.getSearch()+" page " + page.getCurrentPage() + "/" + page.getNoOfPages();
 		}
 		
 		Log log = Log.builder()
@@ -68,7 +68,7 @@ public class ComputerService
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			computerWrapper.setListeComputer(computerDAO.retrieve(computerWrapper));
+			computerDAO.retrieve(page);
 			
 		    logDAO.create(log);
 			connection.commit();
@@ -87,21 +87,21 @@ public class ComputerService
 			}
 		}
 		
-		return computerWrapper;
+		return page;
 	}
 	
-	public void create(Computer computer) 
+	public void create(ComputerDTO computerDTO) 
 	{		
 		Connection connection=null;
 		
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			int idAdd = computerDAO.create(computer);
+			int idAdd = computerDAO.create(computerDTO);
 			
 			Log log = Log.builder()
 					 .typeLog("create")
-					 .operation("Ajout du computer "+computer.getName()+", id = "+idAdd)
+					 .operation("Ajout du computer "+computerDTO.getName()+", id = "+idAdd)
 					 .dateLog(new Date())
 					 .build();
 			
@@ -133,7 +133,7 @@ public class ComputerService
 		}
 	}
 	
-	public Computer find(Long id)
+	public ComputerDTO find(Long id)
 	{
 		Log log = Log.builder()
 				 .typeLog("find")
@@ -141,12 +141,12 @@ public class ComputerService
 				 .build();
 		
 		Connection connection=null;
-		Computer computer=null;
+		ComputerDTO computerDTO=null;
 		
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			computer = computerDAO.find(id);
+			computerDTO = computerDAO.find(id);
 			logDAO.create(log);
 			connection.commit();
 		} 
@@ -164,14 +164,14 @@ public class ComputerService
 			}
 		}
 
-		return computer;
+		return computerDTO;
 	}
 	
-	public void update(Computer computer) 
+	public void update(ComputerDTO computerDTO) 
 	{
 		Log log = Log.builder()
 				 .typeLog("update")
-				 .operation("Mise à jour du computer n° "+computer.getId())
+				 .operation("Mise à jour du computer n° "+computerDTO.getId())
 				 .build();
 		
 		Connection connection=null;
@@ -179,7 +179,7 @@ public class ComputerService
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			computerDAO.update(computer);
+			computerDAO.update(computerDTO);
 			logDAO.create(log);
 			connection.commit();
 		} 
@@ -207,11 +207,11 @@ public class ComputerService
 		}	
 	}
 	
-	public void delete(Computer computer)
+	public void delete(ComputerDTO computerDTO)
 	{	
 		Log log = Log.builder()
 				 .typeLog("delete")
-				 .operation("Suppression du computer n° "+computer.getId())
+				 .operation("Suppression du computer n° "+computerDTO.getId())
 				 .build();
 	
 		Connection connection=null;
@@ -219,7 +219,7 @@ public class ComputerService
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			computerDAO.delete(computer);
+			computerDAO.delete(computerDTO);
 			logDAO.create(log);
 			connection.commit();
 		} 

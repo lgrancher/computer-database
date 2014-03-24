@@ -9,11 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
-import com.excilys.mapper.ComputerMapper;
-import com.excilys.om.Company;
-import com.excilys.om.Computer;
-import com.excilys.om.ComputerWrapper;
+import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
@@ -52,24 +50,22 @@ public class UpdateComputer extends HttpServlet
 			ComputerService computerService = ComputerService.getInstance();
 			CompanyService companyService = CompanyService.getInstance();
 			
-			Computer computer = computerService.find(numId);
+			ComputerDTO computerDTO = computerService.find(numId);
 			
-			if(computer!=null)
+			if(computerDTO!=null)
 			{
-				Company company = computer.getCompany();	
-				ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+				CompanyDTO companyDTO = computerDTO.getCompanyDTO();	
+				ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();				
 				
-				
-				
-				ComputerWrapper computerWrapper = ComputerWrapper.builder()
-																 .currentPage(curPage)
-																 .search(search)
-																 .sort(sort)
-																 .build();
+				Page<?> page = Page.builder()
+								   .currentPage(curPage)
+								   .search(search)
+								   .sort(sort)
+								   .build();
 						
-				request.setAttribute("computerWrapper", computerWrapper);
-				request.setAttribute("computer", computer);
-				request.setAttribute("company", company);
+				request.setAttribute("page", page);
+				request.setAttribute("computerDTOold", computerDTO);
+				request.setAttribute("companyDTO", companyDTO);
 				request.setAttribute("listeCompany", listeCompany);
 				
 				request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
@@ -94,38 +90,42 @@ public class UpdateComputer extends HttpServlet
 		String name = request.getParameter("name");
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
-		String company = request.getParameter("company");
+		String idCompany = request.getParameter("company");
 		String currentPage = request.getParameter("currentPage");
 		String search = request.getParameter("search");
 		String sort = request.getParameter("sort");
 
-		ComputerDTO computerDTO = ComputerDTO.builder()
+		CompanyDTO companyDTO = CompanyDTO.builder()
+								 .id(idCompany)
+								 .build();
+		
+		ComputerDTO computerDTOnew = ComputerDTO.builder()
 											 .id(id)
 											 .name(name)
 											 .introduced(introduced)
 											 .discontinued(discontinued)
-											 .idCompany(company)
+											 .companyDTO(companyDTO)
 											 .build();
 
-		ComputerWrapper computerWrapper = ComputerWrapper.builder()
-														 .currentPage(Integer.parseInt(currentPage))
-														 .search(search)
-														 .sort(sort)
-														 .build();
+		Page<?> page = Page.builder()
+						   .currentPage(Integer.parseInt(currentPage))
+						   .search(search)
+						   .sort(sort)
+						   .build();
 		
-		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
+		ComputerValidator computerValidator = new ComputerValidator(computerDTOnew);
 		
 		if(!computerValidator.verify())
 		{
 			ComputerService computerService = ComputerService.getInstance();
 			CompanyService companyService = CompanyService.getInstance();
 			
-			Computer computer = computerService.find(Long.parseLong(id));
-			ArrayList<Company> listeCompany = (ArrayList<Company>) companyService.retrieveAll();
+		    ComputerDTO computerDTOold = computerService.find(Long.parseLong(id));
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 			
-			request.setAttribute("computer", computer);
-			request.setAttribute("computerDTO", computerDTO);
-			request.setAttribute("computerWrapper", computerWrapper);
+			request.setAttribute("computerDTOold", computerDTOold);
+			request.setAttribute("computerDTOnew", computerDTOnew);
+			request.setAttribute("page", page);
 			request.setAttribute("verifyName", computerValidator.verifyName());
 			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
 			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
@@ -135,9 +135,8 @@ public class UpdateComputer extends HttpServlet
 
 		else
 		{	
-			Computer computer = ComputerMapper.mapping(computerDTO);
 			ComputerService computerService = ComputerService.getInstance();
-			computerService.update(computer);
+			computerService.update(computerDTOnew);
 			
 			response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);	
 		}

@@ -13,11 +13,11 @@
 					<div class="input">
 					
 					<c:if test="${verifyName == 'true'}">
-						<input value="${computerDTO.name}" type="text" name="name" data-validation="required" />
+						<input value="${computerDTOnew.name}" type="text" name="name" data-validation="required" />
 					</c:if>
 					
 					<c:if test="${verifyName != 'true'}">
-						<input value="${computer.name}" type="text" name="name" data-validation="required" />
+						<input value="${computerDTOold.name}" type="text" name="name" data-validation="required" />
 					</c:if>
 					</div>
 					<c:if test="${verifyName == 'false'}">
@@ -30,12 +30,12 @@
 					<div class="input">
 					
 					<c:if test="${verifyIntroduced == 'true'}">
-						<input type="date" id="introducedDate" name="introducedDate" value="${computerDTO.introduced}" data-validation="date infDiscontinued"
+						<input type="date" id="introducedDate" name="introducedDate" value="${computerDTOnew.introduced}" data-validation="date infDiscontinued"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
 					<c:if test="${verifyIntroduced != 'true'}">
-						<input type="date" id="introducedDate" name="introducedDate" value="${computer.introduced}" data-validation="date infDiscontinued"
+						<input type="date" id="introducedDate" name="introducedDate" value="${computerDTOold.introduced}" data-validation="date infDiscontinued"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
@@ -49,12 +49,12 @@
 					<div class="input">
 					
 					 <c:if test="${verifyDiscontinued == 'true'}">
-						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computerDTO.discontinued}" data-validation="date supIntroduced"
+						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computerDTOnew.discontinued}" data-validation="date supIntroduced"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
 					 <c:if test="${verifyDiscontinued != 'true'}">
-						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computer.discontinued}" data-validation="date supIntroduced"
+						<input type="date" id="discontinuedDate" name="discontinuedDate" value="${computerDTOold.discontinued}" data-validation="date supIntroduced"
 							data-validation-optional="true" data-validation-help="yyyy-mm-dd" />
 					</c:if>
 					
@@ -70,11 +70,11 @@
 							<option value="0"></option>
 							<c:forEach var="companies" items="${listeCompany}">
 							<c:choose>
-							 <c:when test="${verifyName!=null && computerDTO.idCompany == companies.id}">
+							 <c:when test="${verifyName!=null && computerDTOnew.companyDTO.id == companies.id}">
 								<option value="${companies.id}" selected>${companies.name}</option>
 							</c:when>
 							
-							<c:when test="${verifyName==null && companies.id == company.id}">
+							<c:when test="${verifyName==null && companies.id == companyDTO.id}">
 								<option value="${companies.id}" selected>${companies.name}</option>
 							</c:when>
 							
@@ -88,10 +88,10 @@
 					<h6>*required fields</h6>
 				</div>
 
-				<input type="hidden" value="${computer.id}" name="id">
-				<input type="hidden" value="${computerWrapper.currentPage}" name="currentPage">
-				<input type="hidden" value="${computerWrapper.search}" name="search">
-				<input type="hidden" value="${computerWrapper.sort}" name="sort">
+				<input type="hidden" value="${computerDTOold.id}" name="id">
+				<input type="hidden" value="${page.currentPage}" name="currentPage">
+				<input type="hidden" value="${page.search}" name="search">
+				<input type="hidden" value="${page.sort}" name="sort">
 			</fieldset>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">

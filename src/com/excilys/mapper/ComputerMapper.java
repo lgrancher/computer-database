@@ -18,7 +18,7 @@ public class ComputerMapper
 		this.setComputerDTO(computerDTO);
 	}
 	
-	public static Computer mapping(ComputerDTO computerDTO)
+	public static Computer dtoToComputer(ComputerDTO computerDTO)
 	{
 		setComputerMapper(new ComputerMapper(computerDTO));
 		
@@ -60,12 +60,7 @@ public class ComputerMapper
 			discontinued = new Date(0);
 		}
 		
-		String theCompany = computerDTO.getIdCompany();
-		Long idCompany = Long.parseLong(theCompany);
-		
-		Company company = Company.builder()
-								 .id(idCompany)
-								 .build();
+		Company company = CompanyMapper.dtoTOCompany(computerDTO.getCompanyDTO());
 		
 		Computer computer = Computer.builder()
 									.id(id)
@@ -75,6 +70,35 @@ public class ComputerMapper
 									.company(company)
 									.build();		
 		return computer;
+	}
+	
+	public static ComputerDTO computerToDTO(Computer computer)
+	{
+		Date introducedDate = computer.getIntroduced();
+		String introduced = "";
+		
+		if(introducedDate!=null)
+		{
+			introduced = introducedDate+"";
+		}
+		
+		Date discontinuedDate = computer.getDiscontinued();
+		String discontinued = "";
+		
+		if(discontinuedDate!=null)
+		{
+			discontinued = discontinuedDate+"";
+		}
+		
+		ComputerDTO computerDTO = ComputerDTO.builder()
+											 .id(computer.getId()+"")
+											 .name(computer.getName())
+											 .introduced(introduced)
+											 .discontinued(discontinued)
+											 .companyDTO(CompanyMapper.companyToDTO(computer.getCompany()))
+											 .build();
+		
+		return computerDTO;
 	}
 
 	public static ComputerMapper getComputerMapper() {
