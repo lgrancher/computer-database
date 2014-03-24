@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
+import com.excilys.validator.PageValidator;
 
 public class ListeComputer extends HttpServlet 
 {
@@ -18,50 +19,17 @@ public class ListeComputer extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		ComputerService computerService = ComputerService.getInstance();
-		String search = request.getParameter("search");
-		String sort = request.getParameter("sort");
-		int currentPage = 1;
-	    int recordsPerPage = 14;
-	   
-	    if(search==null)
-	    {
-	    	search="";
-	    }
-	    
-	    int noOfRecords = computerService.size(search); 
-	    int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-	    
-		if(sort==null)
-		{
-			sort="id";
-		}
-	    
-	    if(request.getParameter("currentPage") != null)
-	    {
-	    	try
-	    	{
-	    		currentPage = Integer.parseInt(request.getParameter("currentPage"));
-	    		
-	    		if(currentPage>noOfPages)
-	    		{
-	    			currentPage--;
-	    		}
-	    	}
-	    	
-	    	catch(NumberFormatException e)
-	    	{
-	    		currentPage = 1;
-	    	}
-	    }
+		
+		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"),request.getParameter("search"), request.getParameter("sort"));
 	    
 	    Page<?> page = Page.builder()
-						   .sort(sort)
-						   .search(search)
-						   .offset((currentPage-1)*recordsPerPage)
-						   .currentPage(currentPage)
-						   .recordsPerPage(recordsPerPage)
-						   .noOfRecords(noOfRecords)
-						   .noOfPages(noOfPages)
+						   .sort(pageValidator.getSort())
+						   .search(pageValidator.getSearch())
+						   .offset(pageValidator.getOffset())
+						   .currentPage(pageValidator.getCurrentPage())
+						   .recordsPerPage(PageValidator.getRecordsPerPages())
+						   .noOfRecords(pageValidator.getNoOfRecords())
+						   .noOfPages(pageValidator.getNoOfPages())
 						   .build();
 	    		
 		computerService.retrieve(page);			

@@ -14,6 +14,7 @@ import com.excilys.DTO.ComputerDTO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
+import com.excilys.validator.PageValidator;
 
 /**
  * Servlet implementation class AjoutComputer
@@ -74,11 +75,7 @@ public class AddComputer extends HttpServlet
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.create(computerDTO);
 			
-			int recordsPerPage=14;		
-			int noOfRecords = computerService.size("");
-			int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-			
-			response.sendRedirect("index?currentPage="+noOfPages);	
+			response.sendRedirect("index?currentPage="+new PageValidator().getNoOfPages());	
 		}
 	}
 }

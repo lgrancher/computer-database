@@ -1,7 +1,9 @@
 package com.excilys.validator;
 
 import org.apache.commons.validator.DateValidator;
+
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.service.ComputerService;
 
 public class ComputerValidator
 {	
@@ -10,6 +12,29 @@ public class ComputerValidator
 	public ComputerValidator(ComputerDTO computerDTO)
 	{
 		this.computerDTO = computerDTO;	
+	}
+	
+	public boolean verifyId()
+	{
+		boolean verify = true;
+		
+		try
+		{	
+			Long numId = Long.parseLong(computerDTO.getId());
+			ComputerDTO computerDTO = ComputerService.getInstance().find(numId);
+			
+			if(computerDTO == null)
+			{
+				verify = false;
+			}
+		}
+		
+		catch(NumberFormatException e)
+		{
+			verify = false;	
+		}
+		
+		return verify;
 	}
 	
 	public boolean verifyName()

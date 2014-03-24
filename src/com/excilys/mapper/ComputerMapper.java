@@ -37,28 +37,23 @@ public class ComputerMapper
 		
 		String name = computerDTO.getName();
 		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
-		Date introduced;
-		Date discontinued;
+		
+		Date introduced = new Date(0);
+		Date discontinued = new Date(0);
 		
 		try 
 		{
 			introduced = sdf.parse(computerDTO.getIntroduced());
 		} 
 		
-		catch (ParseException e) 
-		{
-			introduced = new Date(0);
-		}
+		catch (ParseException e){}
 		
 		try
 		{
 			discontinued = sdf.parse(computerDTO.getDiscontinued());
 		}
 		
-		catch (ParseException e) 
-		{
-			discontinued = new Date(0);
-		}
+		catch (ParseException e){}
 		
 		Company company = CompanyMapper.dtoTOCompany(computerDTO.getCompanyDTO());
 		

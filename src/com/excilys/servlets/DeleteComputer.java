@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.service.ComputerService;
+import com.excilys.validator.ComputerValidator;
+import com.excilys.validator.PageValidator;
 
 /**
  * Servlet implementation class DeleteComputer
@@ -23,42 +25,21 @@ public class DeleteComputer extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
-		String page = request.getParameter("currentPage");
-		String search = request.getParameter("search");
-		String sort = request.getParameter("sort");
-		
-		try
-		{
-			Long idComputer = Long.parseLong(id);
-			ComputerService computerService = ComputerService.getInstance();
-			ComputerDTO computerDTO = computerService.find(idComputer);
 			
-			if(computerDTO!=null)
-			{
-				computerService.delete(computerDTO);
-			}
-		}
-		
-		catch(NumberFormatException e)
-		{}
-		
-		int currentPage;
-		
-		try
+		ComputerDTO computerDTO = ComputerDTO.builder()
+											 .id(id)
+											 .build();
+
+		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
+
+		if(computerValidator.verifyId())
 		{
-			currentPage = Integer.parseInt(page);
+			ComputerService computerService = ComputerService.getInstance();
+			computerDTO = computerService.find(Long.parseLong(id));
+			computerService.delete(computerDTO);
 		}
 		
-		catch(NumberFormatException e)
-		{
-			currentPage=1;
-		}
-		
-		if(search==null)
-		{
-			search="";
-		}
-		
-		response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);
+		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"), request.getParameter("search"), request.getParameter("sort"));
+		response.sendRedirect("index?sort="+pageValidator.getSort()+"&currentPage="+pageValidator.getCurrentPage()+"&search="+pageValidator.getSearch());
 	}
 }
