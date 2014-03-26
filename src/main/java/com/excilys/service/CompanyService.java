@@ -26,7 +26,8 @@ public class CompanyService {
 
 	public static CompanyService getInstance() 
 	{
-		if (companyService == null) {
+		if (companyService == null) 
+		{
 			companyService = new CompanyService();
 		}
 

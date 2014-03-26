@@ -2,16 +2,18 @@ package com.excilys.om;
 
 import java.util.List;
 
+import com.excilys.service.ComputerService;
+
 public class Page<T>
 {
 	private String sort;
 	private String search;
-	private int offset;
-	private int recordsPerPage;
 	private int currentPage;
 	private int noOfPages;
+	private int offset;
 	private int noOfRecords;
 	private List<?> listeElements;
+	private final static int RECORDS_PER_PAGES = 14;
 	
 	public static class Builder 
 	{
@@ -34,36 +36,11 @@ public class Page<T>
            return this;
        }
        
-       public Builder offset(int offset) 
-       {
-           this.page.offset = offset;
-           return this;
-       }
-       
-       public Builder recordsPerPage(int recordsPerPage) 
-       {
-           this.page.recordsPerPage = recordsPerPage;
-           return this;
-       }
-       
        public Builder currentPage(int currentPage) 
        {
            this.page.currentPage = currentPage;
            return this;
-       }
-       
-       public Builder noOfPages(int noOfPages) 
-       {
-           this.page.noOfPages = noOfPages;
-           return this;
-       }
-       
-       public Builder noOfRecords(int noOfRecords) 
-       {
-           this.page.noOfRecords = noOfRecords;
-           return this;
-       }
-       
+       }       
        
        public Builder listeElements(List<?> listeElements)
        {
@@ -73,6 +50,9 @@ public class Page<T>
  
        public Page<?> build() 
        {
+    	   this.page.noOfPages = Page.calculNoOfPages(this.page.search);
+    	   this.page.noOfRecords = Page.calculNoOfRecords(this.page.search);
+    	   this.page.offset = this.page.calculOffset();
            return this.page;
        }
 	}
@@ -103,26 +83,6 @@ public class Page<T>
 	{
 		this.search = search;
 	}
-
-	public int getOffset() 
-	{
-		return offset;
-	}
-
-	public void setOffset(int offset) 
-	{
-		this.offset = offset;
-	}
-
-	public int getRecordsPerPage() 
-	{
-		return recordsPerPage;
-	}
-
-	public void setRecordsPerPage(int recordsPerPage) 
-	{
-		this.recordsPerPage = recordsPerPage;
-	}
 	
 	public int getCurrentPage() 
 	{
@@ -144,39 +104,59 @@ public class Page<T>
 		this.listeElements = listeElements2;
 	}
 
-	public int getNoOfPages() 
+	public static int calculNoOfPages(String search)
+	{
+		return (int) Math.ceil(calculNoOfRecords(search) * 1.0 / getRecordsPerPages() );
+	}
+	
+	public int getNoOfPages()
 	{
 		return noOfPages;
 	}
-
-	public void setNoOfPages(int noOfPages) 
+		
+	public static int calculNoOfRecords(String search)
 	{
-		this.noOfPages = noOfPages;
+		return ComputerService.getInstance().size(search); 
 	}
-
-	public int getNoOfRecords() {
+	
+	public int getNoOfRecords()
+	{
 		return noOfRecords;
 	}
-
-	public void setNoOfRecords(int noOfRecords)
+	
+	public int calculOffset()
 	{
-		this.noOfRecords = noOfRecords;
+		return (currentPage-1)*getRecordsPerPages();
+	}
+	
+	public int getOffset()
+	{
+		return offset;
+	}
+
+	public static int getRecordsPerPages() 
+	{
+		return RECORDS_PER_PAGES;
 	}
 
 	@Override
-	public int hashCode() 
+	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((search == null) ? 0 : search.hashCode());
-		result = prime * result + recordsPerPage;
+		result = prime * result + currentPage;
+		result = prime * result
+				+ ((listeElements == null) ? 0 : listeElements.hashCode());
+		result = prime * result + noOfPages;
+		result = prime * result + noOfRecords;
 		result = prime * result + offset;
+		result = prime * result + ((search == null) ? 0 : search.hashCode());
 		result = prime * result + ((sort == null) ? 0 : sort.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) 
+	public boolean equals(Object obj)
 	{
 		if (this == obj)
 			return true;
@@ -185,14 +165,23 @@ public class Page<T>
 		if (getClass() != obj.getClass())
 			return false;
 		Page<?> other = (Page<?>) obj;
+		if (currentPage != other.currentPage)
+			return false;
+		if (listeElements == null) {
+			if (other.listeElements != null)
+				return false;
+		} else if (!listeElements.equals(other.listeElements))
+			return false;
+		if (noOfPages != other.noOfPages)
+			return false;
+		if (noOfRecords != other.noOfRecords)
+			return false;
+		if (offset != other.offset)
+			return false;
 		if (search == null) {
 			if (other.search != null)
 				return false;
 		} else if (!search.equals(other.search))
-			return false;
-		if (recordsPerPage != other.recordsPerPage)
-			return false;
-		if (offset != other.offset)
 			return false;
 		if (sort == null) {
 			if (other.sort != null)
@@ -205,10 +194,9 @@ public class Page<T>
 	@Override
 	public String toString() 
 	{
-		return "Page [sort=" + sort + ", search=" + search + ", offset="
-				+ offset + ", recordsPerPage=" + recordsPerPage
-				+ ", currentPage=" + currentPage + ", noOfPages=" + noOfPages
-				+ ", noOfRecords=" + noOfRecords + ", listeComputer="
+		return "Page [sort=" + sort + ", search=" + search + ", currentPage="
+				+ currentPage + ", noOfPages=" + noOfPages + ", offset="
+				+ offset + ", noOfRecords=" + noOfRecords + ", listeElements="
 				+ listeElements + "]";
 	}
 }

@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.DTO.PageDTO;
+import com.excilys.mapper.PageMapper;
+import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
-import com.excilys.validator.PageValidator;
 
 /**
  * Servlet implementation class DeleteComputer
@@ -39,7 +41,14 @@ public class DeleteComputer extends HttpServlet
 			computerService.delete(computerDTO);
 		}
 		
-		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"), request.getParameter("search"), request.getParameter("sort"));
-		response.sendRedirect("index?sort="+pageValidator.getSort()+"&currentPage="+pageValidator.getCurrentPage()+"&search="+pageValidator.getSearch());
+		PageDTO pageDTO = PageDTO.builder()
+								 .search(request.getParameter("search"))
+								 .sort(request.getParameter("sort"))
+								 .currentPage(request.getParameter("currentPage"))
+								 .build();
+		
+		Page<?> page = PageMapper.dtoToPage(pageDTO);
+		
+		response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
 	}
 }

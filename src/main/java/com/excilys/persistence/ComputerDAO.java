@@ -42,32 +42,7 @@ public class ComputerDAO
 	public List<ComputerDTO> retrieve(Page<?> page) throws SQLException
 	{				
 		Connection connection = connectionJDBC.getConnection();
-		
-		String sort;
-		
-		switch(page.getSort())
-		{
-			case "name" :
-				sort = "computer.name";
-				break;
-				
-			case "introduced" :
-				sort = "computer.introduced";
-				break;
-			
-			case "discontinued" :
-				sort = "computer.discontinued";
-				break;
-				
-			case "company" :
-				sort = "company.name, computer.name";
-				break;
-				
-			default :
-				sort = "computer.id";	
-				break;
-		}
-		
+	
 		String search;
 		
 		// on affiche tous les computers		
@@ -90,9 +65,9 @@ public class ComputerDAO
 		
 		// requete
 		StringBuilder sql = new StringBuilder ("select computer.id, computer.name, computer.introduced, computer.discontinued, computer.id, company.name from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ? order by ");
-		sql.append(sort);
+		sql.append(page.getSort());
 		sql.append(" limit ?, ?");
-		
+
 		ArrayList<ComputerDTO> listeComputersDTO = new ArrayList<ComputerDTO>();
 		
 		PreparedStatement st = connection.prepareStatement(sql.toString());
@@ -100,7 +75,7 @@ public class ComputerDAO
 		st.setString(1,search);
 		st.setString(2,search);
 		st.setInt(3, page.getOffset());
-		st.setInt(4, page.getRecordsPerPage());
+		st.setInt(4, Page.getRecordsPerPages());
 		
 		ResultSet rs = st.executeQuery();
 		

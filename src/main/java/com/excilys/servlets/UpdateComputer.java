@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.DTO.PageDTO;
+import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
-import com.excilys.validator.PageValidator;
 
 /**
  * Servlet implementation class UpdateComputer
@@ -27,9 +28,7 @@ public class UpdateComputer extends HttpServlet
  
 	// cherche la liste des company a proposer a l'utilisateur
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"),request.getParameter("search"), request.getParameter("sort"));
-		
+	{		
 		String id = request.getParameter("id");
 		ComputerDTO computerDTO = ComputerDTO.builder()
 											 .id(id)
@@ -44,11 +43,13 @@ public class UpdateComputer extends HttpServlet
 			CompanyDTO companyDTO = computerDTO.getCompanyDTO();	
 			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.getInstance().retrieveAll();				
 			
-			Page<?> page = Page.builder()
-							   .currentPage(pageValidator.getCurrentPage())
-							   .search(pageValidator.getSearch())
-							   .sort(pageValidator.getSort())
-							   .build();
+			PageDTO pageDTO = PageDTO.builder()
+					 .search(request.getParameter("search"))
+					 .sort(request.getParameter("sort"))
+					 .currentPage(request.getParameter("currentPage"))
+					 .build();
+			
+			Page<?> page = PageMapper.dtoToPage(pageDTO);
 					
 			request.setAttribute("page", page);
 			request.setAttribute("computerDTOold", computerDTO);
@@ -60,7 +61,7 @@ public class UpdateComputer extends HttpServlet
 		
 		else
 		{
-			response.sendRedirect("index?currentPage="+pageValidator.getCurrentPage());	
+			response.sendRedirect("index?currentPage="+new Page<ComputerDTO>().getCurrentPage());	
 		}
 	}
 	
@@ -72,12 +73,6 @@ public class UpdateComputer extends HttpServlet
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
 		String idCompany = request.getParameter("company");
-		
-		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"),request.getParameter("search"), request.getParameter("sort"));
-
-		int currentPage = pageValidator.getCurrentPage();
-		String search = pageValidator.getSearch();
-		String sort = pageValidator.getSort();
 		
 		CompanyDTO companyDTO = CompanyDTO.builder()
 								 .id(idCompany)
@@ -93,17 +88,19 @@ public class UpdateComputer extends HttpServlet
 
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTOnew);
+
+		PageDTO pageDTO = PageDTO.builder()
+				 				 .search(request.getParameter("search"))
+				 				 .sort(request.getParameter("sort"))
+				 				 .currentPage(request.getParameter("currentPage"))
+				 				 .build();
+		
+		Page<?> page = PageMapper.dtoToPage(pageDTO);
 		
 		if(!computerValidator.verify())
 		{			
 		    ComputerDTO computerDTOold = ComputerService.getInstance().find(Long.parseLong(id));
 			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.getInstance().retrieveAll();
-			
-			Page<?> page = Page.builder()
-							   .currentPage(currentPage)
-							   .search(search)
-							   .sort(sort)
-							   .build();
 			
 			request.setAttribute("computerDTOold", computerDTOold);
 			request.setAttribute("computerDTOnew", computerDTOnew);
@@ -120,7 +117,7 @@ public class UpdateComputer extends HttpServlet
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.update(computerDTOnew);
 			
-			response.sendRedirect("index?sort="+sort+"&currentPage="+currentPage+"&search="+search);	
+			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
 		}
 	}
 }

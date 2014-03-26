@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.DTO.PageDTO;
+import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
-import com.excilys.validator.PageValidator;
 
 public class ListeComputer extends HttpServlet 
 {
@@ -20,20 +21,16 @@ public class ListeComputer extends HttpServlet
 	{	
 		ComputerService computerService = ComputerService.getInstance();
 		
-		PageValidator pageValidator = new PageValidator(request.getParameter("currentPage"),request.getParameter("search"), request.getParameter("sort"));
-	    
-	    Page<?> page = Page.builder()
-						   .sort(pageValidator.getSort())
-						   .search(pageValidator.getSearch())
-						   .offset(pageValidator.getOffset())
-						   .currentPage(pageValidator.getCurrentPage())
-						   .recordsPerPage(PageValidator.getRecordsPerPages())
-						   .noOfRecords(pageValidator.getNoOfRecords())
-						   .noOfPages(pageValidator.getNoOfPages())
-						   .build();
-	    		
-		computerService.retrieve(page);			
+		PageDTO pageDTO = PageDTO.builder()
+								 .search(request.getParameter("search"))
+								 .sort(request.getParameter("sort"))
+								 .currentPage(request.getParameter("currentPage"))
+								 .build();
 		
+		Page<?> page = PageMapper.dtoToPage(pageDTO);
+		
+		computerService.retrieve(page);			
+
 		request.setAttribute("page", page);
 		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
 	}

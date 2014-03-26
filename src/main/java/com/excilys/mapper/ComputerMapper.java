@@ -10,18 +10,8 @@ import com.excilys.om.Computer;
 
 public class ComputerMapper 
 {
-	private static ComputerMapper computerMapper;
-	private ComputerDTO computerDTO;
-	
-	private ComputerMapper(ComputerDTO computerDTO)
-	{
-		this.setComputerDTO(computerDTO);
-	}
-	
 	public static Computer dtoToComputer(ComputerDTO computerDTO)
-	{
-		setComputerMapper(new ComputerMapper(computerDTO));
-		
+	{		
 		String idComputer = computerDTO.getId();
 		Long id;
 		
@@ -94,21 +84,5 @@ public class ComputerMapper
 											 .build();
 		
 		return computerDTO;
-	}
-
-	public static ComputerMapper getComputerMapper() {
-		return computerMapper;
-	}
-
-	public static void setComputerMapper(ComputerMapper computerMapper) {
-		ComputerMapper.computerMapper = computerMapper;
-	}
-
-	public ComputerDTO getComputerDTO() {
-		return computerDTO;
-	}
-
-	public void setComputerDTO(ComputerDTO computerDTO) {
-		this.computerDTO = computerDTO;
 	}
 }

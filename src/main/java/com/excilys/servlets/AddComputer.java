@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
-import com.excilys.validator.PageValidator;
 
 /**
  * Servlet implementation class AjoutComputer
@@ -75,7 +75,13 @@ public class AddComputer extends HttpServlet
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.create(computerDTO);
 			
-			response.sendRedirect("index?currentPage="+new PageValidator().getNoOfPages());	
+			Page<?> page = Page.builder()
+							   .search("")
+							   .currentPage(Page.calculNoOfPages(""))
+							   .sort("id")
+							   .build();
+			
+			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
 		}
 	}
 }

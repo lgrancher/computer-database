@@ -80,7 +80,10 @@ public class ConnectionJDBC
 			e.printStackTrace();
 		}
 		
-		threadConnect.set(null);
+		finally
+		{
+			threadConnect.remove();
+		}
 	}
 	
 	public static void close(ResultSet rs, PreparedStatement ps)

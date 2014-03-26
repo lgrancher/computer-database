@@ -23,6 +23,7 @@ public class ComputerService
 		try 
 		{
 			computerDAO = ComputerDAO.getInstance();
+			connectionJDBC = ConnectionJDBC.getInstance();
 		}
 		
 		catch (SQLException e) 
@@ -30,8 +31,10 @@ public class ComputerService
 			e.printStackTrace();
 		}
 		
-		connectionJDBC = ConnectionJDBC.getInstance();
-		logDAO = LogDAO.getInstance();
+		finally
+		{
+			logDAO = LogDAO.getInstance();
+		}
 	}
 	
 	public static ComputerService getInstance()
@@ -226,7 +229,6 @@ public class ComputerService
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
 			try 
 			{
 				connection.rollback();
