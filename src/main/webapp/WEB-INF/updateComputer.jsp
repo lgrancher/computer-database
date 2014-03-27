@@ -66,7 +66,7 @@
 				<div class="form-group">
 					<label for="company">Company Name:</label>
 					<div class="input">
-						<select name="company">
+						<select name="company" class="form-control">
 							<option value="0"></option>
 							<c:forEach var="companies" items="${listeCompany}">
 							<c:choose>

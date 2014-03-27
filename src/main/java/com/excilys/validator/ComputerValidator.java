@@ -21,7 +21,7 @@ public class ComputerValidator
 		try
 		{	
 			Long numId = Long.parseLong(computerDTO.getId());
-			ComputerDTO computerDTO = ComputerService.getInstance().find(numId);
+			ComputerDTO computerDTO = ComputerService.INSTANCE.find(numId);
 			
 			if(computerDTO == null)
 			{

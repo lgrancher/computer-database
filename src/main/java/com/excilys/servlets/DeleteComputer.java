@@ -36,7 +36,7 @@ public class DeleteComputer extends HttpServlet
 
 		if(computerValidator.verifyId())
 		{
-			ComputerService computerService = ComputerService.getInstance();
+			ComputerService computerService = ComputerService.INSTANCE;
 			computerDTO = computerService.find(Long.parseLong(id));
 			computerService.delete(computerDTO);
 		}

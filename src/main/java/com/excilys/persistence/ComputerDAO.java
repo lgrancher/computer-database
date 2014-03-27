@@ -15,29 +15,12 @@ import com.excilys.om.Company;
 import com.excilys.om.Computer;
 import com.excilys.om.Page;
 
-public class ComputerDAO
-{
-	private static ComputerDAO computerDAO;
-	private static ConnectionJDBC connectionJDBC;
-	
-	private ComputerDAO()
-	{
-		connectionJDBC = ConnectionJDBC.getInstance();
-	}
-	
-	public static ComputerDAO getInstance() throws SQLException
-	{
-		if(computerDAO==null)
-		{
-			computerDAO = new ComputerDAO();
-		}
-		
-		return computerDAO;
-	}
-	
+public enum ComputerDAO
+{	
+	INSTANCE;
 	public List<ComputerDTO> retrieve(Page<?> page) throws SQLException
 	{				
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 	
 		String search;
 	
@@ -91,14 +74,14 @@ public class ComputerDAO
 		}
 
 		page.setListeElements(listeComputersDTO);
-		ConnectionJDBC.close(rs,st);
+		ConnectionJDBC.INSTANCE.close(rs,st);
 		
 		return listeComputersDTO;
 	}
 	
 	public Long create(ComputerDTO computerDTO) throws SQLException
 	{
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 		
 		String sql = "insert into computer values(default,?,?,?,?)";
 		
@@ -131,14 +114,14 @@ public class ComputerDAO
 			idAdd = rs.getLong(1);
 		}
 		
-		ConnectionJDBC.close(rs,st);
+		ConnectionJDBC.INSTANCE.close(rs,st);
 		
 		return idAdd;
 	}
 	
 	public ComputerDTO find(Long id) throws SQLException 
 	{		
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 		
 		String sql = "select * from computer where id=?";
 		
@@ -171,14 +154,14 @@ public class ComputerDAO
 			computerDTO = null;
 		}
 		
-		ConnectionJDBC.close(rs,st);
+		ConnectionJDBC.INSTANCE.close(rs,st);
 		
 		return computerDTO;
 	}
 	
 	public void update(ComputerDTO computerDTO) throws SQLException
 	{
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 		
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
@@ -204,12 +187,12 @@ public class ComputerDAO
 		
 		st.executeUpdate();
  
-		ConnectionJDBC.close(null,st);
+		ConnectionJDBC.INSTANCE.close(null,st);
 	}
 	
 	public void delete(ComputerDTO computerDTO) throws SQLException 
 	{
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 		
 		String sql = "delete from computer where id=?";
 		
@@ -220,12 +203,12 @@ public class ComputerDAO
 	
 		st.executeUpdate();
 		
-		ConnectionJDBC.close(null,st);
+		ConnectionJDBC.INSTANCE.close(null,st);
 	}
 
 	public int size(String search) throws SQLException
 	{
-		Connection connection = connectionJDBC.getConnection();
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
 				
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
 
@@ -253,7 +236,7 @@ public class ComputerDAO
 		rs.next();	
 		int nbLignes = rs.getInt(1);
 		
-		ConnectionJDBC.close(rs,st);
+		ConnectionJDBC.INSTANCE.close(rs,st);
 		
 		return nbLignes;		
 	}

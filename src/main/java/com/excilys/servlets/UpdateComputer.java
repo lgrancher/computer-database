@@ -38,10 +38,10 @@ public class UpdateComputer extends HttpServlet
 		
 		if(computerValidator.verifyId())
 		{
-			computerDTO = ComputerService.getInstance().find(Long.parseLong(id));
+			computerDTO = ComputerService.INSTANCE.find(Long.parseLong(id));
 			
 			CompanyDTO companyDTO = computerDTO.getCompanyDTO();	
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.getInstance().retrieveAll();				
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.INSTANCE.retrieveAll();				
 			
 			PageDTO pageDTO = PageDTO.builder()
 					 .search(request.getParameter("search"))
@@ -99,8 +99,8 @@ public class UpdateComputer extends HttpServlet
 		
 		if(!computerValidator.verify())
 		{			
-		    ComputerDTO computerDTOold = ComputerService.getInstance().find(Long.parseLong(id));
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.getInstance().retrieveAll();
+		    ComputerDTO computerDTOold = ComputerService.INSTANCE.find(Long.parseLong(id));
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.INSTANCE.retrieveAll();
 			
 			request.setAttribute("computerDTOold", computerDTOold);
 			request.setAttribute("computerDTOnew", computerDTOnew);
@@ -114,7 +114,7 @@ public class UpdateComputer extends HttpServlet
 
 		else
 		{	
-			ComputerService computerService = ComputerService.getInstance();
+			ComputerService computerService = ComputerService.INSTANCE;
 			computerService.update(computerDTOnew);
 			
 			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	

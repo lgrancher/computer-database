@@ -108,7 +108,7 @@ public class Page<T>
 
 	public int getNoOfPages()
 	{
-		if(noOfPages==0)
+		if(noOfPages<=0)
 		{
 			noOfPages = (int) Math.ceil(getNoOfRecords() * 1.0 / getRecordsPerPages() );
 		}
@@ -118,9 +118,9 @@ public class Page<T>
 		
 	public int getNoOfRecords()
 	{
-		if(noOfRecords==0)
+		if(noOfRecords<=0)
 		{
-			noOfRecords = ComputerService.getInstance().size(search); 
+			noOfRecords = ComputerService.INSTANCE.size(search); 
 		}
 		
 		return noOfRecords; 

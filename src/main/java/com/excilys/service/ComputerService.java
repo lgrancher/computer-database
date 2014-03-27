@@ -16,52 +16,19 @@ import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
-public class ComputerService 
+public enum ComputerService 
 {
-	private static ComputerService computerService;
-	private static ComputerDAO computerDAO;
-	private static LogDAO logDAO;
-	private static ConnectionJDBC connectionJDBC;
+	INSTANCE;
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-	
-	private ComputerService()
-	{
-		try 
-		{
-			computerDAO = ComputerDAO.getInstance();
-			connectionJDBC = ConnectionJDBC.getInstance();
-			logger.info("Instanciation du ComputerService");
-		}
 		
-		catch (SQLException e) 
-		{
-			logger.error("Erreur d'instanciation du ComputerService");
-		}
-		
-		finally
-		{
-			logDAO = LogDAO.getInstance();
-		}
-	}
-	
-	public static ComputerService getInstance()
-	{
-		if(computerService==null)
-		{
-			computerService = new ComputerService();
-		}
-		
-		return computerService;
-	}
-	
 	public Page<?> retrieve(Page<?> page)
 	{
 		Connection connection=null;
 
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			computerDAO.retrieve(page);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			ComputerDAO.INSTANCE.retrieve(page);
 			
 			String operation = MessageLog.getRetrieve(page, false, true);
 			
@@ -70,7 +37,7 @@ public class ComputerService
 					 .operation(operation)
 					 .build();
 			
-		    logDAO.create(log);
+		    LogDAO.INSTANCE.create(log);
 			connection.commit();
 			
 			logger.info(operation);
@@ -89,7 +56,7 @@ public class ComputerService
 			
 			try 
 			{
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -104,7 +71,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 		
@@ -117,8 +84,8 @@ public class ComputerService
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			Long idAdd = computerDAO.create(computerDTO);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			Long idAdd = ComputerDAO.INSTANCE.create(computerDTO);
 			
 			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
 			
@@ -128,7 +95,7 @@ public class ComputerService
 					 .dateLog(new LocalDate())
 					 .build();
 			
-			logDAO.create(log);
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -148,7 +115,7 @@ public class ComputerService
 						 .dateLog(new LocalDate())
 						 .build();
 				
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -161,7 +128,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 	}
@@ -173,8 +140,8 @@ public class ComputerService
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			computerDTO = computerDAO.find(id);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			computerDTO = ComputerDAO.INSTANCE.find(id);
 			
 			String operation = MessageLog.getFind(id, false, true);
 			
@@ -183,7 +150,7 @@ public class ComputerService
 					 .operation(operation)
 					 .build();
 			
-			logDAO.create(log);
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -201,7 +168,7 @@ public class ComputerService
 			
 			try 
 			{
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -214,7 +181,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 
@@ -227,8 +194,8 @@ public class ComputerService
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			computerDAO.update(computerDTO);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			ComputerDAO.INSTANCE.update(computerDTO);
 			
 			String operation = MessageLog.getUpdate(computerDTO, false, true);
 			Log log = Log.builder()
@@ -236,7 +203,7 @@ public class ComputerService
 					 .operation(operation)
 					 .build();
 			
-			logDAO.create(log);
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			
 			logger.info(operation);
@@ -255,7 +222,7 @@ public class ComputerService
 						 .operation(operation)
 						 .build();
 				
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -268,7 +235,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}	
 	}
@@ -279,8 +246,8 @@ public class ComputerService
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			computerDAO.delete(computerDTO);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			ComputerDAO.INSTANCE.delete(computerDTO);
 			String operation = MessageLog.getDelete(computerDTO, false, true);
 			
 			Log log = Log.builder()
@@ -288,7 +255,7 @@ public class ComputerService
 					 .operation(operation)
 					 .build();
 			
-			logDAO.create(log);
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -307,7 +274,7 @@ public class ComputerService
 						 .operation(operation)
 						 .build();
 				
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -320,7 +287,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 	}
@@ -332,8 +299,8 @@ public class ComputerService
 		
 		try 
 		{			
-			connection = connectionJDBC.getConnection();
-			size= computerDAO.size(search);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			size= ComputerDAO.INSTANCE.size(search);
 			
 			String operation = MessageLog.getSize(search, false, true);
 			
@@ -342,7 +309,7 @@ public class ComputerService
 					 .operation(operation)
 					 .build();
 			
-			logDAO.create(log);
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -360,7 +327,7 @@ public class ComputerService
 			
 			try 
 			{
-				logDAO.create(log);
+				LogDAO.INSTANCE.create(log);
 			} 
 			
 			catch (SQLException e1)
@@ -374,7 +341,7 @@ public class ComputerService
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 		

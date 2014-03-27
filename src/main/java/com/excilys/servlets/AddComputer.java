@@ -27,7 +27,7 @@ public class AddComputer extends HttpServlet
 	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{		
-		CompanyService companyService = CompanyService.getInstance();
+		CompanyService companyService = CompanyService.INSTANCE;
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
 		request.setAttribute("listeCompany", listeCompany);
@@ -58,7 +58,7 @@ public class AddComputer extends HttpServlet
 		
 		if(!computerValidator.verify())
 		{
-			CompanyService companyService = CompanyService.getInstance();
+			CompanyService companyService = CompanyService.INSTANCE;
 			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
 			request.setAttribute("listeCompany", listeCompany);
@@ -72,7 +72,7 @@ public class AddComputer extends HttpServlet
 		
 		else
 		{
-			ComputerService computerService = ComputerService.getInstance();
+			ComputerService computerService = ComputerService.INSTANCE;
 			computerService.create(computerDTO);
 			
 			Page<?> page = Page.builder()

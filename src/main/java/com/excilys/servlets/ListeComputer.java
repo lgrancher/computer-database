@@ -19,7 +19,7 @@ public class ListeComputer extends HttpServlet
 	// affiche la liste des computers
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
-		ComputerService computerService = ComputerService.getInstance();
+		ComputerService computerService = ComputerService.INSTANCE;
 		
 		PageDTO pageDTO = PageDTO.builder()
 								 .search(request.getParameter("search"))

@@ -16,30 +16,11 @@ import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 import com.excilys.om.Log.Type;
 
-public class CompanyService {
-	private static CompanyService companyService;
-	private static CompanyDAO companyDAO;
-	private static LogDAO logDAO;
-	private static ConnectionJDBC connectionJDBC;
+public enum CompanyService 
+{
+	INSTANCE;
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-
-	private CompanyService() 
-	{
-		companyDAO = CompanyDAO.getInstance();
-		logDAO = LogDAO.getInstance();
-		connectionJDBC = ConnectionJDBC.getInstance();
-	}
-
-	public static CompanyService getInstance() 
-	{
-		if (companyService == null) 
-		{
-			companyService = new CompanyService();
-		}
-
-		return companyService;
-	}
-
+	
 	public List<CompanyDTO> retrieveAll()
 	{
 		Log log = Log.builder()
@@ -53,9 +34,9 @@ public class CompanyService {
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
-			listCompanyDTO = companyDAO.retrieveAll();
-			logDAO.create(log);
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			listCompanyDTO = CompanyDAO.INSTANCE.retrieveAll();
+			LogDAO.INSTANCE.create(log);
 			connection.commit();
 			logger.info("Listing des company");
 		} 
@@ -69,7 +50,7 @@ public class CompanyService {
 		{
 			if(connection!=null)
 			{
-				connectionJDBC.close(connection);
+				ConnectionJDBC.INSTANCE.close(connection);
 			}
 		}
 		
