@@ -1,7 +1,6 @@
 package com.excilys.persistence;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +12,7 @@ import org.slf4j.*;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.mapper.ComputerMapper;
+import com.excilys.mapper.DateMapper;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
 import com.excilys.om.Page;
@@ -84,14 +84,15 @@ public class ComputerDAO
 			Company company = new Company();
 			company.setId(rs.getLong(5));
 			company.setName(rs.getString(6));	
-			
+		
 			Computer computer = Computer.builder()
 					.id(rs.getLong(1))
 	                .name(rs.getString(2))
-	                .introduced(rs.getDate(3))
-	                .discontinued(rs.getDate(4))
+	                .introduced(DateMapper.sqlToLocalDate(rs.getDate(3)))
+	                .discontinued(DateMapper.sqlToLocalDate(rs.getDate(4)))
 	                .company(company)
 	                .build();
+			
 			
 			listeComputersDTO.add(ComputerMapper.computerToDTO(computer)); 
 		}
@@ -111,12 +112,10 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
-		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
-		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
-
+	
 		st.setString(1,computer.getName());
-		st.setDate(2, introducedDate);
-		st.setDate(3,(Date) discontinuedDate);
+		st.setDate(2, DateMapper.localDateToSql(computer.getIntroduced()));
+		st.setDate(3, DateMapper.localDateToSql(computer.getDiscontinued()));
 		
 		if(computer.getCompany().getId()>0)
 		{
@@ -168,8 +167,8 @@ public class ComputerDAO
 			Computer computer = Computer.builder()
 					.id(rs.getLong(1))
 	                .name(rs.getString(2))
-	                .introduced(rs.getDate(3))
-	                .discontinued(rs.getDate(4))
+	                .introduced(DateMapper.sqlToLocalDate(rs.getDate(3)))
+	                .discontinued(DateMapper.sqlToLocalDate(rs.getDate(4)))
 	                .company(company)
 	                .build();
 			
@@ -195,12 +194,10 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 			
 		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
-		java.sql.Date introducedDate = new java.sql.Date(computer.getIntroduced().getTime());
-		java.sql.Date discontinuedDate = new java.sql.Date(computer.getDiscontinued().getTime());
-
+		
 		st.setString(1, computer.getName());
-		st.setDate(2, introducedDate);
-		st.setDate(3, discontinuedDate);
+		st.setDate(2, DateMapper.localDateToSql(computer.getIntroduced()));
+		st.setDate(3, DateMapper.localDateToSql(computer.getDiscontinued()));
 		
 		if(computer.getCompany().getId()>0)
 		{

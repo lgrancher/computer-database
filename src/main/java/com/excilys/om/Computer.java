@@ -1,13 +1,13 @@
 package com.excilys.om;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
 
 public class Computer 
 {
 	private long id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private Company company;
 	
 	 public static class Builder 
@@ -32,13 +32,13 @@ public class Computer
             return this;
         }
  
-        public Builder introduced(Date introduced) 
+        public Builder introduced(LocalDate introduced) 
         {
             this.computer.introduced = introduced;
             return this;
         }
  
-        public Builder discontinued(Date discontinued) 
+        public Builder discontinued(LocalDate discontinued) 
         {
             this.computer.discontinued = discontinued;
             return this;
@@ -78,22 +78,22 @@ public class Computer
 		this.name = name;
 	}
 
-	public Date getIntroduced() 
+	public LocalDate getIntroduced() 
 	{
 		return introduced;
 	}
 
-	public void setIntroduced(Date introduced) 
+	public void setIntroduced(LocalDate introduced) 
 	{
 		this.introduced = introduced;
 	}
 
-	public Date getDiscontinued() 
+	public LocalDate getDiscontinued() 
 	{
 		return discontinued;
 	}
 
-	public void setDiscontinued(Date discontinued) 
+	public void setDiscontinued(LocalDate discontinued) 
 	{
 		this.discontinued = discontinued;
 	}

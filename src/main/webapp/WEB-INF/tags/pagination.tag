@@ -6,7 +6,7 @@
 				<%--For displaying Previous link except for the 1st page --%>
 				<c:if test="${page.currentPage != 1}">
 					<span class="num"><a
-						href="index?sort=${sort}&currentPage=${page.currentPage - 1}&search=${page.search}"
+						href="index?sort=${page.sort}&currentPage=${page.currentPage - 1}&search=${page.search}"
 						style="cursor: pointer; color: grey"><span
 							class="glyphicon glyphicon-chevron-left"></span> Previous</a></span>
 				</c:if>

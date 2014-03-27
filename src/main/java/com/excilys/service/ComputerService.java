@@ -2,7 +2,8 @@ package com.excilys.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Date;
+
+import org.joda.time.LocalDate;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.om.Page;
@@ -105,7 +106,7 @@ public class ComputerService
 			Log log = Log.builder()
 					 .typeLog("create")
 					 .operation("Ajout du computer "+computerDTO.getName()+", id = "+idAdd)
-					 .dateLog(new Date())
+					 .dateLog(new LocalDate())
 					 .build();
 			
 			logDAO.create(log);

@@ -2,12 +2,14 @@ package com.excilys.om;
 
 import java.util.Date;
 
+import org.joda.time.LocalDate;
+
 public class Log 
 {
 	private Long id;
 	private String typeLog;
 	private String operation;
-	private Date dateLog;
+	private LocalDate dateLog;
 	
 	public static class Builder
 	{
@@ -38,7 +40,7 @@ public class Log
 			return this;
 		}
 		
-		public Builder dateLog(Date dateLog)
+		public Builder dateLog(LocalDate dateLog)
 		{
 			this.log.dateLog = dateLog;
 			return this;
@@ -87,12 +89,12 @@ public class Log
 		this.operation = operation;
 	}
 
-	public Date getDateLog() 
+	public LocalDate getDateLog() 
 	{
 		return dateLog;
 	}
 
-	public void setDateLog(Date dateLog) 
+	public void setDateLog(LocalDate dateLog) 
 	{
 		this.dateLog = dateLog;
 	}

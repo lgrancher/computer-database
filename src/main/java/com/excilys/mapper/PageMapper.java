@@ -54,7 +54,7 @@ public class PageMapper
 	
 	public static String findSort(String sort)
 	{		
-		if(sort==null)
+		if(sort==null || sort=="")
 		{
 			sort="id";
 		}

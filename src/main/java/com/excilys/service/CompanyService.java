@@ -2,8 +2,9 @@ package com.excilys.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
+
+import org.joda.time.LocalDate;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.om.Log;
@@ -39,7 +40,7 @@ public class CompanyService {
 		Log log = Log.builder()
 				 .typeLog("retrieve")
 				 .operation("Listing des company")
-				 .dateLog(new Date())
+				 .dateLog(new LocalDate())
 				 .build();
 		
 		Connection connection=null;
