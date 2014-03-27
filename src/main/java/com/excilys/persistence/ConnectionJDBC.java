@@ -34,12 +34,12 @@ public class ConnectionJDBC
 			config.setPartitionCount(1);
 			connectionPool = new BoneCP(config);	
 			threadConnect = new ThreadLocal<Connection>();
-			logger.info("Chargement du driver JDBC");
+			logger.info("Initialisation de la connexion");
 		} 
 		
 		catch (ClassNotFoundException | SQLException e) 
 		{
-			e.printStackTrace();
+			logger.error("Erreur lors de l'initialisation de la connexion");
 		}	
 	}
 	
@@ -71,13 +71,12 @@ public class ConnectionJDBC
 		try 
 		{	
 			connection.close();
-			
 			logger.info("Fermeture de la connexion");
 		} 
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
+			logger.error("Erreur lors de la fermeture de la connexion");
 		}
 		
 		finally
@@ -97,7 +96,7 @@ public class ConnectionJDBC
 			
 			catch (SQLException e) 
 			{
-				e.printStackTrace();
+				logger.error("Erreur lors de la fermeture du ResultSet");
 			}
 		}
 		
@@ -110,7 +109,7 @@ public class ConnectionJDBC
 			
 			catch (SQLException e) 
 			{
-				e.printStackTrace();
+				logger.error("Erreur lors de la fermeture du PreparedStatement");
 			}
 		}
 	}

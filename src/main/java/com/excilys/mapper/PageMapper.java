@@ -8,15 +8,16 @@ public class PageMapper
 	public static Page<?> dtoToPage(PageDTO pageDTO)
 	{
 		String search = findSearch(pageDTO.getSearch());
-		int currentPage = findCurrentPage(pageDTO.getCurrentPage(), search);
 		String sort = findSort(pageDTO.getSort());
 		
 		Page<?> page = Page.builder()
 						   .search(search)
-						   .currentPage(currentPage)
 						   .sort(sort)
 						   .build();
 		
+		int currentPage = findCurrentPage(pageDTO.getCurrentPage(), page);
+		page.setCurrentPage(currentPage);
+
 		return page;
 	}
 	
@@ -30,17 +31,17 @@ public class PageMapper
 		return search;
 	}
 	
-	public static int findCurrentPage(String page, String search)
+	public static int findCurrentPage(String curPage, Page<?> page)
 	{
 		int currentPage=1;
 		
-		if(page!=null)
+		if(curPage!=null)
 		{
 			try
 			{
-				currentPage = Integer.parseInt(page);
+				currentPage = Integer.parseInt(curPage);
 				
-				if(currentPage>Page.calculNoOfPages(search))
+				if(currentPage>page.getNoOfPages())
 	    		{
 					currentPage--;
 	    		}

@@ -1,15 +1,14 @@
 package com.excilys.om;
 
-import java.util.Date;
-
 import org.joda.time.LocalDate;
 
 public class Log 
 {
 	private Long id;
-	private String typeLog;
+	private Type typeLog;
 	private String operation;
 	private LocalDate dateLog;
+	public enum Type {create, retrieve, find, delete, update, size, error};
 	
 	public static class Builder
 	{
@@ -28,7 +27,7 @@ public class Log
 			return this;
 		}
 		
-		public Builder typeLog(String typeLog)
+		public Builder typeLog(Type typeLog)
 		{
 			this.log.typeLog = typeLog;
 			return this;
@@ -69,12 +68,12 @@ public class Log
 		this.id = id;
 	}
 
-	public String getTypeLog() 
+	public Type getTypeLog() 
 	{
 		return typeLog;
 	}
 
-	public void setTypeLog(String typeLog) 
+	public void setTypeLog(Type typeLog) 
 	{
 		this.typeLog = typeLog;
 	}
@@ -98,7 +97,7 @@ public class Log
 	{
 		this.dateLog = dateLog;
 	}
-
+	
 	@Override
 	public int hashCode() 
 	{

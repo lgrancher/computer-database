@@ -77,9 +77,9 @@ public class AddComputer extends HttpServlet
 			
 			Page<?> page = Page.builder()
 							   .search("")
-							   .currentPage(Page.calculNoOfPages(""))
 							   .sort("id")
 							   .build();
+			page.setCurrentPage(page.getNoOfPages());
 			
 			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
 		}

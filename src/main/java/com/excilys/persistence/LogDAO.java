@@ -14,7 +14,7 @@ public class LogDAO
 	private LogDAO()
 	{
 		connectionJDBC = ConnectionJDBC.getInstance();
-	};
+	}
 	
 	public static LogDAO getInstance()
 	{
@@ -33,7 +33,7 @@ public class LogDAO
 		PreparedStatement st=null;
 		
 		st = connection.prepareStatement(sql);
-		st.setString(1, log.getTypeLog());
+		st.setString(1, log.getTypeLog().toString());
 		st.setString(2, log.getOperation());
 		
 		st.executeUpdate();	

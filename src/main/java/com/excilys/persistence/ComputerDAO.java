@@ -8,8 +8,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.*;
-
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.mapper.DateMapper;
@@ -20,7 +18,6 @@ import com.excilys.om.Page;
 public class ComputerDAO
 {
 	private static ComputerDAO computerDAO;
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	private static ConnectionJDBC connectionJDBC;
 	
 	private ComputerDAO()
@@ -33,7 +30,6 @@ public class ComputerDAO
 		if(computerDAO==null)
 		{
 			computerDAO = new ComputerDAO();
-			logger.info("Initialisation de computerDAO");
 		}
 		
 		return computerDAO;
@@ -44,11 +40,10 @@ public class ComputerDAO
 		Connection connection = connectionJDBC.getConnection();
 	
 		String search;
-		
+	
 		// on affiche tous les computers		
 		if(page.getSearch().equals(""))
 		{
-			logger.info("Listing de tous les computers page "+page.getCurrentPage() + "/" + page.getNoOfPages());
 			search = "%";
 		}
 		
@@ -59,8 +54,6 @@ public class ComputerDAO
 			builder.append(page.getSearch());
 			builder.append("%");
 			search = builder.toString();
-			
-			logger.info("Listing des computers avec la recherche "+page.getSearch()+" page "+page.getCurrentPage() + "/" + page.getNoOfPages());
 		}
 		
 		// requete
@@ -103,7 +96,7 @@ public class ComputerDAO
 		return listeComputersDTO;
 	}
 	
-	public int create(ComputerDTO computerDTO) throws SQLException
+	public Long create(ComputerDTO computerDTO) throws SQLException
 	{
 		Connection connection = connectionJDBC.getConnection();
 		
@@ -131,14 +124,13 @@ public class ComputerDAO
 		
 		ResultSet rs = st.getGeneratedKeys();
 	
-		int idAdd=0;
+		Long idAdd=(long) 0;
 		
 		if( rs.next() ) 
 		{
-			idAdd = rs.getInt(1);
+			idAdd = rs.getLong(1);
 		}
 		
-		logger.info("Création d'un computer "+computer.getName() + ", id = "+idAdd);
 		ConnectionJDBC.close(rs,st);
 		
 		return idAdd;
@@ -153,7 +145,6 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, id);
 	
-		logger.info("Recherche computer n° "+id);
 		ResultSet rs = st.executeQuery();
 		boolean existe = rs.next();
 	
@@ -209,7 +200,6 @@ public class ComputerDAO
 			st.setNull(4, Types.BIGINT);
 		}
 		
-		logger.info("Mise à jour du computer "+computer.getId());
 		st.setLong(5, computer.getId());
 		
 		st.executeUpdate();
@@ -228,7 +218,6 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		st.setLong(1, computer.getId());
 	
-		logger.info("Suppression du computer n°"+computer.getId());
 		st.executeUpdate();
 		
 		ConnectionJDBC.close(null,st);
@@ -247,7 +236,6 @@ public class ComputerDAO
 		{
 			st.setString(1,"%");
 			st.setString(2,"%");
-			logger.info("Recherche du nombre de computers en tout");
 		}
 		
 		// nombre de computers qui correspondent a la recherche
@@ -259,7 +247,6 @@ public class ComputerDAO
 			
 			st.setString(1,builder.toString());	
 			st.setString(2,builder.toString());
-			logger.info("Recherche du nombre de computer correspondant à "+search);
 		}
 	
 		ResultSet rs = st.executeQuery();

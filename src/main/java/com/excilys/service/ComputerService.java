@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.om.Log.Type;
+import com.excilys.om.MessageLog;
 import com.excilys.om.Page;
 import com.excilys.om.Log;
 import com.excilys.persistence.ComputerDAO;
@@ -18,6 +22,7 @@ public class ComputerService
 	private static ComputerDAO computerDAO;
 	private static LogDAO logDAO;
 	private static ConnectionJDBC connectionJDBC;
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private ComputerService()
 	{
@@ -25,11 +30,12 @@ public class ComputerService
 		{
 			computerDAO = ComputerDAO.getInstance();
 			connectionJDBC = ConnectionJDBC.getInstance();
+			logger.info("Instanciation du ComputerService");
 		}
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
+			logger.error("Erreur d'instanciation du ComputerService");
 		}
 		
 		finally
@@ -50,37 +56,48 @@ public class ComputerService
 	
 	public Page<?> retrieve(Page<?> page)
 	{
-		String operation;
-		
-		if(page.getSearch().equals(""))
-		{
-			operation = "Listing de tous les computers page " + page.getCurrentPage() + "/" + page.getNoOfPages();
-		}
-		
-		else
-		{
-			operation = "Listing des computers avec la recherche "+page.getSearch()+" page " + page.getCurrentPage() + "/" + page.getNoOfPages();
-		}
-		
-		Log log = Log.builder()
-				 .typeLog("retrieve")
-				 .operation(operation)
-				 .build();
-		
 		Connection connection=null;
-		
+
 		try 
 		{
 			connection = connectionJDBC.getConnection();
 			computerDAO.retrieve(page);
 			
+			String operation = MessageLog.getRetrieve(page, false, true);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.retrieve)
+					 .operation(operation)
+					 .build();
+			
 		    logDAO.create(log);
 			connection.commit();
+			
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
+			String operation = MessageLog.getRetrieve(page, true, true);
+			
+			logger.error(operation);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.error)
+					 .operation(operation)
+					 .build();
+			
+			try 
+			{
+				logDAO.create(log);
+			} 
+			
+			catch (SQLException e1) 
+			{
+				
+				logger.error(MessageLog.getRetrieve(page, true, false));
+			}
+			
 		}
 				
 		finally
@@ -101,30 +118,42 @@ public class ComputerService
 		try 
 		{
 			connection = connectionJDBC.getConnection();
-			int idAdd = computerDAO.create(computerDTO);
+			Long idAdd = computerDAO.create(computerDTO);
+			
+			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
 			
 			Log log = Log.builder()
-					 .typeLog("create")
-					 .operation("Ajout du computer "+computerDTO.getName()+", id = "+idAdd)
+					 .typeLog(Type.create)
+					 .operation(operation)
 					 .dateLog(new LocalDate())
 					 .build();
 			
 			logDAO.create(log);
 			connection.commit();
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			
+		{			
 			try 
 			{
 				connection.rollback();
+				
+				String operation = MessageLog.getCreate(computerDTO, (long) 0, true);
+				logger.error(operation);
+				
+				Log log = Log.builder()
+						 .typeLog(Type.error)
+						 .operation(operation)
+						 .dateLog(new LocalDate())
+						 .build();
+				
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
 			{
-				e1.printStackTrace();
+				logger.error(MessageLog.getCreate(computerDTO, (long) 0, false));
 			}
 		}
 		
@@ -138,12 +167,7 @@ public class ComputerService
 	}
 	
 	public ComputerDTO find(Long id)
-	{
-		Log log = Log.builder()
-				 .typeLog("find")
-				 .operation("Recherche du computer n° "+id)
-				 .build();
-		
+	{		
 		Connection connection=null;
 		ComputerDTO computerDTO=null;
 		
@@ -151,13 +175,39 @@ public class ComputerService
 		{
 			connection = connectionJDBC.getConnection();
 			computerDTO = computerDAO.find(id);
+			
+			String operation = MessageLog.getFind(id, false, true);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.find)
+					 .operation(operation)
+					 .build();
+			
 			logDAO.create(log);
 			connection.commit();
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
+			String operation =  MessageLog.getFind(id, true, true);
+			
+			logger.error(operation);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.error)
+					 .operation(operation)
+					 .build();
+			
+			try 
+			{
+				logDAO.create(log);
+			} 
+			
+			catch (SQLException e1) 
+			{
+				logger.error(MessageLog.getFind(id, false, false));
+			}
 		}
 		
 		finally
@@ -172,33 +222,45 @@ public class ComputerService
 	}
 	
 	public void update(ComputerDTO computerDTO) 
-	{
-		Log log = Log.builder()
-				 .typeLog("update")
-				 .operation("Mise à jour du computer n° "+computerDTO.getId())
-				 .build();
-		
+	{		
 		Connection connection=null;
 		
 		try 
 		{
 			connection = connectionJDBC.getConnection();
 			computerDAO.update(computerDTO);
+			
+			String operation = MessageLog.getUpdate(computerDTO, false, true);
+			Log log = Log.builder()
+					 .typeLog(Type.update)
+					 .operation(operation)
+					 .build();
+			
 			logDAO.create(log);
 			connection.commit();
+			
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
 			try 
 			{
 				connection.rollback();
+				String operation = MessageLog.getUpdate(computerDTO, true, true);
+				logger.error(operation);
+
+				Log log = Log.builder()
+						 .typeLog(Type.error)
+						 .operation(operation)
+						 .build();
+				
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
 			{
-				e1.printStackTrace();
+				logger.error(MessageLog.getUpdate(computerDTO, true, false));
 			}
 		}
 		
@@ -212,20 +274,23 @@ public class ComputerService
 	}
 	
 	public void delete(ComputerDTO computerDTO)
-	{	
-		Log log = Log.builder()
-				 .typeLog("delete")
-				 .operation("Suppression du computer n° "+computerDTO.getId())
-				 .build();
-	
+	{		
 		Connection connection=null;
 		
 		try 
 		{
 			connection = connectionJDBC.getConnection();
 			computerDAO.delete(computerDTO);
+			String operation = MessageLog.getDelete(computerDTO, false, true);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.delete)
+					 .operation(operation)
+					 .build();
+			
 			logDAO.create(log);
 			connection.commit();
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
@@ -233,11 +298,21 @@ public class ComputerService
 			try 
 			{
 				connection.rollback();
+				
+				String operation = MessageLog.getDelete(computerDTO, true, true);
+				logger.error(operation);
+				
+				Log log = Log.builder()
+						 .typeLog(Type.error)
+						 .operation(operation)
+						 .build();
+				
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
 			{
-				e1.printStackTrace();
+				logger.error(MessageLog.getDelete(computerDTO, true, false));
 			}
 		}
 		
@@ -251,38 +326,48 @@ public class ComputerService
 	}
 	
 	public int size(String search)
-	{
-		String operation;
-		
-		if(search.equals(""))
-		{
-			operation = "Recherche du nombre de computer en tout";
-		}
-		
-		else
-		{
-			operation = "Recherche du nombre de computer correspondant à "+search;
-		}
-		
-		Log log = Log.builder()
-				 .typeLog("size")
-				 .operation(operation)
-				 .build();
-		
+	{		
 		Connection connection=null;
 		int size=0;
 		
 		try 
-		{
+		{			
 			connection = connectionJDBC.getConnection();
 			size= computerDAO.size(search);
+			
+			String operation = MessageLog.getSize(search, false, true);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.size)
+					 .operation(operation)
+					 .build();
+			
 			logDAO.create(log);
 			connection.commit();
+			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
-		{
-			e.printStackTrace();
+		{		
+			String operation = MessageLog.getSize(search, true, true);
+			
+			logger.error(operation);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.error)
+					 .operation(operation)
+					 .build();
+			
+			try 
+			{
+				logDAO.create(log);
+			} 
+			
+			catch (SQLException e1)
+			{
+				logger.error(MessageLog.getSize(search, true, false));
+			}
+			
 		}		
 		
 		finally

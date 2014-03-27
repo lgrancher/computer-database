@@ -50,9 +50,10 @@ public class Page<T>
  
        public Page<?> build() 
        {
-    	   this.page.noOfPages = Page.calculNoOfPages(this.page.search);
-    	   this.page.noOfRecords = Page.calculNoOfRecords(this.page.search);
-    	   this.page.offset = this.page.calculOffset();
+    	   this.page.getNoOfRecords();
+    	   this.page.getNoOfPages();
+    	   this.page.getOffset();
+    	   
            return this.page;
        }
 	}
@@ -92,6 +93,7 @@ public class Page<T>
 	public void setCurrentPage(int currentPage) 
 	{
 		this.currentPage = currentPage;
+		getOffset();
 	}
 
 	public List<?> getListeElements() 
@@ -104,36 +106,36 @@ public class Page<T>
 		this.listeElements = listeElements2;
 	}
 
-	public static int calculNoOfPages(String search)
-	{
-		return (int) Math.ceil(calculNoOfRecords(search) * 1.0 / getRecordsPerPages() );
-	}
-	
 	public int getNoOfPages()
 	{
+		if(noOfPages==0)
+		{
+			noOfPages = (int) Math.ceil(getNoOfRecords() * 1.0 / getRecordsPerPages() );
+		}
+		
 		return noOfPages;
 	}
 		
-	public static int calculNoOfRecords(String search)
-	{
-		return ComputerService.getInstance().size(search); 
-	}
-	
 	public int getNoOfRecords()
 	{
-		return noOfRecords;
-	}
-	
-	public int calculOffset()
-	{
-		return (currentPage-1)*getRecordsPerPages();
+		if(noOfRecords==0)
+		{
+			noOfRecords = ComputerService.getInstance().size(search); 
+		}
+		
+		return noOfRecords; 
 	}
 	
 	public int getOffset()
 	{
+		if(offset<=0)
+		{
+			offset = (currentPage-1)*getRecordsPerPages();
+		}
+		
 		return offset;
 	}
-
+	
 	public static int getRecordsPerPages() 
 	{
 		return RECORDS_PER_PAGES;
