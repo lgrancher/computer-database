@@ -18,7 +18,7 @@
 	 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-			<h1><span class="titreBar"><a href="index">Application - Computer Database</a></span></h1>
+			<h1><span class="titreBar"><a href="index?currentPage=1">Application - Computer Database</a></span></h1>
 		</div>
 	</div>
  </div>

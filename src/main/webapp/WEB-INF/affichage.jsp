@@ -55,6 +55,23 @@
 		</c:otherwise>
 	</c:choose>
 	<import:pagination />
-
+	<input type="hidden" id="erreur" value="${erreur}" />
+	<input type="hidden" id="type" value="${type}" />
+	
 </section>
+
+<script>
+var idErreur = $("#erreur").val();
+var type = $("#type").val();
+
+if(idErreur!="")
+{
+	if(type==="update")
+		alert("The computer "+idErreur+" can't be updated, it has been deleted");
+	
+	else if(type==="delete")
+		alert("The computer "+idErreur+" has been already deleted");
+}
+</script>
+
 <jsp:include page="../include/footer.jsp" />

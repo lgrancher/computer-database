@@ -1,6 +1,9 @@
 package com.excilys.DTO;
 
-public class ComputerDTO 
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class ComputerDTO implements Serializable
 {
 	private String id;
 	private String name;

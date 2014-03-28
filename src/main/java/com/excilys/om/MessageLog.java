@@ -185,4 +185,27 @@ public class MessageLog
 		
 		return builder.toString();
 	}
+	
+	public static String getLastId(boolean erreur, boolean log)
+	{
+		StringBuilder builder = new StringBuilder();
+		
+		if(!erreur && log)
+		{
+			builder.append("Recherche de l'id du dernier computer");
+		}
+		
+		else if(erreur && log)
+		{
+			builder.append("Erreur de la recherche de l'id du dernier computer");
+		}
+		
+		else
+		{
+			builder.append("Erreur de l'enregistrement du log en base lors du lastId");
+		}
+		
+		return builder.toString();
+	}
+
 }

@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.DTO.PageDTO;
 import com.excilys.mapper.PageMapper;
@@ -21,17 +22,35 @@ public class ListeComputer extends HttpServlet
 	{	
 		ComputerService computerService = ComputerService.INSTANCE;
 		
-		PageDTO pageDTO = PageDTO.builder()
-								 .search(request.getParameter("search"))
-								 .sort(request.getParameter("sort"))
-								 .currentPage(request.getParameter("currentPage"))
-								 .build();
+		HttpSession session = request.getSession();
+		Page<?> page;
 		
-		Page<?> page = PageMapper.dtoToPage(pageDTO);
+		// pour le changement de page
+		if(request.getParameter("currentPage")!=null || 
+		   request.getParameter("search")!=null ||
+		   request.getParameter("sort")!=null || 
+		   session.getAttribute("page")==null)
+		{
+			PageDTO pageDTO = PageDTO.builder()
+									 .search(request.getParameter("search"))
+									 .sort(request.getParameter("sort"))
+									 .currentPage(request.getParameter("currentPage"))
+									 .build();
+
+			page = PageMapper.dtoToPage(pageDTO);	
+		}
+		
+		// pour l'ajout, la modif, la suppression
+		else
+		{			
+			page = (Page<?>) session.getAttribute("page");
+		}
 		
 		computerService.retrieve(page);			
-
-		request.setAttribute("page", page);
+		
+		session.setAttribute("page", page);
+		session.setAttribute("erreur", request.getParameter("erreur"));
+		session.setAttribute("type", request.getParameter("type"));
 		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
 	}
 }

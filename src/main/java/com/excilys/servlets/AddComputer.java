@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -30,8 +31,9 @@ public class AddComputer extends HttpServlet
 		CompanyService companyService = CompanyService.INSTANCE;
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
-		request.setAttribute("listeCompany", listeCompany);
-
+		HttpSession session = request.getSession();
+		session.setAttribute("listeCompany", listeCompany);
+		
 		request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);	
 	}
 	
@@ -56,12 +58,9 @@ public class AddComputer extends HttpServlet
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
 		
+		// si le computer n'est pas valide, on repropose le formulaire
 		if(!computerValidator.verify())
 		{
-			CompanyService companyService = CompanyService.INSTANCE;
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
-
-			request.setAttribute("listeCompany", listeCompany);
 			request.setAttribute("computerDTO", computerDTO);
 			request.setAttribute("verifyName", computerValidator.verifyName());
 			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
@@ -72,16 +71,15 @@ public class AddComputer extends HttpServlet
 		
 		else
 		{
-			ComputerService computerService = ComputerService.INSTANCE;
-			computerService.create(computerDTO);
+			ComputerService.INSTANCE.create(computerDTO);
 			
-			Page<?> page = Page.builder()
-							   .search("")
-							   .sort("id")
-							   .build();
+			Page<?> page = Page.builder().build();
 			page.setCurrentPage(page.getNoOfPages());
 			
-			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
+			HttpSession session = request.getSession();
+			session.setAttribute("page", page);
+			
+			response.sendRedirect("index");	
 		}
 	}
 }

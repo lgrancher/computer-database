@@ -1,11 +1,13 @@
 package com.excilys.om;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.excilys.service.ComputerService;
 
-public class Page<T>
+public class Page<T> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String sort;
 	private String search;
 	private int currentPage;
@@ -52,13 +54,24 @@ public class Page<T>
        {
     	   this.page.getNoOfRecords();
     	   this.page.getNoOfPages();
+    	   
+    	   if(this.page.currentPage>this.page.noOfPages)
+    	   {
+    		   this.page.currentPage = this.page.noOfPages;
+    	   }
+    	   
     	   this.page.getOffset();
     	   
            return this.page;
        }
 	}
 	
-	public Page(){}
+	public Page()
+	{
+		search="";
+		sort="computer.id";
+		currentPage=1;
+	}
 
 	public static Builder builder() 
 	{

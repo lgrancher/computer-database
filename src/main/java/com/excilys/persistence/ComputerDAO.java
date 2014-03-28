@@ -240,4 +240,20 @@ public enum ComputerDAO
 		
 		return nbLignes;		
 	}
+	
+	public long lastId() throws SQLException
+	{
+		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		
+		String sql = "select auto_increment from information_schema.tables where table_name=\"computer\"";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();	
+		long lastId = rs.getInt(1)-1;
+		
+		ConnectionJDBC.INSTANCE.close(rs,st);
+		
+		return lastId;
+	}
 }

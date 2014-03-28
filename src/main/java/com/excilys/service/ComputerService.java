@@ -347,4 +347,60 @@ public enum ComputerService
 		
 		return size;
 	}
+	
+	public long lastId()
+	{
+		Connection connection=null;
+		long lastId=0;
+		
+		try 
+		{			
+			connection = ConnectionJDBC.INSTANCE.getConnection();
+			lastId= ComputerDAO.INSTANCE.lastId();
+			
+			String operation = MessageLog.getLastId(false, true);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.size)
+					 .operation(operation)
+					 .build();
+			
+			LogDAO.INSTANCE.create(log);
+			connection.commit();
+			logger.info(operation);
+		} 
+		
+		catch (SQLException e) 
+		{		
+			String operation = MessageLog.getLastId(true, true);
+			
+			logger.error(operation);
+			
+			Log log = Log.builder()
+					 .typeLog(Type.error)
+					 .operation(operation)
+					 .build();
+			
+			try 
+			{
+				LogDAO.INSTANCE.create(log);
+			} 
+			
+			catch (SQLException e1)
+			{
+				logger.error(MessageLog.getLastId(true, false));
+			}
+			
+		}		
+		
+		finally
+		{
+			if(connection!=null)
+			{
+				ConnectionJDBC.INSTANCE.close(connection);
+			}
+		}
+		
+		return lastId;
+	}
 }

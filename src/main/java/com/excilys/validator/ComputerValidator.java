@@ -14,27 +14,41 @@ public class ComputerValidator
 		this.computerDTO = computerDTO;	
 	}
 	
-	public boolean verifyId()
+	public ComputerDTO getComputerDTOWithId()
 	{
-		boolean verify = true;
-		
 		try
 		{	
 			Long numId = Long.parseLong(computerDTO.getId());
-			ComputerDTO computerDTO = ComputerService.INSTANCE.find(numId);
-			
-			if(computerDTO == null)
-			{
-				verify = false;
-			}
+			this.computerDTO = ComputerService.INSTANCE.find(numId);
 		}
 		
 		catch(NumberFormatException e)
 		{
-			verify = false;	
+			this.computerDTO = null;
 		}
 		
-		return verify;
+		return this.computerDTO;
+	}
+	
+	public static String verifyIdExist(String id, String type)
+	{
+		String url="index";
+		
+		try
+		{
+			long idComputer = Long.parseLong(id);
+			long lastId = ComputerService.INSTANCE.lastId();
+			
+			if(idComputer>0 && idComputer<=lastId)
+			{
+				url = "index?erreur="+idComputer+"&type="+type;
+			}
+			
+		}
+		
+		catch(NumberFormatException e){}
+		
+		return url;
 	}
 	
 	public boolean verifyName()

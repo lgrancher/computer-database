@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -35,33 +36,33 @@ public class UpdateComputer extends HttpServlet
 											 .build();
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
+		computerDTO = computerValidator.getComputerDTOWithId();
 		
-		if(computerValidator.verifyId())
-		{
-			computerDTO = ComputerService.INSTANCE.find(Long.parseLong(id));
+		PageDTO pageDTO = PageDTO.builder()
+				 .search(request.getParameter("search"))
+				 .sort(request.getParameter("sort"))
+				 .currentPage(request.getParameter("currentPage"))
+				 .build();
+		
+		Page<?> page = PageMapper.dtoToPage(pageDTO);
 			
-			CompanyDTO companyDTO = computerDTO.getCompanyDTO();	
+		HttpSession session = request.getSession();
+		session.setAttribute("page", page);
+		
+		// si le computer a modifier existe
+		if(computerDTO!=null)
+		{			
 			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.INSTANCE.retrieveAll();				
 			
-			PageDTO pageDTO = PageDTO.builder()
-					 .search(request.getParameter("search"))
-					 .sort(request.getParameter("sort"))
-					 .currentPage(request.getParameter("currentPage"))
-					 .build();
-			
-			Page<?> page = PageMapper.dtoToPage(pageDTO);
-					
-			request.setAttribute("page", page);
-			request.setAttribute("computerDTOold", computerDTO);
-			request.setAttribute("companyDTO", companyDTO);
-			request.setAttribute("listeCompany", listeCompany);
+			session.setAttribute("listeCompany", listeCompany);
+			session.setAttribute("computerDTOold", computerDTO);
 			
 			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
 		}
 		
 		else
 		{
-			response.sendRedirect("index?currentPage="+new Page<ComputerDTO>().getCurrentPage());	
+			response.sendRedirect(ComputerValidator.verifyIdExist(id, "update"));
 		}
 	}
 	
@@ -90,34 +91,45 @@ public class UpdateComputer extends HttpServlet
 		ComputerValidator computerValidator = new ComputerValidator(computerDTOnew);
 
 		PageDTO pageDTO = PageDTO.builder()
-				 				 .search(request.getParameter("search"))
-				 				 .sort(request.getParameter("sort"))
-				 				 .currentPage(request.getParameter("currentPage"))
-				 				 .build();
+				 .search(request.getParameter("search"))
+				 .sort(request.getParameter("sort"))
+				 .currentPage(request.getParameter("currentPage"))
+				 .build();
 		
 		Page<?> page = PageMapper.dtoToPage(pageDTO);
+			
+		HttpSession session = request.getSession();
+		session.setAttribute("page", page);
 		
+		// si le nouveau computer n'est pas correct, on repropose le formulaire
 		if(!computerValidator.verify())
 		{			
-		    ComputerDTO computerDTOold = ComputerService.INSTANCE.find(Long.parseLong(id));
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.INSTANCE.retrieveAll();
-			
-			request.setAttribute("computerDTOold", computerDTOold);
 			request.setAttribute("computerDTOnew", computerDTOnew);
-			request.setAttribute("page", page);
 			request.setAttribute("verifyName", computerValidator.verifyName());
 			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
 			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
-			request.setAttribute("listeCompany", listeCompany);
+
 			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
 		}
 
+		// si le nouveau computer est correct
 		else
 		{	
-			ComputerService computerService = ComputerService.INSTANCE;
-			computerService.update(computerDTOnew);
+			Long idComputer = Long.parseLong(id);
 			
-			response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
+			// on verifie que le computer existe toujours
+			if(ComputerService.INSTANCE.find(idComputer)!=null)
+			{
+				ComputerService computerService = ComputerService.INSTANCE;
+				computerService.update(computerDTOnew);
+				
+				response.sendRedirect("index");
+			 }
+			 
+			 else
+			 {
+				 response.sendRedirect(ComputerValidator.verifyIdExist(id, "update"));
+			 }
 		}
 	}
 }

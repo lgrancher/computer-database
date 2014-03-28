@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.DTO.PageDTO;
@@ -30,25 +31,35 @@ public class DeleteComputer extends HttpServlet
 			
 		ComputerDTO computerDTO = ComputerDTO.builder()
 											 .id(id)
-											 .build();
-
+											 .build();		
+		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
-
-		if(computerValidator.verifyId())
+		computerDTO = computerValidator.getComputerDTOWithId();
+		
+		String url = "index";
+		
+		if(computerDTO!=null)
 		{
 			ComputerService computerService = ComputerService.INSTANCE;
-			computerDTO = computerService.find(Long.parseLong(id));
-			computerService.delete(computerDTO);
+			computerService.delete(computerDTO);	
+		}
+		
+		else
+		{			
+			url = ComputerValidator.verifyIdExist(id, "delete");	
 		}
 		
 		PageDTO pageDTO = PageDTO.builder()
-								 .search(request.getParameter("search"))
-								 .sort(request.getParameter("sort"))
-								 .currentPage(request.getParameter("currentPage"))
-								 .build();
-		
+				 .search(request.getParameter("search"))
+				 .sort(request.getParameter("sort"))
+				 .currentPage(request.getParameter("currentPage"))
+				 .build();
+
 		Page<?> page = PageMapper.dtoToPage(pageDTO);
+
+		HttpSession session = request.getSession();
+		session.setAttribute("page", page);
 		
-		response.sendRedirect("index?sort="+page.getSort()+"&currentPage="+page.getCurrentPage()+"&search="+page.getSearch());	
+		response.sendRedirect(url);
 	}
 }
