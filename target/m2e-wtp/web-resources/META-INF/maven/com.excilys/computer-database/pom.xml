@@ -10,77 +10,112 @@
 
 	<build>
 		<finalName>computer-database</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+		</plugins>
 	</build>
+	
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<bonecp>0.8.0.RELEASE</bonecp>
+		<guava>16.0.1</guava>
+		<taglibs>1.1.2</taglibs>
+		<jstl>1.2</jstl>
+		<validator>1.1.4</validator>
+		<servlet>3.1.0</servlet>
+		<joda-time>2.3</joda-time>
+		<logback>1.1.1</logback>
+		<spring>4.0.2.RELEASE</spring>
 	</properties>
 
 	<dependencies>
+
+		<!-- gère le pool de connexions -->
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
+			<version>${bonecp}</version>
+			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>16.0.1</version>
-		</dependency>
+
+
+		<!-- Affichage jsp -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
-			<version>1.1.2</version>
+			<version>${taglibs}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-			<version>1.1.4</version>
+			<version>${jstl}</version>
+			 <scope>runtime</scope>
 		</dependency>
 
+		<!-- Servlets -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<version>${servlet}</version>
+			<scope>provided</scope>
 		</dependency>
 
+		<!-- gèrent les dates -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
+			<version>${joda-time}</version>
+			<scope>runtime</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${validator}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- permet d'afficher des logs -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.1</version>
+			<version>${logback}</version>
+			<scope>runtime</scope>
 		</dependency>
-		
+
+		<!-- dépendances SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.0.2.RELEASE</version>
+			<version>${spring}</version>
+			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>4.0.2.RELEASE</version>
+			<version>${spring}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.0.2.RELEASE</version>
+			<version>${spring}</version>
 		</dependency>
-		
+
 	</dependencies>
 </project>
 

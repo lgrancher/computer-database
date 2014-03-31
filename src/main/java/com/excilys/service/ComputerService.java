@@ -1,5 +1,6 @@
 package com.excilys.service;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -19,8 +20,10 @@ import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
 @Service
-public class ComputerService 
+public class ComputerService implements Serializable
 {	
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private ComputerDAO computerDAO;
 	

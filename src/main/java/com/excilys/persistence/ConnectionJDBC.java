@@ -1,5 +1,6 @@
 package com.excilys.persistence;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,9 @@ import org.slf4j.*;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ConnectionJDBC 
+public class ConnectionJDBC implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	private static String user = "root";
 	private static String passwd = "excilys";
