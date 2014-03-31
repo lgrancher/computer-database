@@ -7,18 +7,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.om.Company;
 
-public enum CompanyDAO 
+@Repository
+public class CompanyDAO 
 {	
-	INSTANCE;
+	@Autowired
+	private ConnectionJDBC connectionJDBC;
+	
 	public List<CompanyDTO> retrieveAll() throws SQLException
 	{		
 		String sql = "select * from company";
 		
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		PreparedStatement st=null;
 		ResultSet rs=null;
@@ -37,8 +43,18 @@ public enum CompanyDAO
 			listeCompanyDTO.add(CompanyMapper.companyToDTO(company));
 		}
 		
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return listeCompanyDTO;
+	}
+
+	public ConnectionJDBC getConnectionJDBC() 
+	{
+		return connectionJDBC;
+	}
+
+	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
+	{
+		this.connectionJDBC = connectionJDBC;
 	}
 }

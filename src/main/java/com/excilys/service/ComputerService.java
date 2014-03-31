@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.om.Log.Type;
@@ -16,9 +18,18 @@ import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
-public enum ComputerService 
-{
-	INSTANCE;
+@Service
+public class ComputerService 
+{	
+	@Autowired
+	private ComputerDAO computerDAO;
+	
+	@Autowired
+	private LogDAO logDAO;
+	
+	@Autowired
+	private ConnectionJDBC connectionJDBC;
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 		
 	public Page<?> retrieve(Page<?> page)
@@ -27,8 +38,8 @@ public enum ComputerService
 
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			ComputerDAO.INSTANCE.retrieve(page);
+			connection = connectionJDBC.getConnection();
+			computerDAO.retrieve(page);
 			
 			String operation = MessageLog.getRetrieve(page, false, true);
 			
@@ -37,7 +48,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-		    LogDAO.INSTANCE.create(log);
+		    logDAO.create(log);
 			connection.commit();
 			
 			logger.info(operation);
@@ -56,7 +67,7 @@ public enum ComputerService
 			
 			try 
 			{
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -71,7 +82,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
@@ -84,8 +95,8 @@ public enum ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			Long idAdd = ComputerDAO.INSTANCE.create(computerDTO);
+			connection = connectionJDBC.getConnection();
+			Long idAdd = computerDAO.create(computerDTO);
 			
 			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
 			
@@ -95,7 +106,7 @@ public enum ComputerService
 					 .dateLog(new LocalDate())
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -115,7 +126,7 @@ public enum ComputerService
 						 .dateLog(new LocalDate())
 						 .build();
 				
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -128,7 +139,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 	}
@@ -140,8 +151,8 @@ public enum ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			computerDTO = ComputerDAO.INSTANCE.find(id);
+			connection = connectionJDBC.getConnection();
+			computerDTO = computerDAO.find(id);
 			
 			String operation = MessageLog.getFind(id, false, true);
 			
@@ -150,7 +161,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -168,7 +179,7 @@ public enum ComputerService
 			
 			try 
 			{
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -181,7 +192,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 
@@ -194,8 +205,8 @@ public enum ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			ComputerDAO.INSTANCE.update(computerDTO);
+			connection = connectionJDBC.getConnection();
+			computerDAO.update(computerDTO);
 			
 			String operation = MessageLog.getUpdate(computerDTO, false, true);
 			Log log = Log.builder()
@@ -203,7 +214,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			
 			logger.info(operation);
@@ -222,7 +233,7 @@ public enum ComputerService
 						 .operation(operation)
 						 .build();
 				
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -235,7 +246,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}	
 	}
@@ -246,8 +257,8 @@ public enum ComputerService
 		
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			ComputerDAO.INSTANCE.delete(computerDTO);
+			connection = connectionJDBC.getConnection();
+			computerDAO.delete(computerDTO);
 			String operation = MessageLog.getDelete(computerDTO, false, true);
 			
 			Log log = Log.builder()
@@ -255,7 +266,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -274,7 +285,7 @@ public enum ComputerService
 						 .operation(operation)
 						 .build();
 				
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1) 
@@ -287,7 +298,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 	}
@@ -299,8 +310,8 @@ public enum ComputerService
 		
 		try 
 		{			
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			size= ComputerDAO.INSTANCE.size(search);
+			connection = connectionJDBC.getConnection();
+			size= computerDAO.size(search);
 			
 			String operation = MessageLog.getSize(search, false, true);
 			
@@ -309,7 +320,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -327,7 +338,7 @@ public enum ComputerService
 			
 			try 
 			{
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1)
@@ -341,7 +352,7 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
@@ -355,8 +366,8 @@ public enum ComputerService
 		
 		try 
 		{			
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			lastId= ComputerDAO.INSTANCE.lastId();
+			connection = connectionJDBC.getConnection();
+			lastId= computerDAO.lastId();
 			
 			String operation = MessageLog.getLastId(false, true);
 			
@@ -365,7 +376,7 @@ public enum ComputerService
 					 .operation(operation)
 					 .build();
 			
-			LogDAO.INSTANCE.create(log);
+			logDAO.create(log);
 			connection.commit();
 			logger.info(operation);
 		} 
@@ -383,7 +394,7 @@ public enum ComputerService
 			
 			try 
 			{
-				LogDAO.INSTANCE.create(log);
+				logDAO.create(log);
 			} 
 			
 			catch (SQLException e1)
@@ -397,10 +408,40 @@ public enum ComputerService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
 		return lastId;
+	}
+
+	public ComputerDAO getComputerDAO() 
+	{
+		return computerDAO;
+	}
+
+	public void setComputerDAO(ComputerDAO computerDAO) 
+	{
+		this.computerDAO = computerDAO;
+	}
+
+	public LogDAO getLogDAO() 
+	{
+		return logDAO;
+	}
+
+	public void setLogDAO(LogDAO logDAO) 
+	{
+		this.logDAO = logDAO;
+	}
+
+	public ConnectionJDBC getConnectionJDBC() 
+	{
+		return connectionJDBC;
+	}
+
+	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
+	{
+		this.connectionJDBC = connectionJDBC;
 	}
 }

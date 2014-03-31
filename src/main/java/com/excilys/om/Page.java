@@ -16,66 +16,33 @@ public class Page<T> implements Serializable
 	private int noOfRecords;
 	private List<?> listeElements;
 	private final static int RECORDS_PER_PAGES = 14;
-	
-	public static class Builder 
-	{
-       Page<?> page;
-       
-       private Builder() 
-       {
-    	   page = new Page<>();
-       }
- 
-       public Builder sort(String sort) 
-       {
-           this.page.sort = sort;
-           return this;
-       }
- 
-       public Builder search(String search) 
-       {
-           this.page.search = search;
-           return this;
-       }
-       
-       public Builder currentPage(int currentPage) 
-       {
-           this.page.currentPage = currentPage;
-           return this;
-       }       
-       
-       public Builder listeElements(List<?> listeElements)
-       {
-    	   this.page.setListeElements(listeElements);
-    	   return this;
-       }
- 
-       public Page<?> build() 
-       {
-    	   this.page.getNoOfRecords();
-    	   this.page.getNoOfPages();
-    	   
-    	   if(this.page.currentPage>this.page.noOfPages)
-    	   {
-    		   this.page.currentPage = this.page.noOfPages;
-    	   }
-    	   
-    	   this.page.getOffset();
-    	   
-           return this.page;
-       }
-	}
-	
-	public Page()
-	{
-		search="";
-		sort="computer.id";
-		currentPage=1;
-	}
 
-	public static Builder builder() 
+	public ComputerService computerService;
+	
+	public Page(ComputerService computerService)
 	{
-	   return new Builder();
+		this.search = "";
+		this.sort = "computer.id";
+		this.computerService = computerService;
+		this.currentPage = 1;
+	}
+	
+	public Page(ComputerService computerService, String search, String sort, int currentPage)
+	{
+		this.search = search;
+		this.sort = sort;
+		this.computerService = computerService;
+		this.currentPage = currentPage;
+		
+		getNoOfRecords();
+		getNoOfPages();
+  	   
+		if(currentPage>noOfPages)
+  	   	{
+			currentPage = noOfPages;
+  	   	}
+  	   
+		getOffset();
 	}
 	
 	public String getSort() 
@@ -133,7 +100,7 @@ public class Page<T> implements Serializable
 	{
 		if(noOfRecords<=0)
 		{
-			noOfRecords = ComputerService.INSTANCE.size(search); 
+			noOfRecords = computerService.size(search); 
 		}
 		
 		return noOfRecords; 

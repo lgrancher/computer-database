@@ -3,12 +3,15 @@ package com.excilys.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -19,13 +22,16 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
-/**
- * Servlet implementation class UpdateComputer
- */
-@WebServlet("/UpdateComputer")
+
 public class UpdateComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
  
 	// cherche la liste des company a proposer a l'utilisateur
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -36,7 +42,7 @@ public class UpdateComputer extends HttpServlet
 											 .build();
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
-		computerDTO = computerValidator.getComputerDTOWithId();
+		computerDTO = computerValidator.getComputerDTOWithId(computerService);
 		
 		PageDTO pageDTO = PageDTO.builder()
 				 .search(request.getParameter("search"))
@@ -44,7 +50,7 @@ public class UpdateComputer extends HttpServlet
 				 .currentPage(request.getParameter("currentPage"))
 				 .build();
 		
-		Page<?> page = PageMapper.dtoToPage(pageDTO);
+		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 			
 		HttpSession session = request.getSession();
 		session.setAttribute("page", page);
@@ -52,7 +58,7 @@ public class UpdateComputer extends HttpServlet
 		// si le computer a modifier existe
 		if(computerDTO!=null)
 		{			
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyService.INSTANCE.retrieveAll();				
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();				
 			
 			session.setAttribute("listeCompany", listeCompany);
 			session.setAttribute("computerDTOold", computerDTO);
@@ -62,7 +68,7 @@ public class UpdateComputer extends HttpServlet
 		
 		else
 		{
-			response.sendRedirect(ComputerValidator.verifyIdExist(id, "update"));
+			response.sendRedirect(computerValidator.verifyIdExist(id, "update", computerService));
 		}
 	}
 	
@@ -96,7 +102,7 @@ public class UpdateComputer extends HttpServlet
 				 .currentPage(request.getParameter("currentPage"))
 				 .build();
 		
-		Page<?> page = PageMapper.dtoToPage(pageDTO);
+		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 			
 		HttpSession session = request.getSession();
 		session.setAttribute("page", page);
@@ -118,18 +124,43 @@ public class UpdateComputer extends HttpServlet
 			Long idComputer = Long.parseLong(id);
 			
 			// on verifie que le computer existe toujours
-			if(ComputerService.INSTANCE.find(idComputer)!=null)
+			if(computerService.find(idComputer)!=null)
 			{
-				ComputerService computerService = ComputerService.INSTANCE;
 				computerService.update(computerDTOnew);
-				
 				response.sendRedirect("index");
-			 }
+			}
 			 
-			 else
-			 {
-				 response.sendRedirect(ComputerValidator.verifyIdExist(id, "update"));
-			 }
+			else
+			{
+				response.sendRedirect(computerValidator.verifyIdExist(id, "update", computerService));
+			}
 		}
+	}
+
+	public CompanyService getCompanyService() 
+	{
+		return companyService;
+	}
+
+	public void setCompanyService(CompanyService companyService) 
+	{
+		this.companyService = companyService;
+	}
+
+	public ComputerService getComputerService() 
+	{
+		return computerService;
+	}
+
+	public void setComputerService(ComputerService computerService) 
+	{
+		this.computerService = computerService;
+	}
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException
+	{
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

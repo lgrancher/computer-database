@@ -14,12 +14,13 @@ public class ComputerValidator
 		this.computerDTO = computerDTO;	
 	}
 	
-	public ComputerDTO getComputerDTOWithId()
+	// retourne un computerDTO si l'id existe, null sinon
+	public ComputerDTO getComputerDTOWithId(ComputerService computerService)
 	{
 		try
 		{	
 			Long numId = Long.parseLong(computerDTO.getId());
-			this.computerDTO = ComputerService.INSTANCE.find(numId);
+			this.computerDTO = computerService.find(numId);
 		}
 		
 		catch(NumberFormatException e)
@@ -30,20 +31,24 @@ public class ComputerValidator
 		return this.computerDTO;
 	}
 	
-	public static String verifyIdExist(String id, String type)
+	/* 
+	 * retourne l'url permettant ou non une alert d'erreur
+	 * si l'id a existe, avertissement comme quoi le computer a ete supprime
+	 * sinon, retour a la page d'accueil, l'utilisateur a ete fouille dans l'url
+	*/
+	public String verifyIdExist(String id, String type, ComputerService computerService)
 	{
 		String url="index";
 		
 		try
 		{
 			long idComputer = Long.parseLong(id);
-			long lastId = ComputerService.INSTANCE.lastId();
+			long lastId = computerService.lastId();
 			
 			if(idComputer>0 && idComputer<=lastId)
 			{
 				url = "index?erreur="+idComputer+"&type="+type;
 			}
-			
 		}
 		
 		catch(NumberFormatException e){}

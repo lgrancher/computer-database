@@ -7,6 +7,8 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.om.Log;
@@ -16,10 +18,19 @@ import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 import com.excilys.om.Log.Type;
 
-public enum CompanyService 
-{
-	INSTANCE;
+@Service
+public class CompanyService 
+{	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	
+	@Autowired
+	private CompanyDAO companyDAO;
+
+	@Autowired
+	private LogDAO logDAO;
+	
+	@Autowired
+	private ConnectionJDBC connectionJDBC;
 	
 	public List<CompanyDTO> retrieveAll()
 	{
@@ -34,9 +45,9 @@ public enum CompanyService
 		
 		try 
 		{
-			connection = ConnectionJDBC.INSTANCE.getConnection();
-			listCompanyDTO = CompanyDAO.INSTANCE.retrieveAll();
-			LogDAO.INSTANCE.create(log);
+			connection = connectionJDBC.getConnection();
+			listCompanyDTO = companyDAO.retrieveAll();
+			logDAO.create(log);
 			connection.commit();
 			logger.info("Listing des company");
 		} 
@@ -50,10 +61,40 @@ public enum CompanyService
 		{
 			if(connection!=null)
 			{
-				ConnectionJDBC.INSTANCE.close(connection);
+				connectionJDBC.close(connection);
 			}
 		}
 		
 		return listCompanyDTO;
+	}
+	
+	public CompanyDAO getCompanyDAO() 
+	{
+		return companyDAO;
+	}
+
+	public void setCompanyDAO(CompanyDAO companyDAO) 
+	{
+		this.companyDAO = companyDAO;
+	}
+
+	public LogDAO getLogDAO() 
+	{
+		return logDAO;
+	}
+
+	public void setLogDAO(LogDAO logDAO) 
+	{
+		this.logDAO = logDAO;
+	}
+
+	public ConnectionJDBC getConnectionJDBC() 
+	{
+		return connectionJDBC;
+	}
+
+	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
+	{
+		this.connectionJDBC = connectionJDBC;
 	}
 }

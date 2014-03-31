@@ -1,21 +1,19 @@
 package com.excilys.mapper;
 
+import com.excilys.DTO.ComputerDTO;
 import com.excilys.DTO.PageDTO;
 import com.excilys.om.Page;
+import com.excilys.service.ComputerService;
 
 public class PageMapper 
 {
-	public static Page<?> dtoToPage(PageDTO pageDTO)
+	public static Page<?> dtoToPage(PageDTO pageDTO, ComputerService computerService)
 	{
 		String search = findSearch(pageDTO.getSearch());
 		String sort = findSort(pageDTO.getSort());
 		int currentPage = findCurrentPage(pageDTO.getCurrentPage());
 		
-		Page<?> page = Page.builder()
-						   .search(search)
-						   .sort(sort)
-						   .currentPage(currentPage)
-						   .build();
+		Page<?> page = new Page<ComputerDTO>(computerService, search, sort, currentPage);
 		return page;
 	}
 	

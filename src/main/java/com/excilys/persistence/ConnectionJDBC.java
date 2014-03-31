@@ -9,20 +9,20 @@ import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
 import org.slf4j.*;
+import org.springframework.stereotype.Repository;
 
-public enum ConnectionJDBC 
+@Repository
+public class ConnectionJDBC 
 {
-	INSTANCE;
-	private Logger logger = LoggerFactory.getLogger(ConnectionJDBC.class);
-	private BoneCP connectionPool = null;
-	private ThreadLocal<Connection> threadConnect;
+	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	private static String user = "root";
+	private static String passwd = "excilys";
+	private static Logger logger = LoggerFactory.getLogger(ConnectionJDBC.class);
+	private static BoneCP connectionPool = null;
+	private static ThreadLocal<Connection> threadConnect;
 
-	ConnectionJDBC()
+	private ConnectionJDBC()
 	{
-		String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-		String user = "root";
-		String passwd = "excilys";
-	
 		try 
 		{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -76,7 +76,7 @@ public enum ConnectionJDBC
 		}
 	}
 	
-	public void close(ResultSet rs, PreparedStatement ps)
+	public static void close(ResultSet rs, PreparedStatement ps)
 	{
 		if(rs!=null)
 		{
@@ -105,4 +105,3 @@ public enum ConnectionJDBC
 		}
 	}
 }
-

@@ -2,11 +2,15 @@ package com.excilys.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.DTO.PageDTO;
 import com.excilys.mapper.PageMapper;
@@ -16,15 +20,16 @@ import com.excilys.service.ComputerService;
 public class ListeComputer extends HttpServlet 
 {
 	private static final long serialVersionUID = 4062844883931660436L;
-
+	
+	@Autowired
+	private ComputerService computerService;
+	
 	// affiche la liste des computers
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
-		ComputerService computerService = ComputerService.INSTANCE;
-		
 		HttpSession session = request.getSession();
 		Page<?> page;
-		
+	
 		// pour le changement de page
 		if(request.getParameter("currentPage")!=null || 
 		   request.getParameter("search")!=null ||
@@ -37,7 +42,7 @@ public class ListeComputer extends HttpServlet
 									 .currentPage(request.getParameter("currentPage"))
 									 .build();
 
-			page = PageMapper.dtoToPage(pageDTO);	
+			page = PageMapper.dtoToPage(pageDTO, computerService);	
 		}
 		
 		// pour l'ajout, la modif, la suppression
@@ -52,5 +57,22 @@ public class ListeComputer extends HttpServlet
 		session.setAttribute("erreur", request.getParameter("erreur"));
 		session.setAttribute("type", request.getParameter("type"));
 		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
+	}
+
+	public ComputerService getComputerService() 
+	{
+		return computerService;
+	}
+
+	public void setComputerService(ComputerService computerService) 
+	{
+		this.computerService = computerService;
+	}
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException
+	{
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

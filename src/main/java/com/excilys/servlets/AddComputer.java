@@ -3,12 +3,15 @@ package com.excilys.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -17,18 +20,20 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
-/**
- * Servlet implementation class AjoutComputer
- */
-@WebServlet("/AddComputer")
+
 public class AddComputer extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
+	
 	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{		
-		CompanyService companyService = CompanyService.INSTANCE;
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
 		HttpSession session = request.getSession();
@@ -71,9 +76,9 @@ public class AddComputer extends HttpServlet
 		
 		else
 		{
-			ComputerService.INSTANCE.create(computerDTO);
+			computerService.create(computerDTO);
 			
-			Page<?> page = Page.builder().build();
+			Page<?> page = new Page<ComputerDTO>(computerService);
 			page.setCurrentPage(page.getNoOfPages());
 			
 			HttpSession session = request.getSession();
@@ -81,5 +86,32 @@ public class AddComputer extends HttpServlet
 			
 			response.sendRedirect("index");	
 		}
+	}
+
+	public CompanyService getCompanyService() 
+	{
+		return companyService;
+	}
+
+	public void setCompanyService(CompanyService companyService) 
+	{
+		this.companyService = companyService;
+	}
+
+	public ComputerService getComputerService() 
+	{
+		return computerService;
+	}
+
+	public void setComputerService(ComputerService computerService) 
+	{
+		this.computerService = computerService;
+	}
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException
+	{
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

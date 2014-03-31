@@ -8,6 +8,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.mapper.DateMapper;
@@ -15,12 +18,15 @@ import com.excilys.om.Company;
 import com.excilys.om.Computer;
 import com.excilys.om.Page;
 
-public enum ComputerDAO
-{	
-	INSTANCE;
+@Repository
+public class ComputerDAO
+{
+	@Autowired
+	private ConnectionJDBC connectionJDBC;
+	
 	public List<ComputerDTO> retrieve(Page<?> page) throws SQLException
 	{				
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 	
 		String search;
 	
@@ -74,14 +80,14 @@ public enum ComputerDAO
 		}
 
 		page.setListeElements(listeComputersDTO);
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return listeComputersDTO;
 	}
 	
 	public Long create(ComputerDTO computerDTO) throws SQLException
 	{
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		String sql = "insert into computer values(default,?,?,?,?)";
 		
@@ -114,14 +120,14 @@ public enum ComputerDAO
 			idAdd = rs.getLong(1);
 		}
 		
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return idAdd;
 	}
 	
 	public ComputerDTO find(Long id) throws SQLException 
 	{		
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		String sql = "select * from computer where id=?";
 		
@@ -154,14 +160,14 @@ public enum ComputerDAO
 			computerDTO = null;
 		}
 		
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return computerDTO;
 	}
 	
 	public void update(ComputerDTO computerDTO) throws SQLException
 	{
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
@@ -187,12 +193,12 @@ public enum ComputerDAO
 		
 		st.executeUpdate();
  
-		ConnectionJDBC.INSTANCE.close(null,st);
+		ConnectionJDBC.close(null,st);
 	}
 	
 	public void delete(ComputerDTO computerDTO) throws SQLException 
 	{
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		String sql = "delete from computer where id=?";
 		
@@ -203,12 +209,12 @@ public enum ComputerDAO
 	
 		st.executeUpdate();
 		
-		ConnectionJDBC.INSTANCE.close(null,st);
+		ConnectionJDBC.close(null,st);
 	}
 
 	public int size(String search) throws SQLException
 	{
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 				
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";
 
@@ -236,14 +242,14 @@ public enum ComputerDAO
 		rs.next();	
 		int nbLignes = rs.getInt(1);
 		
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return nbLignes;		
 	}
 	
 	public long lastId() throws SQLException
 	{
-		Connection connection = ConnectionJDBC.INSTANCE.getConnection();
+		Connection connection = connectionJDBC.getConnection();
 		
 		String sql = "select auto_increment from information_schema.tables where table_name=\"computer\"";
 		
@@ -252,8 +258,18 @@ public enum ComputerDAO
 		rs.next();	
 		long lastId = rs.getInt(1)-1;
 		
-		ConnectionJDBC.INSTANCE.close(rs,st);
+		ConnectionJDBC.close(rs,st);
 		
 		return lastId;
+	}
+
+	public ConnectionJDBC getConnectionJDBC()
+	{
+		return connectionJDBC;
+	}
+
+	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
+	{
+		this.connectionJDBC = connectionJDBC;
 	}
 }
