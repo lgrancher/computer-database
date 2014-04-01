@@ -1,21 +1,13 @@
 package com.excilys.servlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
-import com.excilys.DTO.CompanyDTO;
-import com.excilys.DTO.ComputerDTO;
-import com.excilys.DTO.PageDTO;
+import com.excilys.DTO.*;
 import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
@@ -23,8 +15,8 @@ import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
 @Controller
-@Scope("session")
 @RequestMapping("/UpdateComputer")
+@SessionAttributes({"page", "computerDTO", "companyDTO"})
 public class UpdateComputer
 {	
 	@Autowired
@@ -34,11 +26,14 @@ public class UpdateComputer
 	private ComputerService computerService;
  
 	@RequestMapping(method = RequestMethod.GET)
-	protected String listeCompany(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
+	protected String listeCompany(@RequestParam(value="id", required=false) String id, 
+								   @RequestParam(value="search", required=false) String search, 
+								   @RequestParam(value="sort", required=false) String sort, 
+								   @RequestParam(value="currentPage", required=false) String currentPage, 
+								   ModelMap model) 
 	{		
 		String redirect;
 		
-		String id = request.getParameter("id");
 		ComputerDTO computerDTO = ComputerDTO.builder()
 											 .id(id)
 											 .build();
@@ -47,22 +42,22 @@ public class UpdateComputer
 		computerDTO = computerValidator.getComputerDTOWithId(computerService);
 		
 		PageDTO pageDTO = PageDTO.builder()
-				 .search(request.getParameter("search"))
-				 .sort(request.getParameter("sort"))
-				 .currentPage(request.getParameter("currentPage"))
+				 .search(search)
+				 .sort(sort)
+				 .currentPage(currentPage)
 				 .build();
 		
 		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 			
-		session.setAttribute("page", page);
+		model.addAttribute("page", page);
 		
 		// si le computer a modifier existe
 		if(computerDTO!=null)
 		{			
 			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();				
 			
-			session.setAttribute("listeCompany", listeCompany);
-			session.setAttribute("computerDTOold", computerDTO);
+			model.addAttribute("listeCompany", listeCompany);
+			model.addAttribute("computerDTOold", computerDTO);
 			
 			redirect = "updateComputer";
 		}
@@ -76,16 +71,15 @@ public class UpdateComputer
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	protected String updateComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
+	protected String updateComputer(@RequestParam(value="id") String id,
+									 @RequestParam(value="name") String name,
+									 @RequestParam(value="introducedDate") String introduced,
+									 @RequestParam(value="discontinuedDate") String discontinued,
+									 @RequestParam(value="company") String idCompany,
+									 ModelMap model) 
 	{
 		String redirect;
-		
-		String id = request.getParameter("id");
-		String name = request.getParameter("name");
-		String introduced = request.getParameter("introducedDate");
-		String discontinued = request.getParameter("discontinuedDate");
-		String idCompany = request.getParameter("company");
-		
+				
 		CompanyDTO companyDTO = CompanyDTO.builder()
 								 .id(idCompany)
 								 .build();
@@ -100,24 +94,14 @@ public class UpdateComputer
 
 		
 		ComputerValidator computerValidator = new ComputerValidator(computerDTOnew);
-
-		PageDTO pageDTO = PageDTO.builder()
-				 .search(request.getParameter("search"))
-				 .sort(request.getParameter("sort"))
-				 .currentPage(request.getParameter("currentPage"))
-				 .build();
-		
-		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
-			
-		session.setAttribute("page", page);
 		
 		// si le nouveau computer n'est pas correct, on repropose le formulaire
 		if(!computerValidator.verify())
 		{			
-			request.setAttribute("computerDTOnew", computerDTOnew);
-			request.setAttribute("verifyName", computerValidator.verifyName());
-			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
-			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
+			model.addAttribute("computerDTOnew", computerDTOnew);
+			model.addAttribute("verifyName", computerValidator.verifyName());
+			model.addAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
+			model.addAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
 
 			redirect = "updateComputer";
 		}
@@ -131,35 +115,15 @@ public class UpdateComputer
 			if(computerService.find(idComputer)!=null)
 			{
 				computerService.update(computerDTOnew);
-				redirect = "redirect: index";
+				redirect = "redirect:index";
 			}
 			 
 			else
 			{
-				redirect = "redirect: "+computerValidator.verifyIdExist(id, "update", computerService);
+				redirect = "redirect:"+computerValidator.verifyIdExist(id, "update", computerService);
 			}
 		}
 		
 		return redirect;
-	}
-
-	public CompanyService getCompanyService() 
-	{
-		return companyService;
-	}
-
-	public void setCompanyService(CompanyService companyService) 
-	{
-		this.companyService = companyService;
-	}
-
-	public ComputerService getComputerService() 
-	{
-		return computerService;
-	}
-
-	public void setComputerService(ComputerService computerService) 
-	{
-		this.computerService = computerService;
 	}
 }

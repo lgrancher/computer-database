@@ -1,15 +1,9 @@
 package com.excilys.servlets;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import com.excilys.DTO.PageDTO;
 import com.excilys.mapper.PageMapper;
@@ -17,12 +11,12 @@ import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 
 @Controller
+@SessionAttributes("page")
 public class ListeComputer 
 {	
 	@Autowired
 	private ComputerService computerService;
-	
-	
+
 	@RequestMapping("/")
 	public String home() 
 	{
@@ -30,20 +24,24 @@ public class ListeComputer
 	}
 	
 	@RequestMapping(value="/index", method = RequestMethod.GET)
-	protected String listeComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException
-	{	
+	protected String listeComputer( @RequestParam(value="search", required=false) String search, 
+			   						 @RequestParam(value="sort", required=false) String sort, 
+			   						 @RequestParam(value="currentPage", required=false) String currentPage,
+			   						 @RequestParam(value="type", required=false) String type,
+			   						 @RequestParam(value="erreur", required=false) String erreur,
+			   						 ModelMap model) 
+	{		
 		Page<?> page;
-	
 		// pour le changement de page
-		if(request.getParameter("currentPage")!=null || 
-		   request.getParameter("search")!=null ||
-		   request.getParameter("sort")!=null || 
-		   session.getAttribute("page")==null)
+		if(search!=null || 
+		   sort!=null ||
+		   currentPage!=null || 
+		   !model.containsAttribute("page"))
 		{
 			PageDTO pageDTO = PageDTO.builder()
-									 .search(request.getParameter("search"))
-									 .sort(request.getParameter("sort"))
-									 .currentPage(request.getParameter("currentPage"))
+									 .search(search)
+									 .sort(sort)
+									 .currentPage(currentPage)
 									 .build();
 
 			page = PageMapper.dtoToPage(pageDTO, computerService);	
@@ -52,25 +50,15 @@ public class ListeComputer
 		// pour l'ajout, la modif, la suppression
 		else
 		{			
-			page = (Page<?>) session.getAttribute("page");
+			page = (Page<?>) model.get("page");
 		}
 		
 		computerService.retrieve(page);			
 		
-		session.setAttribute("page", page);
-		session.setAttribute("erreur", request.getParameter("erreur"));
-		session.setAttribute("type", request.getParameter("type"));
+		model.addAttribute("page",page);
+		model.addAttribute("erreur", erreur);
+		model.addAttribute("type", type);
 		
 		return "affichage";	
-	}
-
-	public ComputerService getComputerService() 
-	{
-		return computerService;
-	}
-
-	public void setComputerService(ComputerService computerService) 
-	{
-		this.computerService = computerService;
 	}
 }

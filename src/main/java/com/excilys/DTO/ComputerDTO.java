@@ -2,9 +2,12 @@ package com.excilys.DTO;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
+import org.springframework.context.annotation.Scope;
+
+@Scope("session")
 public class ComputerDTO implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String name;
 	private String introduced;

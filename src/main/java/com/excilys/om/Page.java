@@ -3,8 +3,11 @@ package com.excilys.om;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
+
 import com.excilys.service.ComputerService;
 
+@Scope("session")
 public class Page<T> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
