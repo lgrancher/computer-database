@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +22,16 @@ public class ListeComputer
 	@Autowired
 	private ComputerService computerService;
 	
+	
 	@RequestMapping("/")
-	public void home(HttpServletRequest request, HttpServletResponse response) throws IOException
+	public String home() 
 	{
-		response.sendRedirect("index");
+		return "redirect: index";
 	}
 	
 	@RequestMapping(value="/index", method = RequestMethod.GET)
-	protected void listeComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected String listeComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException
 	{	
-		HttpSession session = request.getSession();
 		Page<?> page;
 	
 		// pour le changement de page
@@ -61,7 +60,8 @@ public class ListeComputer
 		session.setAttribute("page", page);
 		session.setAttribute("erreur", request.getParameter("erreur"));
 		session.setAttribute("type", request.getParameter("type"));
-		request.getRequestDispatcher("WEB-INF/affichage.jsp").forward(request, response);	
+		
+		return "affichage";	
 	}
 
 	public ComputerService getComputerService() 

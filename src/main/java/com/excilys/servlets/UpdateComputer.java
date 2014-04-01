@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +23,7 @@ import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
 @Controller
+@Scope("session")
 @RequestMapping("/UpdateComputer")
 public class UpdateComputer
 {	
@@ -33,8 +34,10 @@ public class UpdateComputer
 	private ComputerService computerService;
  
 	@RequestMapping(method = RequestMethod.GET)
-	protected void listeCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected String listeCompany(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
 	{		
+		String redirect;
+		
 		String id = request.getParameter("id");
 		ComputerDTO computerDTO = ComputerDTO.builder()
 											 .id(id)
@@ -51,7 +54,6 @@ public class UpdateComputer
 		
 		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 			
-		HttpSession session = request.getSession();
 		session.setAttribute("page", page);
 		
 		// si le computer a modifier existe
@@ -62,18 +64,22 @@ public class UpdateComputer
 			session.setAttribute("listeCompany", listeCompany);
 			session.setAttribute("computerDTOold", computerDTO);
 			
-			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
+			redirect = "updateComputer";
 		}
 		
 		else
 		{
-			response.sendRedirect(computerValidator.verifyIdExist(id, "update", computerService));
+			redirect = "redirect:" +computerValidator.verifyIdExist(id, "update", computerService);
 		}
+		
+		return redirect;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	protected void updateComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected String updateComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
 	{
+		String redirect;
+		
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
 		String introduced = request.getParameter("introducedDate");
@@ -103,7 +109,6 @@ public class UpdateComputer
 		
 		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 			
-		HttpSession session = request.getSession();
 		session.setAttribute("page", page);
 		
 		// si le nouveau computer n'est pas correct, on repropose le formulaire
@@ -114,7 +119,7 @@ public class UpdateComputer
 			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
 			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
 
-			request.getRequestDispatcher("WEB-INF/updateComputer.jsp").forward(request, response);
+			redirect = "updateComputer";
 		}
 
 		// si le nouveau computer est correct
@@ -126,14 +131,16 @@ public class UpdateComputer
 			if(computerService.find(idComputer)!=null)
 			{
 				computerService.update(computerDTOnew);
-				response.sendRedirect("index");
+				redirect = "redirect: index";
 			}
 			 
 			else
 			{
-				response.sendRedirect(computerValidator.verifyIdExist(id, "update", computerService));
+				redirect = "redirect: "+computerValidator.verifyIdExist(id, "update", computerService);
 			}
 		}
+		
+		return redirect;
 	}
 
 	public CompanyService getCompanyService() 

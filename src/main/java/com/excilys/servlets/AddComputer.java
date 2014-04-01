@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +30,20 @@ public class AddComputer
 	private ComputerService computerService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	protected void listeCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected String listeCompany(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
 	{		
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
-		HttpSession session = request.getSession();
 		session.setAttribute("listeCompany", listeCompany);
 		
-		request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);	
+		return "addComputer";	
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	protected void addComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected String addComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
 	{
+		String redirect;
+		
 		String name = request.getParameter("name");
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
@@ -70,7 +70,7 @@ public class AddComputer
 			request.setAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
 			request.setAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
 			
-			request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
+			redirect ="addComputer";
 		}
 		
 		else
@@ -80,11 +80,12 @@ public class AddComputer
 			Page<?> page = new Page<ComputerDTO>(computerService);
 			page.setCurrentPage(page.getNoOfPages());
 			
-			HttpSession session = request.getSession();
 			session.setAttribute("page", page);
 			
-			response.sendRedirect("index");	
+			redirect = "redirect: index";	
 		}
+		
+		return redirect;
 	}
 
 	public CompanyService getCompanyService() 

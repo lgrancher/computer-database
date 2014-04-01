@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class DeleteComputer
 	private ComputerService computerService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void deleteComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected String deleteComputer(HttpServletRequest request, HttpSession session) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
 			
@@ -38,7 +37,7 @@ public class DeleteComputer
 		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
 		computerDTO = computerValidator.getComputerDTOWithId(computerService);
 		
-		String url = "index";
+		String redirect = "index";
 		
 		if(computerDTO!=null)
 		{
@@ -47,7 +46,7 @@ public class DeleteComputer
 		
 		else
 		{			
-			url = computerValidator.verifyIdExist(id, "delete", computerService);	
+			redirect = computerValidator.verifyIdExist(id, "delete", computerService);	
 		}
 		
 		PageDTO pageDTO = PageDTO.builder()
@@ -58,10 +57,9 @@ public class DeleteComputer
 
 		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
 
-		HttpSession session = request.getSession();
 		session.setAttribute("page", page);
 		
-		response.sendRedirect(url);
+		return "redirect: "+redirect;
 	}
 
 	public ComputerService getComputerService() 

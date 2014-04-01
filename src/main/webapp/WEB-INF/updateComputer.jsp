@@ -74,7 +74,7 @@
 								<option value="${companies.id}" selected>${companies.name}</option>
 							</c:when>
 							
-							<c:when test="${verifyName==null && companies.id == companyDTO.id}">
+							<c:when test="${verifyName==null && computerDTOold.companyDTO.id == companies.id}">
 								<option value="${companies.id}" selected>${companies.name}</option>
 							</c:when>
 							
