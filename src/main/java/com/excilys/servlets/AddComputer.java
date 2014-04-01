@@ -3,15 +3,15 @@ package com.excilys.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -20,19 +20,18 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
-
-public class AddComputer extends HttpServlet
+@Controller
+@RequestMapping("/AddComputer")
+public class AddComputer
 {
-	private static final long serialVersionUID = 1L;
-
 	@Autowired
 	private CompanyService companyService;
 	
 	@Autowired
 	private ComputerService computerService;
 	
-	// cherche la liste des company que l'utilisateur va pouvoir ajouter au computer
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	@RequestMapping(method = RequestMethod.GET)
+	protected void listeCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{		
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 
@@ -42,8 +41,8 @@ public class AddComputer extends HttpServlet
 		request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);	
 	}
 	
-	// ajoute le computer dans la base
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	@RequestMapping(method = RequestMethod.POST)
+	protected void addComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String name = request.getParameter("name");
 		String introduced = request.getParameter("introducedDate");
@@ -106,12 +105,5 @@ public class AddComputer extends HttpServlet
 	public void setComputerService(ComputerService computerService) 
 	{
 		this.computerService = computerService;
-	}
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException
-	{
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

@@ -2,15 +2,15 @@ package com.excilys.servlets;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.DTO.PageDTO;
@@ -19,15 +19,15 @@ import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
-public class DeleteComputer extends HttpServlet 
+@Controller
+@RequestMapping("/DeleteComputer")
+public class DeleteComputer
 {	
-	private static final long serialVersionUID = 1L;
-	
 	@Autowired
 	private ComputerService computerService;
 
-	// supprime le computer
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	@RequestMapping(method = RequestMethod.GET)
+	protected void deleteComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
 			
@@ -72,12 +72,5 @@ public class DeleteComputer extends HttpServlet
 	public void setComputerService(ComputerService computerService) 
 	{
 		this.computerService = computerService;
-	}
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException
-	{
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

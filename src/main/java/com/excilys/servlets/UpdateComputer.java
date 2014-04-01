@@ -3,15 +3,15 @@ package com.excilys.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.DTO.CompanyDTO;
 import com.excilys.DTO.ComputerDTO;
@@ -22,19 +22,18 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
-
-public class UpdateComputer extends HttpServlet
-{
-	private static final long serialVersionUID = 1L;
-	
+@Controller
+@RequestMapping("/UpdateComputer")
+public class UpdateComputer
+{	
 	@Autowired
 	private CompanyService companyService;
 	
 	@Autowired
 	private ComputerService computerService;
  
-	// cherche la liste des company a proposer a l'utilisateur
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	@RequestMapping(method = RequestMethod.GET)
+	protected void listeCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{		
 		String id = request.getParameter("id");
 		ComputerDTO computerDTO = ComputerDTO.builder()
@@ -72,8 +71,8 @@ public class UpdateComputer extends HttpServlet
 		}
 	}
 	
-	// modifie le computer
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	@RequestMapping(method = RequestMethod.POST)
+	protected void updateComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
@@ -155,12 +154,5 @@ public class UpdateComputer extends HttpServlet
 	public void setComputerService(ComputerService computerService) 
 	{
 		this.computerService = computerService;
-	}
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException
-	{
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 }

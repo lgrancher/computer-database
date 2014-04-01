@@ -5,47 +5,32 @@
     <welcome-file>index</welcome-file>
   </welcome-file-list>
   
-<context-param>
+<context-param> 
    <param-name>contextConfigLocation</param-name>
-   <param-value>/WEB-INF/applicationContext.xml</param-value>
+   <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
  </context-param>   
+ 
+<context-param>
+	<param-name>contextConfigLocation</param-name>
+   	<param-value>/WEB-INF/applicationContext.xml</param-value>
+</context-param>
+
+ 
  <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
-  
+ 
   <servlet>
-    <servlet-name>ListeComputer</servlet-name>
-     <servlet-class> com.excilys.servlets.ListeComputer </servlet-class>
+      <servlet-name>dispatcher</servlet-name>
+      <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
   </servlet>
+
   <servlet-mapping>
-    <servlet-name>ListeComputer</servlet-name>
-    <url-pattern>/index</url-pattern>
+      <servlet-name>dispatcher</servlet-name>
+      <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>AddComputer</servlet-name>
-    <servlet-class>com.excilys.servlets.AddComputer</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AddComputer</servlet-name>
-    <url-pattern>/AddComputer</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>UpdateComputer</servlet-name>
-    <servlet-class>com.excilys.servlets.UpdateComputer</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UpdateComputer</servlet-name>
-    <url-pattern>/UpdateComputer</url-pattern>
-  </servlet-mapping>
-   <servlet>
-    <servlet-name>DeleteComputer</servlet-name>
-    <servlet-class>com.excilys.servlets.DeleteComputer</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DeleteComputer</servlet-name>
-    <url-pattern>/DeleteComputer</url-pattern>
-  </servlet-mapping>
-  
+
   <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/error.jsp</location>
