@@ -41,6 +41,11 @@ public class CompanyDTO implements Serializable
 	 
 	public CompanyDTO() {}
 
+	public CompanyDTO(String id)
+	{
+		this.id = id;
+	}
+	
 	public String getId() 
 	{
 		return id;

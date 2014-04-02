@@ -12,5 +12,6 @@
   <context:component-scan base-package="com.excilys.persistence" />
   <context:component-scan base-package="com.excilys.service" />   
   <context:component-scan base-package="com.excilys.validator" /> 
+  
 </beans>
     

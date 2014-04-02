@@ -6,11 +6,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.excilys.DTO.ComputerDTO;
-import com.excilys.DTO.PageDTO;
-import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
-import com.excilys.validator.ComputerValidator;
 
 @Controller
 @RequestMapping("/DeleteComputer")
@@ -27,34 +24,19 @@ public class DeleteComputer
 									 @RequestParam(value="currentPage", required=false) String currentPage, 
 									 ModelMap model) 
 	{			
-		ComputerDTO computerDTO = ComputerDTO.builder()
-											 .id(id)
-											 .build();		
-		
-		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
-		computerDTO = computerValidator.getComputerDTOWithId(computerService);
+		ComputerDTO computerDTO = new ComputerDTO(id, computerService);
 		
 		String redirect = "index";
 		
-		if(computerDTO!=null)
+		if(computerDTO.getName()!=null)
 		{
 			computerService.delete(computerDTO);	
 		}
 		
 		else
 		{			
-			redirect = computerValidator.verifyIdExist(id, "delete", computerService);	
+			redirect = Page.urlVerifyIdExist(id, "delete", computerService);	
 		}
-		
-		PageDTO pageDTO = PageDTO.builder()
-				 .search(search)
-				 .sort(sort)
-				 .currentPage(currentPage)
-				 .build();
-
-		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
-
-		model.addAttribute("page", page);
 		
 		return "redirect:"+redirect;
 	}

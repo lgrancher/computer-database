@@ -58,11 +58,11 @@ public class PageMapper
 				break;
 				
 			case "introduced" :
-				sort = "computer.introduced";
+				sort = "computer.introduced , computer.name";
 				break;
 			
 			case "discontinued" :
-				sort = "computer.discontinued";
+				sort = "computer.discontinued, computer.name";
 				break;
 				
 			case "company" :

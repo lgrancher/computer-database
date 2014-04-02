@@ -2,9 +2,14 @@ package com.excilys.DTO;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+
 import org.springframework.context.annotation.Scope;
 
+import com.excilys.service.ComputerService;
+
 @Scope("session")
+@Entity
 public class ComputerDTO implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -62,6 +67,43 @@ public class ComputerDTO implements Serializable
 
 	public ComputerDTO(){}
 
+	// retourne un computerDTO si l'id existe, null sinon
+	public ComputerDTO(String id, ComputerService computerService)
+	{
+		try
+		{	
+			Long numId = Long.parseLong(id);
+			ComputerDTO computerFound = computerService.find(numId);
+			
+			if(computerFound!=null)
+			{
+				this.id = computerFound.getId();
+				this.name = computerFound.getName();
+				this.introduced = computerFound.getIntroduced();
+				this.discontinued = computerFound.getDiscontinued();
+				this.company = computerFound.getCompanyDTO();
+			}
+			
+			else
+			{
+				this.id = id;
+				this.name = null;
+				this.introduced = null;
+				this.discontinued = null;
+				this.company = null;
+			}
+		}
+		
+		catch(NumberFormatException e)
+		{
+			this.id = id;
+			this.name = null;
+			this.introduced = null;
+			this.discontinued = null;
+			this.company = null;
+		}
+	}
+	
 	public String getId() 
 	{
 		return id;

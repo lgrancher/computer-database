@@ -37,6 +37,8 @@
 		<joda-time>2.3</joda-time>
 		<logback>1.1.1</logback>
 		<spring>4.0.2.RELEASE</spring>
+		<validation>1.1.0.Final</validation>
+		<persistence>1.0.2</persistence>
 	</properties>
 
 	<dependencies>
@@ -128,6 +130,21 @@
 			<version>${spring}</version>
 		</dependency>
 
+		<!--         gere la validation          -->
+		<dependency>
+		  <groupId>javax.validation</groupId>
+		  <artifactId>validation-api</artifactId>
+		  <version>${validation}</version>
+		  <scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>javax.persistence</groupId>
+		  <artifactId>persistence-api</artifactId>
+		  <version>${persistence}</version>
+		  <scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 </project>
 

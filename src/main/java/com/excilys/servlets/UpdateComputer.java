@@ -2,13 +2,17 @@ package com.excilys.servlets;
 
 import java.util.ArrayList;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.DTO.*;
-import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
@@ -16,7 +20,6 @@ import com.excilys.validator.ComputerValidator;
 
 @Controller
 @RequestMapping("/UpdateComputer")
-@SessionAttributes({"page", "computerDTO", "companyDTO"})
 public class UpdateComputer
 {	
 	@Autowired
@@ -25,105 +28,65 @@ public class UpdateComputer
 	@Autowired
 	private ComputerService computerService;
  
+	@Autowired
+	private ComputerValidator computerValidator;
+
+	@InitBinder
+	private void initBinder(WebDataBinder binder) 
+	{
+		binder.addValidators(computerValidator);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
-	protected String listeCompany(@RequestParam(value="id", required=false) String id, 
-								   @RequestParam(value="search", required=false) String search, 
-								   @RequestParam(value="sort", required=false) String sort, 
-								   @RequestParam(value="currentPage", required=false) String currentPage, 
-								   ModelMap model) 
-	{		
-		String redirect;
+    public ModelAndView showForm(@RequestParam(value="id", required=false) String id, ModelMap model)
+ 	{
+	 	ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
+		model.addAttribute("listeCompany", listeCompany);
 		
-		ComputerDTO computerDTO = ComputerDTO.builder()
-											 .id(id)
-											 .build();
+		ComputerDTO computerDTO = new ComputerDTO(id, computerService);
 		
-		ComputerValidator computerValidator = new ComputerValidator(computerDTO);
-		computerDTO = computerValidator.getComputerDTOWithId(computerService);
-		
-		PageDTO pageDTO = PageDTO.builder()
-				 .search(search)
-				 .sort(sort)
-				 .currentPage(currentPage)
-				 .build();
-		
-		Page<?> page = PageMapper.dtoToPage(pageDTO, computerService);
-			
-		model.addAttribute("page", page);
-		
-		// si le computer a modifier existe
-		if(computerDTO!=null)
-		{			
-			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();				
-			
-			model.addAttribute("listeCompany", listeCompany);
-			model.addAttribute("computerDTOold", computerDTO);
-			
-			redirect = "updateComputer";
+		ModelAndView mav =  new ModelAndView();
+		 
+		if(computerDTO.getName()!=null)
+		{	
+			model.addAttribute("companySelect",computerDTO.getCompanyDTO().getId());
+			mav = new ModelAndView("updateComputer", "computerDTO", computerDTO);
 		}
 		
 		else
 		{
-			redirect = "redirect:" +computerValidator.verifyIdExist(id, "update", computerService);
+			mav.setViewName("redirect:" +Page.urlVerifyIdExist(id, "update", computerService));
 		}
 		
-		return redirect;
-	}
-	
+		return mav;
+    }
+
 	@RequestMapping(method = RequestMethod.POST)
-	protected String updateComputer(@RequestParam(value="id") String id,
-									 @RequestParam(value="name") String name,
-									 @RequestParam(value="introducedDate") String introduced,
-									 @RequestParam(value="discontinuedDate") String discontinued,
-									 @RequestParam(value="company") String idCompany,
-									 ModelMap model) 
+	public ModelAndView updateComputer(@ModelAttribute("computerDTO") @Valid ComputerDTO computerDTO, BindingResult result, ModelMap model) 
 	{
-		String redirect;
-				
-		CompanyDTO companyDTO = CompanyDTO.builder()
-								 .id(idCompany)
-								 .build();
-		
-		ComputerDTO computerDTOnew = ComputerDTO.builder()
-											 .id(id)
-											 .name(name)
-											 .introduced(introduced)
-											 .discontinued(discontinued)
-											 .companyDTO(companyDTO)
-											 .build();
-
-		
-		ComputerValidator computerValidator = new ComputerValidator(computerDTOnew);
-		
-		// si le nouveau computer n'est pas correct, on repropose le formulaire
-		if(!computerValidator.verify())
-		{			
-			model.addAttribute("computerDTOnew", computerDTOnew);
-			model.addAttribute("verifyName", computerValidator.verifyName());
-			model.addAttribute("verifyIntroduced", computerValidator.verifyIntroduced());
-			model.addAttribute("verifyDiscontinued", computerValidator.verifyDiscontinued());
-
-			redirect = "updateComputer";
+		ModelAndView mav =  new ModelAndView("updateComputer", "computerDTO", computerDTO);
+	  
+		if(result.hasErrors())
+		{
+			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
+			model.addAttribute("listeCompany", listeCompany);
+			model.addAttribute("companySelect", computerDTO.getCompanyDTO().getId());
 		}
-
-		// si le nouveau computer est correct
+      
 		else
-		{	
-			Long idComputer = Long.parseLong(id);
-			
-			// on verifie que le computer existe toujours
-			if(computerService.find(idComputer)!=null)
-			{
-				computerService.update(computerDTOnew);
-				redirect = "redirect:index";
-			}
-			 
+		{
+			if(computerDTO.getName()!=null)
+  		  	{
+				computerService.update(computerDTO);
+				mav.setViewName("redirect:index"); 
+  		  	}
+    	  
 			else
-			{
-				redirect = "redirect:"+computerValidator.verifyIdExist(id, "update", computerService);
-			}
+  		  	{
+				mav.setViewName("redirect:" +Page.urlVerifyIdExist(computerDTO.getId(), "update", computerService));
+  		  	}
 		}
-		
-		return redirect;
-	}
+        
+		return mav;
+    }
 }

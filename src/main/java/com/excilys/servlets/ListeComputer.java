@@ -20,7 +20,7 @@ public class ListeComputer
 	@RequestMapping("/")
 	public String home() 
 	{
-		return "redirect: index";
+		return "redirect:index";
 	}
 	
 	@RequestMapping(value="/index", method = RequestMethod.GET)
@@ -32,11 +32,8 @@ public class ListeComputer
 			   						 ModelMap model) 
 	{		
 		Page<?> page;
-		// pour le changement de page
-		if(search!=null || 
-		   sort!=null ||
-		   currentPage!=null || 
-		   !model.containsAttribute("page"))
+		// pour le changement de page et l'ajout
+		if(search!=null || sort!=null || currentPage!=null || !model.containsAttribute("page"))
 		{
 			PageDTO pageDTO = PageDTO.builder()
 									 .search(search)
@@ -47,10 +44,11 @@ public class ListeComputer
 			page = PageMapper.dtoToPage(pageDTO, computerService);	
 		}
 		
-		// pour l'ajout, la modif, la suppression
+		// pour la modif et la suppression
 		else
 		{			
 			page = (Page<?>) model.get("page");
+			page.update();
 		}
 		
 		computerService.retrieve(page);			

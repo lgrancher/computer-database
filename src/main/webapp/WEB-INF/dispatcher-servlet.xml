@@ -22,12 +22,9 @@
 		</property>
 	</bean> 
 	
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-		<property name = "alwaysUseFullPath" value = "false" />
-	</bean>
-	
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/fonts/**" location="/fonts/" />
+	<mvc:resources mapping="/pictures/**" location="/pictures/" />
 	<mvc:annotation-driven />
 	
 </beans>

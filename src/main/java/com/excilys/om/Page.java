@@ -37,7 +37,7 @@ public class Page<T> implements Serializable
 		this.computerService = computerService;
 		this.currentPage = currentPage;
 		
-		getNoOfRecords();
+		calculateNoOfRecords();
 		getNoOfPages();
   	   
 		if(currentPage>noOfPages)
@@ -46,6 +46,44 @@ public class Page<T> implements Serializable
   	   	}
   	   
 		getOffset();
+	}
+	
+	public void update()
+	{
+		calculateNoOfRecords();
+		getNoOfPages();
+  	   
+		if(currentPage>noOfPages)
+  	   	{
+			currentPage = noOfPages;
+  	   	}
+  	   
+		getOffset();
+	}
+	
+	/* 
+	 * retourne l'url permettant ou non une alert d'erreur
+	 * si l'id a existe, avertissement comme quoi le computer a ete supprime
+	 * sinon, retour a la page d'accueil, l'utilisateur a ete fouille dans l'url
+	*/
+	public static String urlVerifyIdExist(String id, String type, ComputerService computerService)
+	{
+		String url="index";
+		
+		try
+		{
+			long idComputer = Long.parseLong(id);
+			long lastId = computerService.lastId();
+			
+			if(idComputer>0 && idComputer<=lastId)
+			{
+				url = "index?erreur="+idComputer+"&type="+type;
+			}
+		}
+		
+		catch(NumberFormatException e){}
+		
+		return url;
 	}
 	
 	public String getSort() 
@@ -91,30 +129,30 @@ public class Page<T> implements Serializable
 
 	public int getNoOfPages()
 	{
-		if(noOfPages<=0)
-		{
-			noOfPages = (int) Math.ceil(getNoOfRecords() * 1.0 / getRecordsPerPages() );
-		}
+		noOfPages = (int) Math.ceil(getNoOfRecords() * 1.0 / getRecordsPerPages() );
 		
 		return noOfPages;
 	}
 		
-	public int getNoOfRecords()
+	public int calculateNoOfRecords()
 	{
+		noOfRecords = computerService.size(search); 
+		return noOfRecords; 
+	}
+	
+	public int getNoOfRecords()
+	{	
 		if(noOfRecords<=0)
 		{
-			noOfRecords = computerService.size(search); 
-		}
+			noOfRecords = calculateNoOfRecords();
+		}	
 		
 		return noOfRecords; 
 	}
 	
 	public int getOffset()
 	{
-		if(offset<=0)
-		{
-			offset = (currentPage-1)*getRecordsPerPages();
-		}
+		offset = (currentPage-1)*getRecordsPerPages();
 		
 		return offset;
 	}
