@@ -38,16 +38,16 @@ public class ComputerValidator implements Validator
 	public void validate(Object target, Errors errors) 
 	{
 		ComputerDTO computerDTO = (ComputerDTO) target;
-		ValidationUtils.rejectIfEmpty(errors, "name", "computerDTO.name.empty","You have not answered all required fields");	
+		ValidationUtils.rejectIfEmpty(errors, "name", "errorName");	
 		
 		if(!verifyIntroduced(computerDTO.getIntroduced()))
 		{
-			errors.rejectValue("introduced", "invalid", "You have not given a correct introduced date (YYYY-MM-DD)");
+			errors.rejectValue("introduced", "errorIntroduced");
 		}
 		
 		if(!verifyDiscontinued(computerDTO.getIntroduced(), computerDTO.getDiscontinued()))
 		{
-			errors.rejectValue("discontinued", "invalid", "You have not given a correct discontinued date (YYYY-MM-DD and later than the introduced date)");
+			errors.rejectValue("discontinued", "errorDiscontinued");
 		}
 	}
 }

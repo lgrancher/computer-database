@@ -12,6 +12,22 @@
  
 	<context:component-scan base-package="com.excilys.servlets" />
  
+ 	<mvc:interceptors>
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="language" />
+		</bean>
+	</mvc:interceptors>
+	
+ 	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="langage" />
+    </bean>
+	
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -21,6 +37,7 @@
 			<value>.jsp</value>
 		</property>
 	</bean> 
+
 	
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/fonts/**" location="/fonts/" />

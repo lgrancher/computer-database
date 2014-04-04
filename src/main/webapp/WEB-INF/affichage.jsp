@@ -3,9 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="import" tagdir="/WEB-INF/tags"%>
 <%@ page import="java.util.ArrayList"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <section id="main">
-	<h2 id="homeTitle">${page.noOfRecords} computers</h2>
+	<h2 id="homeTitle">${page.noOfRecords} <spring:message code="computers"/></h2>
 	<div id="actions">
 		<form action="index" method="GET">
 			<div class="row">
@@ -14,7 +15,7 @@
 						<input type="text" class="form-control" name="search"> <span
 							class="input-group-btn">
 							<button class="btn btn-info" type="submit">
-								<span class="glyphicon glyphicon-search"></span> Filter by name
+								<span class="glyphicon glyphicon-search"></span> <spring:message code="filter"/>
 							</button>
 						</span>
 					</div>
@@ -31,7 +32,6 @@
 			<thead>
 				<tr>
 					<import:titres />
-					<th>Operations</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -51,7 +51,7 @@
 		</table>
 		</c:when>
 		<c:otherwise> 
-			<h2>No computer matching this search !</h2>
+			<h2><spring:message code="noComputer"/></h2>
 		</c:otherwise>
 	</c:choose>
 	<import:pagination />
@@ -59,7 +59,9 @@
 	<input type="hidden" id="type" value="${type}" />
 	
 </section>
-
+<spring:message code="computer" var="comp"/>
+<spring:message code="updateComputerDeleted" var="errorUpdate"/>
+<spring:message code="deletedComputerDeleted" var="errorDeleted"/>
 <script>
 var idErreur = $("#erreur").val();
 var type = $("#type").val();
@@ -67,10 +69,10 @@ var type = $("#type").val();
 if(idErreur!="")
 {
 	if(type==="update")
-		alert("The computer "+idErreur+" can't be updated, it has been deleted");
+		alert("${comp} "+idErreur+" ${errorUpdate}");
 	
 	else if(type==="delete")
-		alert("The computer "+idErreur+" has been already deleted");
+		alert("${comp} "+idErreur+" ${errorDeleted}");
 }
 </script>
 

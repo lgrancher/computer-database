@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <div class="navbar navbar-default navbar-fixed-bottom">
 		<div class="container-fluid">
 			<div class="pagination">
@@ -8,13 +9,13 @@
 					<span class="num"><a
 						href="index?sort=${page.sort}&currentPage=${page.currentPage - 1}&search=${page.search}"
 						style="cursor: pointer; color: grey"><span
-							class="glyphicon glyphicon-chevron-left"></span> Previous</a></span>
+							class="glyphicon glyphicon-chevron-left"></span> <spring:message code="previous"/></a></span>
 				</c:if>
 
 
 				<c:if test="${page.currentPage == 1}">
 					<span class="num"><span
-						class="glyphicon glyphicon-chevron-left"></span> Previous</span>
+						class="glyphicon glyphicon-chevron-left"></span> <spring:message code="previous"/></span>
 				</c:if>
 
 
@@ -36,12 +37,12 @@
 				<c:if test="${page.currentPage lt page.noOfPages}">
 					<span class="num"><a
 						href="index?sort=${page.sort}&currentPage=${page.currentPage + 1}&search=${page.search}"
-						style="cursor: pointer; color: grey">Next <span
+						style="cursor: pointer; color: grey"><spring:message code="next"/> <span
 							class="glyphicon glyphicon-chevron-right"></span></a></span>
 				</c:if>
 
 				<c:if test="${page.currentPage == page.noOfPages}">
-					<span class="num">Next <span
+					<span class="num"><spring:message code="next"/> <span
 						class="glyphicon glyphicon-chevron-right"></span></span>
 				</c:if>
 

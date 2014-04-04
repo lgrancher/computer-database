@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,9 +17,16 @@
 </head>
 <body>
 	 <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
-			<h1><span class="titreBar"><a href="index?currentPage=1">Application - Computer Database</a></span></h1>
+			<ul class="nav navbar-nav navbar-center">
+				<li><h1><span class="titreBar"><a href="index?currentPage=1"> <spring:message code="title"/></a></span></h1></li>
+			</ul>
+			 <ul class="nav navbar-nav navbar-right">
+				<li><a id="flag" href="?language=fr"><img src="pictures/drapeau-fr.png" alt="fr" /></a></li>
+				<li><a id="flag" href="?language=en"><img src="pictures/drapeau-en.png" alt="en" /></a></li>
+			</ul>
 		</div>
 	</div>
  </div>
+ 

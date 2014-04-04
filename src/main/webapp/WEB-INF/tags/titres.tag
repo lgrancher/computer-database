@@ -1,7 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<c:set var="attribut" value="${page.listeElements[0]['class']['declaredFields']}" />
-<c:forEach var="titre" items="${attribut}" begin="1">
-	<th><a
-		href="index?sort=${titre.name}&currentPage=1&search=${page.search}">${titre.name}</a></th>
-</c:forEach>
+<th><a href="index?sort=id&currentPage=1&search=${page.search}"><spring:message code="id"/></a></th>
+<th><a href="index?sort=name&currentPage=1&search=${page.search}"><spring:message code="name"/></a></th>
+<th><a href="index?sort=introduced&currentPage=1&search=${page.search}"><spring:message code="introduced"/></a></th>
+<th><a href="index?sort=discontinued&currentPage=1&search=${page.search}"><spring:message code="discontinued"/></a></th>
+<th><a href="index?sort=company&currentPage=1&search=${page.search}"><spring:message code="company"/></a></th>
+<th></th>
