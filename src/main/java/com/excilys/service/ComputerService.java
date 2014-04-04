@@ -1,6 +1,5 @@
 package com.excilys.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.joda.time.LocalDate;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.om.Log.Type;
@@ -19,6 +19,7 @@ import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
 @Service
+@Transactional
 public class ComputerService 
 {	
 	@Autowired
@@ -34,11 +35,8 @@ public class ComputerService
 		
 	public Page<?> retrieve(Page<?> page)
 	{
-		Connection connection=null;
-
 		try 
 		{
-			connection = connectionJDBC.getConnection();
 			computerDAO.retrieve(page);
 			
 			String operation = MessageLog.getRetrieve(page, false, true);
@@ -49,7 +47,6 @@ public class ComputerService
 					 .build();
 			
 		    logDAO.create(log);
-			connection.commit();
 			
 			logger.info(operation);
 		} 
@@ -77,25 +74,15 @@ public class ComputerService
 			}
 			
 		}
-				
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
 		
 		return page;
 	}
 	
 	public void create(ComputerDTO computerDTO) 
 	{		
-		Connection connection=null;
-		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
+			
 			Long idAdd = computerDAO.create(computerDTO);
 			
 			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
@@ -107,7 +94,6 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			logger.info(operation);
 		} 
 		
@@ -115,8 +101,6 @@ public class ComputerService
 		{			
 			try 
 			{
-				connection.rollback();
-				
 				String operation = MessageLog.getCreate(computerDTO, (long) 0, true);
 				logger.error(operation);
 				
@@ -134,24 +118,14 @@ public class ComputerService
 				logger.error(MessageLog.getCreate(computerDTO, (long) 0, false));
 			}
 		}
-		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
 	}
 	
 	public ComputerDTO find(Long id)
 	{		
-		Connection connection=null;
 		ComputerDTO computerDTO=null;
 		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
 			computerDTO = computerDAO.find(id);
 			
 			String operation = MessageLog.getFind(id, false, true);
@@ -162,7 +136,6 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			logger.info(operation);
 		} 
 		
@@ -187,25 +160,15 @@ public class ComputerService
 				logger.error(MessageLog.getFind(id, false, false));
 			}
 		}
-		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
 
 		return computerDTO;
 	}
 	
 	public void update(ComputerDTO computerDTO) 
 	{		
-		Connection connection=null;
-		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
+			
 			computerDAO.update(computerDTO);
 			
 			String operation = MessageLog.getUpdate(computerDTO, false, true);
@@ -215,7 +178,6 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			
 			logger.info(operation);
 		} 
@@ -224,7 +186,6 @@ public class ComputerService
 		{
 			try 
 			{
-				connection.rollback();
 				String operation = MessageLog.getUpdate(computerDTO, true, true);
 				logger.error(operation);
 
@@ -241,23 +202,13 @@ public class ComputerService
 				logger.error(MessageLog.getUpdate(computerDTO, true, false));
 			}
 		}
-		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}	
 	}
 	
 	public void delete(ComputerDTO computerDTO)
 	{		
-		Connection connection=null;
-		
 		try 
 		{
-			connection = connectionJDBC.getConnection();
+		
 			computerDAO.delete(computerDTO);
 			String operation = MessageLog.getDelete(computerDTO, false, true);
 			
@@ -267,16 +218,13 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			logger.info(operation);
 		} 
 		
 		catch (SQLException e) 
 		{
 			try 
-			{
-				connection.rollback();
-				
+			{				
 				String operation = MessageLog.getDelete(computerDTO, true, true);
 				logger.error(operation);
 				
@@ -293,24 +241,14 @@ public class ComputerService
 				logger.error(MessageLog.getDelete(computerDTO, true, false));
 			}
 		}
-		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
 	}
 	
 	public int size(String search)
 	{		
-		Connection connection=null;
 		int size=0;
 		
 		try 
 		{			
-			connection = connectionJDBC.getConnection();
 			size= computerDAO.size(search);
 			
 			String operation = MessageLog.getSize(search, false, true);
@@ -321,7 +259,6 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			logger.info(operation);
 		} 
 		
@@ -348,25 +285,16 @@ public class ComputerService
 			
 		}		
 		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
-		
 		return size;
 	}
 	
 	public long lastId()
 	{
-		Connection connection=null;
 		long lastId=0;
 		
 		try 
 		{			
-			connection = connectionJDBC.getConnection();
+			
 			lastId= computerDAO.lastId();
 			
 			String operation = MessageLog.getLastId(false, true);
@@ -377,7 +305,6 @@ public class ComputerService
 					 .build();
 			
 			logDAO.create(log);
-			connection.commit();
 			logger.info(operation);
 		} 
 		
@@ -403,14 +330,6 @@ public class ComputerService
 			}
 			
 		}		
-		
-		finally
-		{
-			if(connection!=null)
-			{
-				connectionJDBC.close(connection);
-			}
-		}
 		
 		return lastId;
 	}

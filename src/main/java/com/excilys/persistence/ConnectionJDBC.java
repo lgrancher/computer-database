@@ -31,7 +31,6 @@ public class ConnectionJDBC
 		if(threadConnect.get() == null)
 		{
 			Connection connection = dataSource.getConnection();
-			connection.setAutoCommit(false);
 			threadConnect.set(connection);
 			logger.info("Ouverture de la connexion");
 		}
