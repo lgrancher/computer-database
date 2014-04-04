@@ -1,6 +1,5 @@
 package com.excilys.service;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,10 +19,8 @@ import com.excilys.persistence.LogDAO;
 import com.excilys.om.Log.Type;
 
 @Service
-public class CompanyService implements Serializable 
+public class CompanyService 
 {
-	private static final long serialVersionUID = 1L;
-
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	@Autowired

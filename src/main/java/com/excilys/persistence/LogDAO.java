@@ -1,6 +1,5 @@
 package com.excilys.persistence;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,10 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.excilys.om.Log;
 
 @Repository
-public class LogDAO implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	
+public class LogDAO 
+{	
 	@Autowired
 	private ConnectionJDBC connectionJDBC;
 	

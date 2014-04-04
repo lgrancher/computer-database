@@ -1,6 +1,5 @@
 package com.excilys.persistence;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +19,8 @@ import com.excilys.om.Computer;
 import com.excilys.om.Page;
 
 @Repository
-public class ComputerDAO implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	
+public class ComputerDAO 
+{	
 	@Autowired
 	private ConnectionJDBC connectionJDBC;
 	

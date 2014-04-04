@@ -1,56 +1,36 @@
 package com.excilys.persistence;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jolbox.bonecp.BoneCP;
-import com.jolbox.bonecp.BoneCPConfig;
+import javax.sql.DataSource;
 
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ConnectionJDBC implements Serializable
+public class ConnectionJDBC 
 {
-	private static final long serialVersionUID = 1L;
-	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private static String user = "root";
-	private static String passwd = "excilys";
 	private static Logger logger = LoggerFactory.getLogger(ConnectionJDBC.class);
-	private static BoneCP connectionPool = null;
 	private static ThreadLocal<Connection> threadConnect;
 
+	@Autowired
+	private DataSource dataSource;
+	
 	private ConnectionJDBC()
 	{
-		try 
-		{
-			Class.forName("com.mysql.jdbc.Driver");
-			BoneCPConfig config = new BoneCPConfig();
-			config.setJdbcUrl(url);
-			config.setUsername(user);
-			config.setPassword(passwd);
-			config.setMinConnectionsPerPartition(5);
-			config.setMaxConnectionsPerPartition(10);
-			config.setPartitionCount(1);
-			connectionPool = new BoneCP(config);	
-			threadConnect = new ThreadLocal<Connection>();
-			logger.info("Initialisation de la connexion");
-		} 
-		
-		catch (ClassNotFoundException | SQLException e) 
-		{
-			logger.error("Erreur lors de l'initialisation de la connexion");
-		}	
+		threadConnect = new ThreadLocal<Connection>();
+		logger.info("Initialisation de la connexion");
 	}
 	
 	public Connection getConnection() throws SQLException
 	{	
 		if(threadConnect.get() == null)
 		{
-			Connection connection = connectionPool.getConnection();
+			Connection connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 			threadConnect.set(connection);
 			logger.info("Ouverture de la connexion");

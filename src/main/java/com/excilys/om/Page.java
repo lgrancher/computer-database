@@ -1,6 +1,5 @@
 package com.excilys.om;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -8,9 +7,8 @@ import org.springframework.context.annotation.Scope;
 import com.excilys.service.ComputerService;
 
 @Scope("session")
-public class Page<T> implements Serializable
+public class Page<T> 
 {
-	private static final long serialVersionUID = 1L;
 	private String sort;
 	private String search;
 	private int currentPage;

@@ -1,6 +1,5 @@
 package com.excilys.persistence;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,10 +15,8 @@ import com.excilys.mapper.CompanyMapper;
 import com.excilys.om.Company;
 
 @Repository
-public class CompanyDAO implements Serializable
-{	
-	private static final long serialVersionUID = 1L;
-	
+public class CompanyDAO 
+{		
 	@Autowired
 	private ConnectionJDBC connectionJDBC;
 	
