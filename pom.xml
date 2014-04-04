@@ -129,6 +129,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring}</version>
+		</dependency>
 
 		<!--         gere la validation          -->
 		<dependency>

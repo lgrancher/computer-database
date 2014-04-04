@@ -16,7 +16,7 @@
 
 </head>
 <body>
-	 <div class="navbar navbar-inverse navbar-fixed-top">
+	<!--  <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
 			<ul class="nav navbar-nav navbar-center">
@@ -29,4 +29,19 @@
 		</div>
 	</div>
  </div>
+ -->
+ 
+ <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <h2><span class="titreBar"><a href="index?currentPage=1"> <spring:message code="title"/></a></span></h2>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="flag" href="?language=fr"><img src="pictures/drapeau-fr.png" alt="fr" /></a></li>
+            <li><a id="flag" href="?language=en"><img src="pictures/drapeau-en.png" alt="en" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
  
