@@ -1,0 +1,82 @@
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.excilys</groupId>
+    <artifactId>Computer-Database</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>Computer-Database-webapp</artifactId>
+ 
+  <packaging>war</packaging>
+  <name>Computer-Database-webapp Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+       <version>3.8.1</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Computer-Database-core</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
+     <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Computer-Database-service</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
+     <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Computer-Database-binding</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
+   	<!--         gere la validation          -->
+	<dependency>
+	  <groupId>javax.validation</groupId>
+	  <artifactId>validation-api</artifactId>
+	  <version>${validation}</version>
+	  <scope>compile</scope>
+	</dependency>
+     
+    <!--        Affichage jsp      -->
+	<dependency>
+		<groupId>taglibs</groupId>
+		<artifactId>standard</artifactId>
+		<version>${taglibs}</version>
+		<scope>runtime</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+		<version>${jstl}</version>
+		<scope>runtime</scope>
+	</dependency>
+	
+	<!-- gèrent les dates -->
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time-jsptags</artifactId>
+		<version>${joda-time-jsptags}</version>
+		<scope>runtime</scope>
+	</dependency>
+	
+	<!-- Servlets -->
+	<dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jsp-api</artifactId>
+        <version>${jsp-api}</version>
+        <scope>provided</scope>
+    </dependency>
+	
+  </dependencies>
+  <build>
+    <finalName>Computer-Database-webapp</finalName>
+  </build>
+</project>

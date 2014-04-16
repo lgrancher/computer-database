@@ -1,15 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.excilys</groupId>
-	<artifactId>computer-database</artifactId>
-	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<name>test Maven Webapp</name>
-	<url>http://maven.apache.org</url>
-
-	<build>
-		<finalName>computer-database</finalName>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.excilys</groupId>
+  <artifactId>Computer-Database</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <build>
+		<finalName>Computer-Database</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -27,7 +25,15 @@
 		</plugins>
 	</build>
 	
-	<properties>
+  <modules>
+  	<module>Computer-Database-core</module>
+  	<module>Computer-Database-service</module>
+  	<module>Computer-Database-persistence</module>
+  	<module>Computer-Database-binding</module>
+    <module>Computer-Database-webapp</module>
+  </modules>
+  
+  <properties>
 		<bonecp>0.8.0.RELEASE</bonecp>
 		<guava>16.0.1</guava>
 		<taglibs>1.1.2</taglibs>
@@ -59,14 +65,12 @@
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 			<version>${taglibs}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl}</version>
-			 <scope>runtime</scope>
 		</dependency>
 
 		<!-- Servlets -->
@@ -89,21 +93,18 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>${joda-time}</version>
-			<scope>runtime</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time-jsptags</artifactId>
 			<version>${joda-time-jsptags}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
 			<version>${validator}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- permet d'afficher des logs -->
@@ -111,7 +112,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- dépendances SPRING -->
@@ -119,7 +119,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -169,4 +168,3 @@
 		
 	</dependencies>
 </project>
-

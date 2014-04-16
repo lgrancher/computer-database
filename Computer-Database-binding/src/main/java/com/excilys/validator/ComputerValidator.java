@@ -45,7 +45,7 @@ public class ComputerValidator implements Validator
 		{
 			LocalDate introducedDate = new LocalDate(DateMapper.formatWebVersDB(introduced));
 			LocalDate discontinuedDate = new LocalDate(DateMapper.formatWebVersDB(discontinued));
-			superieurIntroduced = introducedDate.isBefore(discontinuedDate) || introducedDate.equals(discontinuedDate);
+			superieurIntroduced = introducedDate.isBefore(discontinuedDate);
 		}
 		
 		return vide || (discontinuedValid && superieurIntroduced);
