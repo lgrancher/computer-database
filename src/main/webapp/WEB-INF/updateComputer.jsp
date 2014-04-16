@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="import" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <section id="main">
+
 	<div class="col-lg-4 col-lg-offset-4">
 		<form:form class="form-horizontal" modelAttribute="computerDTO"
 			id="form" method="POST" action="UpdateComputer">
@@ -14,7 +16,6 @@
 				</h2>
 			</div>
 			<fieldset>
-
 				<div class="form-group">
 					<label for="name"><spring:message code="computerName" />*:</label>
 					<div class="input">
@@ -26,15 +27,20 @@
 					<form:errors path="name" cssStyle="color: red;" />
 				</div>
 
+				<spring:message code="date" var="dateValid"/>
+				<spring:message code="dateAffich" var="dateAffich"/>
+				<spring:message code="dateTrait" var="dateTrait"/>
 				<div class="form-group">
 					<label for="introduced"><spring:message code="introduced" />:</label>
 					<div class="input">
 					
 						<spring:message code="errorIntroduced" var="errIntroduced"/>
-						<form:input type="date" id="introducedDate" path="introduced"
+						<form:input type="text" id="introducedDate" path="introduced"
 							value="${computerDTO.introduced}"
 							data-validation="date infDiscontinued"
-							data-validation-optional="true" data-validation-help="yyyy-mm-dd" 
+							data-validation-format="${dateTrait}"
+							data-validation-help="${dateAffich}"
+							data-validation-optional="true" 
 							data-validation-error-msg="${errIntroduced}"/>
 					</div>
 					<form:errors path="introduced" cssStyle="color: red;" />
@@ -46,10 +52,12 @@
 					<div class="input">
 					
 						<spring:message code="errorDiscontinued" var="errDiscontinued"/>
-						<form:input type="date" id="discontinuedDate" path="discontinued"
+						<form:input type="text" id="discontinuedDate" path="discontinued"
 							value="${computerDTO.discontinued}"
 							data-validation="date supIntroduced"
-							data-validation-optional="true" data-validation-help="yyyy-mm-dd"
+							data-validation-format="${dateTrait}"
+							data-validation-help="${dateAffich}"
+							data-validation-optional="true" 
 							data-validation-error-msg="${errDiscontinued}" />
 					</div>
 					<form:errors path="discontinued" cssStyle="color: red;" />
@@ -80,6 +88,7 @@
 					type="hidden" value="${page.currentPage}" name="currentPage">
 				<input type="hidden" value="${page.search}" name="search"> <input
 					type="hidden" value="${page.sort}" name="sort">
+				<input type="hidden" id="local" value="${pageContext.response.locale}" />
 			</fieldset>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
@@ -92,24 +101,6 @@
 		</form:form>
 	</div>
 </section>
-<script>
-	$.formUtils.addValidator({
-		name : 'supIntroduced',
-		validatorFunction : function(value, $el, config, language, $form) {
-			return value >= $('#introducedDate').val()
-					|| $('#discontinuedDate').val() === "";
-		},
-	});
 
-	$.formUtils.addValidator({
-		name : 'infDiscontinued',
-		validatorFunction : function(value, $el, config, language, $form) {
-			return value <= $('#discontinuedDate').val()
-					|| $('#discontinuedDate').val() === "";
-		},
-	});
-
-	$.validate();
-</script>
-
+<script type="text/javascript" src="js/validation.js"></script>
 <jsp:include page="../include/footer.jsp" />

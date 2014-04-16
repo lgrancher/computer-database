@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 
 import org.springframework.context.annotation.Scope;
 
+import com.excilys.mapper.DateMapper;
 import com.excilys.service.ComputerService;
 
 @Scope("session")
@@ -76,8 +77,8 @@ public class ComputerDTO
 			{
 				this.id = computerFound.getId();
 				this.name = computerFound.getName();
-				this.introduced = computerFound.getIntroduced();
-				this.discontinued = computerFound.getDiscontinued();
+				this.introduced = DateMapper.formatDBVersWeb(computerFound.getIntroduced());
+				this.discontinued = DateMapper.formatDBVersWeb(computerFound.getDiscontinued());
 				this.company = computerFound.getCompanyDTO();
 			}
 			

@@ -1,4 +1,5 @@
 <jsp:include page="../include/header.jsp" />
+<%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="import" tagdir="/WEB-INF/tags"%>
@@ -39,8 +40,14 @@
 					<tr>
 						<td class="id">${computer.id}</td>
 						<td class="name">${computer.name}</td>
-						<td class="date">${computer.introduced}</td>
-						<td class="date">${computer.discontinued}</td>
+						<td class="date">
+						 <joda:parseDateTime var="introduced" pattern="yyyy-MM-dd" value="${computer.introduced}" />
+ 						 <joda:format value="${introduced}" />
+ 						</td>
+						<td class="date">
+						 <joda:parseDateTime var="discontinued" pattern="yyyy-MM-dd" value="${computer.discontinued}" />
+ 						 <joda:format value="${discontinued}" />
+ 						</td>
 						<td class="name">${computer.companyDTO.name}</td>
 						<td class="operations"><import:update
 								computerId="${computer.id}" /> <import:delete

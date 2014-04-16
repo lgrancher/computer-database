@@ -1,7 +1,6 @@
 package com.excilys.servlets;
 
 import java.util.ArrayList;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +53,17 @@ public class AddComputer
 		  ModelAndView mav =  new ModelAndView("addComputer", "computerDTO", computerDTO);
 		  
 	      if(result.hasErrors())
-	      {
-	    	  ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
-	    	  model.addAttribute("listeCompany", listeCompany);
-	    	  model.addAttribute("companySelect", computerDTO.getCompanyDTO().getId());
+	      {	  			
+	  			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
+	  			model.addAttribute("listeCompany", listeCompany);
+	    	  
+	  			model.addAttribute("companySelect", computerDTO.getCompanyDTO().getId());
 	      }
 	      
 	      else
 	      {
-	    	  computerService.create(computerDTO);
-	    	  mav.setViewName("redirect:index?currentPage="+new Page<ComputerDTO>(computerService).getNoOfPages());
+	    	  	computerService.create(computerDTO);
+	    	  	mav.setViewName("redirect:index?currentPage="+new Page<ComputerDTO>(computerService).getNoOfPages());
 	      }	  
 	        
 	      return mav;

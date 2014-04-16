@@ -35,10 +35,12 @@
 		<validator>1.1.4</validator>
 		<servlet>3.1.0</servlet>
 		<joda-time>2.3</joda-time>
+		<joda-time-jsptags>1.1.1</joda-time-jsptags>
 		<logback>1.1.1</logback>
 		<spring>4.0.2.RELEASE</spring>
 		<validation>1.1.0.Final</validation>
 		<persistence>1.0.2</persistence>
+		<jsp-api>2.0</jsp-api>
 	</properties>
 
 	<dependencies>
@@ -74,12 +76,26 @@
 			<version>${servlet}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>jsp-api</artifactId>
+	        <version>${jsp-api}</version>
+	        <scope>provided</scope>
+   		 </dependency>
 
 		<!-- gèrent les dates -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>${joda-time}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time-jsptags</artifactId>
+			<version>${joda-time-jsptags}</version>
 			<scope>runtime</scope>
 		</dependency>
 

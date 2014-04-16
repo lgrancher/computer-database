@@ -81,8 +81,7 @@ public class ComputerService
 	public void create(ComputerDTO computerDTO) 
 	{		
 		try 
-		{
-			
+		{	
 			Long idAdd = computerDAO.create(computerDTO);
 			
 			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
@@ -208,7 +207,6 @@ public class ComputerService
 	{		
 		try 
 		{
-		
 			computerDAO.delete(computerDTO);
 			String operation = MessageLog.getDelete(computerDTO, false, true);
 			
