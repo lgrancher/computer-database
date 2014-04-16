@@ -4,9 +4,6 @@ import javax.persistence.Entity;
 
 import org.springframework.context.annotation.Scope;
 
-import com.excilys.mapper.DateMapper;
-import com.excilys.service.ComputerService;
-
 @Scope("session")
 @Entity
 public class ComputerDTO 
@@ -64,43 +61,6 @@ public class ComputerDTO
 	 }
 
 	public ComputerDTO(){}
-
-	// retourne un computerDTO si l'id existe, null sinon
-	public ComputerDTO(String id, ComputerService computerService)
-	{
-		try
-		{	
-			Long numId = Long.parseLong(id);
-			ComputerDTO computerFound = computerService.find(numId);
-			
-			if(computerFound!=null)
-			{
-				this.id = computerFound.getId();
-				this.name = computerFound.getName();
-				this.introduced = DateMapper.formatDBVersWeb(computerFound.getIntroduced());
-				this.discontinued = DateMapper.formatDBVersWeb(computerFound.getDiscontinued());
-				this.company = computerFound.getCompanyDTO();
-			}
-			
-			else
-			{
-				this.id = id;
-				this.name = null;
-				this.introduced = null;
-				this.discontinued = null;
-				this.company = null;
-			}
-		}
-		
-		catch(NumberFormatException e)
-		{
-			this.id = id;
-			this.name = null;
-			this.introduced = null;
-			this.discontinued = null;
-			this.company = null;
-		}
-	}
 	
 	public String getId() 
 	{

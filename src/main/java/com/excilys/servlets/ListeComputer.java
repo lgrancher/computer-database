@@ -32,6 +32,7 @@ public class ListeComputer
 			   						 ModelMap model) 
 	{		
 		Page<?> page;
+		
 		// pour le changement de page et l'ajout
 		if(search!=null || sort!=null || currentPage!=null || !model.containsAttribute("page"))
 		{
@@ -41,14 +42,14 @@ public class ListeComputer
 									 .currentPage(currentPage)
 									 .build();
 
-			page = PageMapper.dtoToPage(pageDTO, computerService);	
+			page = PageMapper.dtoToPage(pageDTO, computerService.size(search));	
 		}
 		
 		// pour la modif et la suppression
 		else
 		{			
 			page = (Page<?>) model.get("page");
-			page.update();
+			page.update(computerService.size(search));
 		}
 		
 		computerService.retrieve(page);			
@@ -56,6 +57,7 @@ public class ListeComputer
 		model.addAttribute("page",page);
 		model.addAttribute("erreur", erreur);
 		model.addAttribute("type", type);
+		model.addAttribute("search",search);
 		
 		return "affichage";	
 	}

@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.excilys.DTO.ComputerDTO;
+import com.excilys.mapper.DateMapper;
 import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 
@@ -23,20 +24,24 @@ public class DeleteComputer
 									 @RequestParam(value="sort", required=false) String sort, 
 									 @RequestParam(value="currentPage", required=false) String currentPage, 
 									 ModelMap model) 
-	{			
-		ComputerDTO computerDTO = new ComputerDTO(id, computerService);
+	{		
+		String redirect = Page.urlVerifyIdExist(id, "delete", computerService.size(search));
 		
-		String redirect = "index";
-		
-		if(computerDTO.getName()!=null)
-		{
-			computerService.delete(computerDTO);	
+		try
+		{	
+			Long numId = Long.parseLong(id);
+			ComputerDTO computerDTO = computerService.find(numId);
+			computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
+			computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
+			
+			if(computerDTO!=null)
+			{
+				computerService.delete(computerDTO);
+				redirect = "index";
+			}
 		}
 		
-		else
-		{			
-			redirect = Page.urlVerifyIdExist(id, "delete", computerService);	
-		}
+		catch(NumberFormatException e){}
 		
 		return "redirect:"+redirect;
 	}

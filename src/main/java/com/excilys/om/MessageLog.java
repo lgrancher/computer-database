@@ -1,7 +1,5 @@
 package com.excilys.om;
 
-import com.excilys.DTO.ComputerDTO;
-
 public class MessageLog 
 {
 	public static String getRetrieve(Page<?> page, boolean erreur, boolean log)
@@ -56,23 +54,23 @@ public class MessageLog
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(search.equals("") && !erreur && log)
+		if((search == null || search.equals("")) && !erreur && log)
 		{
 			builder.append("Recherche du nombre de computers en tout");
 		}
 		
-		else if(!search.equals("") && !erreur && log)
+		else if((search != null && !search.equals("")) && !erreur && log)
 		{
 			builder.append("Recherche du nombre de computers correspondant à la recherche ");
 			builder.append(search);
 		}
 		
-		else if(search.equals("") && erreur && log)
+		else if((search == null || search.equals("")) && erreur && log)
 		{
 			builder.append("Erreur de la recherche du nombre de computers en tout ");
 		}
 		
-		else if(!search.equals("") && erreur && log)
+		else if((search != null && !search.equals("")) && erreur && log)
 		{
 			builder.append("Erreur de la recherche du nombre de computers correspondant à la recherche ");
 			builder.append(search);
@@ -87,26 +85,26 @@ public class MessageLog
 	}
 
 	
-	public static String getCreate(ComputerDTO computerDTO, Long id, boolean rollback)
+	public static String getCreate(String name, Long id, boolean rollback)
 	{
 		StringBuilder builder = new StringBuilder();
 		
 		if(id==0 && rollback)
 		{
 			builder.append("Erreur de l'ajout du computer ");
-			builder.append(computerDTO.getName());
+			builder.append(name);
 		}
 		
 		else if(id==0 && !rollback)
 		{
 			builder.append("Erreur du rollback de l'ajout du computer ");
-			builder.append(computerDTO.getName());
+			builder.append(name);
 		}
 		
 		else
 		{
 			builder.append("Ajout du computer ");
-			builder.append(computerDTO.getName());
+			builder.append(name);
 			builder.append(", id = ");
 			builder.append(id);
 		}
@@ -138,20 +136,20 @@ public class MessageLog
 		return builder.toString();
 	}
 	
-	public static String getUpdate(ComputerDTO computerDTO, boolean error, boolean log)
+	public static String getUpdate(String id, boolean error, boolean log)
 	{
 		StringBuilder builder = new StringBuilder();
 		
 		if(!error && log)
 		{
 			builder.append("Mise à jour du computer n° ");
-			builder.append(computerDTO.getId());
+			builder.append(id);
 		}
 		
 		else if(error && log)
 		{
 			builder.append("Erreur de mise à jour sur le computer n°");
-			builder.append(computerDTO.getId());
+			builder.append(id);
 		}
 		
 		else
@@ -162,20 +160,20 @@ public class MessageLog
 		return builder.toString();
 	}
 	
-	public static String getDelete(ComputerDTO computerDTO, boolean error, boolean log)
+	public static String getDelete(String id, boolean error, boolean log)
 	{
 		StringBuilder builder = new StringBuilder();
 		
 		if(!error && log)
 		{
 			builder.append("Suppression du computer n° ");
-			builder.append(computerDTO.getId());
+			builder.append(id);
 		}
 		
 		else if(error && log)
 		{
 			builder.append("Erreur de suppression du computer n°");
-			builder.append(computerDTO.getId());
+			builder.append(id);
 		}
 		
 		else

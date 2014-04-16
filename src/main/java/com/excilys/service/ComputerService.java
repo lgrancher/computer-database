@@ -84,7 +84,7 @@ public class ComputerService
 		{	
 			Long idAdd = computerDAO.create(computerDTO);
 			
-			String operation = MessageLog.getCreate(computerDTO, idAdd, false);
+			String operation = MessageLog.getCreate(computerDTO.getName(), idAdd, false);
 			
 			Log log = Log.builder()
 					 .typeLog(Type.create)
@@ -100,7 +100,7 @@ public class ComputerService
 		{			
 			try 
 			{
-				String operation = MessageLog.getCreate(computerDTO, (long) 0, true);
+				String operation = MessageLog.getCreate(computerDTO.getName(), (long) 0, true);
 				logger.error(operation);
 				
 				Log log = Log.builder()
@@ -114,7 +114,7 @@ public class ComputerService
 			
 			catch (SQLException e1) 
 			{
-				logger.error(MessageLog.getCreate(computerDTO, (long) 0, false));
+				logger.error(MessageLog.getCreate(computerDTO.getName(), (long) 0, false));
 			}
 		}
 	}
@@ -170,7 +170,7 @@ public class ComputerService
 			
 			computerDAO.update(computerDTO);
 			
-			String operation = MessageLog.getUpdate(computerDTO, false, true);
+			String operation = MessageLog.getUpdate(computerDTO.getId(), false, true);
 			Log log = Log.builder()
 					 .typeLog(Type.update)
 					 .operation(operation)
@@ -185,7 +185,7 @@ public class ComputerService
 		{
 			try 
 			{
-				String operation = MessageLog.getUpdate(computerDTO, true, true);
+				String operation = MessageLog.getUpdate(computerDTO.getId(), true, true);
 				logger.error(operation);
 
 				Log log = Log.builder()
@@ -198,7 +198,7 @@ public class ComputerService
 			
 			catch (SQLException e1) 
 			{
-				logger.error(MessageLog.getUpdate(computerDTO, true, false));
+				logger.error(MessageLog.getUpdate(computerDTO.getId(), true, false));
 			}
 		}
 	}
@@ -208,7 +208,7 @@ public class ComputerService
 		try 
 		{
 			computerDAO.delete(computerDTO);
-			String operation = MessageLog.getDelete(computerDTO, false, true);
+			String operation = MessageLog.getDelete(computerDTO.getId(), false, true);
 			
 			Log log = Log.builder()
 					 .typeLog(Type.delete)
@@ -223,7 +223,7 @@ public class ComputerService
 		{
 			try 
 			{				
-				String operation = MessageLog.getDelete(computerDTO, true, true);
+				String operation = MessageLog.getDelete(computerDTO.getId(), true, true);
 				logger.error(operation);
 				
 				Log log = Log.builder()
@@ -236,7 +236,7 @@ public class ComputerService
 			
 			catch (SQLException e1) 
 			{
-				logger.error(MessageLog.getDelete(computerDTO, true, false));
+				logger.error(MessageLog.getDelete(computerDTO.getId(), true, false));
 			}
 		}
 	}

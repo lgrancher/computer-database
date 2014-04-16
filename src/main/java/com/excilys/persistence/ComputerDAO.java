@@ -221,7 +221,7 @@ public class ComputerDAO
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		// nombre de computers en tout
-		if(search.equals(""))
+		if(search == null || search.equals(""))
 		{
 			st.setString(1,"%");
 			st.setString(2,"%");

@@ -63,7 +63,11 @@ public class AddComputer
 	      else
 	      {
 	    	  	computerService.create(computerDTO);
-	    	  	mav.setViewName("redirect:index?currentPage="+new Page<ComputerDTO>(computerService).getNoOfPages());
+	    	  	
+	    	  	Page<?> page = new Page<ComputerDTO>();
+	    	  	page.setNoOfRecords(computerService.size(""));
+	    	  	
+	    	  	mav.setViewName("redirect:index?currentPage="+page.getNoOfPages());
 	      }	  
 	        
 	      return mav;

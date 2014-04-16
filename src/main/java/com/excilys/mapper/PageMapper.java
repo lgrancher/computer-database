@@ -3,17 +3,16 @@ package com.excilys.mapper;
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.DTO.PageDTO;
 import com.excilys.om.Page;
-import com.excilys.service.ComputerService;
 
 public class PageMapper 
 {
-	public static Page<?> dtoToPage(PageDTO pageDTO, ComputerService computerService)
+	public static Page<?> dtoToPage(PageDTO pageDTO, int nbRecords)
 	{
 		String search = findSearch(pageDTO.getSearch());
 		String sort = findSort(pageDTO.getSort());
 		int currentPage = findCurrentPage(pageDTO.getCurrentPage());
 		
-		Page<?> page = new Page<ComputerDTO>(computerService, search, sort, currentPage);
+		Page<?> page = new Page<ComputerDTO>(search, sort, currentPage, nbRecords);
 		return page;
 	}
 	

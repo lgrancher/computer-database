@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.DTO.*;
+import com.excilys.mapper.DateMapper;
 import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
@@ -43,20 +44,23 @@ public class UpdateComputer
 	 	ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
 		model.addAttribute("listeCompany", listeCompany);
 		
-		ComputerDTO computerDTO = new ComputerDTO(id, computerService);
+		ModelAndView mav =  new ModelAndView("redirect:" +Page.urlVerifyIdExist(id, "update", computerService.lastId()));
 		
-		ModelAndView mav =  new ModelAndView();
-		 
-		if(computerDTO.getName()!=null)
+		try
 		{	
-			model.addAttribute("companySelect",computerDTO.getCompanyDTO().getId());
-			mav = new ModelAndView("updateComputer", "computerDTO", computerDTO);
+			Long numId = Long.parseLong(id);
+			ComputerDTO computerDTO = computerService.find(numId);
+			computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
+			computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
+				 
+			if(computerDTO!=null)
+			{	
+				model.addAttribute("companySelect",computerDTO.getCompanyDTO().getId());
+				mav = new ModelAndView("updateComputer", "computerDTO", computerDTO);
+			}
 		}
 		
-		else
-		{
-			mav.setViewName("redirect:" +Page.urlVerifyIdExist(id, "update", computerService));
-		}
+		catch(NumberFormatException e){};
 		
 		return mav;
     }
@@ -83,7 +87,7 @@ public class UpdateComputer
     	  
 			else
   		  	{
-				mav.setViewName("redirect:" +Page.urlVerifyIdExist(computerDTO.getId(), "update", computerService));
+				mav.setViewName("redirect:" +Page.urlVerifyIdExist(computerDTO.getId(), "update", computerService.lastId()));
   		  	}
 		}
         

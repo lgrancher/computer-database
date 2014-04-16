@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 
-import com.excilys.service.ComputerService;
-
 @Scope("session")
 public class Page<T> 
 {
@@ -17,25 +15,21 @@ public class Page<T>
 	private int noOfRecords;
 	private List<?> listeElements;
 	private final static int RECORDS_PER_PAGES = 14;
-
-	public ComputerService computerService;
 	
-	public Page(ComputerService computerService)
+	public Page()
 	{
 		this.search = "";
 		this.sort = "computer.id";
-		this.computerService = computerService;
 		this.currentPage = 1;
 	}
 	
-	public Page(ComputerService computerService, String search, String sort, int currentPage)
+	public Page(String search, String sort, int currentPage, int nbRecords)
 	{
 		this.search = search;
 		this.sort = sort;
-		this.computerService = computerService;
 		this.currentPage = currentPage;
 		
-		calculateNoOfRecords();
+		setNoOfRecords(nbRecords);
 		getNoOfPages();
   	   
 		if(currentPage>noOfPages)
@@ -46,9 +40,9 @@ public class Page<T>
 		getOffset();
 	}
 	
-	public void update()
+	public void update(int nbRecords)
 	{
-		calculateNoOfRecords();
+		setNoOfRecords(nbRecords);
 		getNoOfPages();
   	   
 		if(currentPage>noOfPages)
@@ -64,14 +58,13 @@ public class Page<T>
 	 * si l'id a existe, avertissement comme quoi le computer a ete supprime
 	 * sinon, retour a la page d'accueil, l'utilisateur a ete fouille dans l'url
 	*/
-	public static String urlVerifyIdExist(String id, String type, ComputerService computerService)
+	public static String urlVerifyIdExist(String id, String type, long lastId)
 	{
 		String url="index";
 		
 		try
 		{
 			long idComputer = Long.parseLong(id);
-			long lastId = computerService.lastId();
 			
 			if(idComputer>0 && idComputer<=lastId)
 			{
@@ -132,19 +125,13 @@ public class Page<T>
 		return noOfPages;
 	}
 		
-	public int calculateNoOfRecords()
+	public void setNoOfRecords(int nbRecords)
 	{
-		noOfRecords = computerService.size(search); 
-		return noOfRecords; 
+		this.noOfRecords = nbRecords;
 	}
 	
 	public int getNoOfRecords()
 	{	
-		if(noOfRecords<=0)
-		{
-			noOfRecords = calculateNoOfRecords();
-		}	
-		
 		return noOfRecords; 
 	}
 	
