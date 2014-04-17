@@ -49,7 +49,7 @@ public class ListeComputer
 		else
 		{			
 			page = (Page<?>) model.get("page");
-			page.update(computerService.size(search));
+			page.update(computerService.size(page.getSearch()));
 		}
 		
 		computerService.retrieve(page);			

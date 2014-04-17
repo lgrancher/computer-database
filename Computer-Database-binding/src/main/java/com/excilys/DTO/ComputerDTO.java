@@ -2,9 +2,6 @@ package com.excilys.DTO;
 
 import javax.persistence.Entity;
 
-import org.springframework.context.annotation.Scope;
-
-@Scope("session")
 @Entity
 public class ComputerDTO 
 {

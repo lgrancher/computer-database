@@ -1,8 +1,5 @@
 package com.excilys.DTO;
 
-import org.springframework.context.annotation.Scope;
-
-@Scope("session")
 public class CompanyDTO 
 {
 	private String id;

@@ -9,13 +9,13 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
   
-  	<!--   scanne les annotations   -->
- 	<context:annotation-config />
+  	<context:component-scan base-package="com.excilys.persistence" />
+ 	<context:component-scan base-package="com.excilys.service" />   
   
-  	<import resource="classpath:/Context-Binding.xml"/>
-  	<import resource="classpath:/Context-Core.xml"/>
-  	<import resource="classpath:/Context-Persistence.xml"/>
-  	<import resource="classpath:/Context-Service.xml"/>
-  				
+	<!-- pour les transactions-->
+	<tx:annotation-driven transaction-manager="txManager"/>
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 </beans>
     
