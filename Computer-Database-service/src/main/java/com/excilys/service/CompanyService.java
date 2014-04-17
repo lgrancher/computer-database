@@ -14,7 +14,6 @@ import com.excilys.DTO.CompanyDTO;
 import com.excilys.om.Log;
 import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
-import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 import com.excilys.om.Log.Type;
 
@@ -29,9 +28,6 @@ public class CompanyService
 
 	@Autowired
 	private LogDAO logDAO;
-	
-	@Autowired
-	private ConnectionJDBC connectionJDBC;
 	
 	public List<CompanyDTO> retrieveAll()
 	{
@@ -76,15 +72,5 @@ public class CompanyService
 	public void setLogDAO(LogDAO logDAO) 
 	{
 		this.logDAO = logDAO;
-	}
-
-	public ConnectionJDBC getConnectionJDBC() 
-	{
-		return connectionJDBC;
-	}
-
-	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
-	{
-		this.connectionJDBC = connectionJDBC;
 	}
 }

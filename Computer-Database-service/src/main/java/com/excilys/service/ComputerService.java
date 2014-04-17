@@ -15,7 +15,6 @@ import com.excilys.om.MessageLog;
 import com.excilys.om.Page;
 import com.excilys.om.Log;
 import com.excilys.persistence.ComputerDAO;
-import com.excilys.persistence.ConnectionJDBC;
 import com.excilys.persistence.LogDAO;
 
 @Service
@@ -27,9 +26,6 @@ public class ComputerService
 	
 	@Autowired
 	private LogDAO logDAO;
-	
-	@Autowired
-	private ConnectionJDBC connectionJDBC;
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 		
@@ -350,15 +346,5 @@ public class ComputerService
 	public void setLogDAO(LogDAO logDAO) 
 	{
 		this.logDAO = logDAO;
-	}
-
-	public ConnectionJDBC getConnectionJDBC() 
-	{
-		return connectionJDBC;
-	}
-
-	public void setConnectionJDBC(ConnectionJDBC connectionJDBC) 
-	{
-		this.connectionJDBC = connectionJDBC;
 	}
 }

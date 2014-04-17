@@ -7,8 +7,15 @@ public class CompanyMapper
 {	
 	public static Company dtoTOCompany(CompanyDTO companyDTO)
 	{
+		Long id = Long.parseLong(companyDTO.getId());
+		
+		if(id==0)
+		{
+			id = null;
+		}
+		
 		Company company = Company.builder()
-									.id(Long.parseLong(companyDTO.getId()))
+									.id(id)
 									.name(companyDTO.getName())
 									.build();
 		return company;

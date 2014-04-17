@@ -8,6 +8,18 @@
   
  	<context:component-scan base-package="com.excilys.validator" /> 
   
+    <bean id="computerDAO" class="com.excilys.persistence.ComputerDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	 <bean id="companyDAO" class="com.excilys.persistence.CompanyDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	 <bean id="logDAO" class="com.excilys.persistence.LogDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
  	 <!-- BoneCP configuration -->
 	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
 	   <property name="driverClass" value="com.mysql.jdbc.Driver" />

@@ -1,5 +1,8 @@
 package com.excilys.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
@@ -9,7 +12,7 @@ public class ComputerMapper
 	public static Computer dtoToComputer(ComputerDTO computerDTO)
 	{		
 		String idComputer = computerDTO.getId();
-		Long id;
+		long id;
 		
 		try
 		{
@@ -18,7 +21,7 @@ public class ComputerMapper
 		
 		catch(NumberFormatException e)
 		{
-			id=(long) 0;
+			id = 0;
 		}
 		
 		String name = computerDTO.getName();
@@ -46,5 +49,17 @@ public class ComputerMapper
 											 .build();
 		
 		return computerDTO;
+	}
+	
+	public static List<ComputerDTO> computerToDTO(List<Computer> computers)
+	{
+		List<ComputerDTO> listComputersDTO = new ArrayList<ComputerDTO>();
+		
+		for(Computer computer : computers)
+		{
+			listComputersDTO.add(computerToDTO(computer));
+		}
+		
+		return listComputersDTO;
 	}
 }
