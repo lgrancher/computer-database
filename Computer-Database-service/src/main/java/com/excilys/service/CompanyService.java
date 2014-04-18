@@ -1,6 +1,5 @@
 package com.excilys.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -37,20 +36,11 @@ public class CompanyService
 				 .dateLog(new LocalDate())
 				 .build();
 		
-		List<CompanyDTO> listCompanyDTO=null;
+		List<CompanyDTO> listCompanyDTO = companyDAO.retrieveAll();
 		
-		try 
-		{
-			listCompanyDTO = companyDAO.retrieveAll();
-			logDAO.create(log);
-			logger.info("Listing des company");
-		} 
-		
-		catch (SQLException e) 
-		{
-			logger.info("Erreur de listing des company");
-		}
-		
+		logDAO.create(log);
+		logger.info("Listing des company");
+	
 		return listCompanyDTO;
 	}
 	

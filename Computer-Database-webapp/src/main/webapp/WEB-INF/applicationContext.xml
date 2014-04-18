@@ -12,10 +12,11 @@
   	<!--   scanne les annotations   -->
  	<context:annotation-config />
   
-  	<import resource="classpath:/Context-Binding.xml"/>
-  	<import resource="classpath:/Context-Core.xml"/>
-  	<import resource="classpath:/Context-Persistence.xml"/>
-  	<import resource="classpath:/Context-Service.xml"/>
+  	<import resource="classpath:/contextBinding.xml"/>
+  	<import resource="classpath:/contextCore.xml"/>
+  	<import resource="classpath:/contextPersistence.xml"/>
+  	<import resource="classpath:/contextService.xml"/>
+  	<import resource="classpath:/datasource.xml"/>
   				
 </beans>
     

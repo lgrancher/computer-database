@@ -28,14 +28,11 @@ public class UpdateComputer
 	
 	@Autowired
 	private ComputerService computerService;
- 
-	@Autowired
-	private ComputerValidator computerValidator;
 
 	@InitBinder
 	private void initBinder(WebDataBinder binder) 
 	{
-		binder.addValidators(computerValidator);
+		binder.addValidators(new ComputerValidator());
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

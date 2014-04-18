@@ -23,7 +23,7 @@ import com.excilys.om.Page;
 @Repository
 public class ComputerDAO extends JdbcDaoSupport
 {		
-	public List<ComputerDTO> retrieve(Page<?> page) throws SQLException
+	public List<ComputerDTO> retrieve(Page<?> page) 
 	{				
 		String search;
 	
@@ -56,7 +56,7 @@ public class ComputerDAO extends JdbcDaoSupport
 		return listComputersDTO;
 	}
 	
-	public Long create(ComputerDTO computerDTO) throws SQLException
+	public Long create(ComputerDTO computerDTO) 
 	{
 		final String sql = "insert into computer values(default,?,?,?,?)";
 		
@@ -90,7 +90,7 @@ public class ComputerDAO extends JdbcDaoSupport
 		return new Long(keyHolder.getKey().longValue());
 	}
 	
-	public ComputerDTO find(Long id) throws SQLException 
+	public ComputerDTO find(Long id) 
 	{			
 		String sql = "select computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name  from computer left join company on computer.company_id=company.id where computer.id=?";
 		
@@ -99,7 +99,7 @@ public class ComputerDAO extends JdbcDaoSupport
 		return computerDTO;
 	}
 	
-	public void update(ComputerDTO computerDTO) throws SQLException
+	public void update(ComputerDTO computerDTO) 
 	{
 		String sql = "update computer set name=?, introduced=?, discontinued=?, company_id=? where id=?";
 		
@@ -112,14 +112,14 @@ public class ComputerDAO extends JdbcDaoSupport
 													computer.getId()});
 	}
 	
-	public void delete(ComputerDTO computerDTO) throws SQLException 
+	public void delete(ComputerDTO computerDTO) 
 	{		
 		String sql = "delete from computer where id=?";
 		
 		getJdbcTemplate().update(sql, new Object[] {computerDTO.getId()});
 	}
 
-	public int size(String search) throws SQLException
+	public int size(String search) 
 	{		
 		String sql = "select count(*) from computer left join company on computer.company_id = company.id where computer.name like ? or company.name like ?";		
 		String realSearch = "%";
@@ -139,7 +139,7 @@ public class ComputerDAO extends JdbcDaoSupport
 		return nbLignes;		
 	}
 	
-	public long lastId() throws SQLException
+	public long lastId() 
 	{
 		String sql = "select auto_increment from information_schema.tables where table_name=\"computer\"";
 

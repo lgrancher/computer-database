@@ -1,8 +1,5 @@
 package com.excilys.DTO;
 
-import javax.persistence.Entity;
-
-@Entity
 public class ComputerDTO 
 {
 	private String id;
