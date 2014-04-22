@@ -1,71 +1,69 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.excilys</groupId>
-    <artifactId>Computer-Database</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
- 	 <artifactId>Computer-Database-persistence</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.excilys</groupId>
+		<artifactId>Computer-Database</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>Computer-Database-persistence</artifactId>
 
- 	<dependencies>
-	  	<dependency>
-	 		<groupId>${project.groupId}</groupId>
-	      	<artifactId>Computer-Database-binding</artifactId>
-	      	<version>${project.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-	 		<groupId>${project.groupId}</groupId>
-	      	<artifactId>Computer-Database-core</artifactId>
-	      	<version>${project.version}</version>
-	    </dependency>
-
-	   
-	    <!--         gere la validation          -->		
+	<dependencies>
 		<dependency>
-		  <groupId>javax.persistence</groupId>
-		  <artifactId>persistence-api</artifactId>
-		  <version>${persistence}</version>
-		  <scope>provided</scope>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>Computer-Database-binding</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-		
-		<!--      permet d'afficher des logs      -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>Computer-Database-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+
+		<!-- gère le pool de connexions -->
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava </groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
+		<!-- permet d'afficher des logs -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${logback}</version>
 		</dependency>
-		
-	 	 <!--         dépendances SPRING      -->
+
+		<!-- dépendances SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring}</version>
+			<artifactId>spring-orm</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring}</version>
+			<artifactId>spring-jdbc</artifactId>
 		</dependency>
-		
+
+		<!-- hibernate -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
-		
-	</dependencies>	
+	</dependencies>
 </project>

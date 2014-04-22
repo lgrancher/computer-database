@@ -1,6 +1,6 @@
 package com.excilys.service;
 
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.DTO.ComputerDTO;
-import com.excilys.om.Log.Type;
+import com.excilys.om.Log.TypeLog;
 import com.excilys.om.MessageLog;
 import com.excilys.om.Page;
 import com.excilys.om.Log;
@@ -34,8 +34,9 @@ public class ComputerService
 		String operation = MessageLog.getRetrieve(page, false, true);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.retrieve)
+				 .typeLog(TypeLog.retrieve)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 	    logDAO.create(log);
@@ -52,9 +53,9 @@ public class ComputerService
 		String operation = MessageLog.getCreate(computerDTO.getName(), idAdd, false);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.create)
+				 .typeLog(TypeLog.create)
 				 .operation(operation)
-				 .dateLog(new LocalDate())
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);
@@ -68,8 +69,9 @@ public class ComputerService
 		String operation = MessageLog.getFind(id, false, true);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.find)
+				 .typeLog(TypeLog.find)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);
@@ -84,8 +86,9 @@ public class ComputerService
 			
 		String operation = MessageLog.getUpdate(computerDTO.getId(), false, true);
 		Log log = Log.builder()
-				 .typeLog(Type.update)
+				 .typeLog(TypeLog.update)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);
@@ -99,8 +102,9 @@ public class ComputerService
 		String operation = MessageLog.getDelete(computerDTO.getId(), false, true);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.delete)
+				 .typeLog(TypeLog.delete)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);
@@ -114,8 +118,9 @@ public class ComputerService
 		String operation = MessageLog.getSize(search, false, true);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.size)
+				 .typeLog(TypeLog.size)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);
@@ -131,8 +136,9 @@ public class ComputerService
 		String operation = MessageLog.getLastId(false, true);
 		
 		Log log = Log.builder()
-				 .typeLog(Type.size)
+				 .typeLog(TypeLog.size)
 				 .operation(operation)
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		logDAO.create(log);

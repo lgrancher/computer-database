@@ -1,17 +1,20 @@
 package com.excilys.persistence;
 
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 
 import com.excilys.om.Log;
 
 @Repository
-public class LogDAO extends JdbcDaoSupport
+public class LogDAO
 {		
+	@PersistenceContext
+	protected EntityManager entityManager;
+	
 	public void create(Log log) 
 	{
-		String sql = "insert into log values(default,?,?,NOW())";
-		
-		getJdbcTemplate().update(sql, new Object[] {log.getTypeLog().toString(), log.getOperation()});
+		entityManager.persist(log);
 	}
 }

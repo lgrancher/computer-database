@@ -2,7 +2,7 @@ package com.excilys.service;
 
 import java.util.List;
 
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import com.excilys.om.Log;
 import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.LogDAO;
-import com.excilys.om.Log.Type;
+import com.excilys.om.Log.TypeLog;
 
 @Service
 @Transactional
@@ -31,9 +31,9 @@ public class CompanyService
 	public List<CompanyDTO> retrieveAll()
 	{
 		Log log = Log.builder()
-				 .typeLog(Type.retrieve)
+				 .typeLog(TypeLog.retrieve)
 				 .operation("Listing des company")
-				 .dateLog(new LocalDate())
+				 .dateLog(LocalDateTime.now())
 				 .build();
 		
 		List<CompanyDTO> listCompanyDTO = companyDAO.retrieveAll();

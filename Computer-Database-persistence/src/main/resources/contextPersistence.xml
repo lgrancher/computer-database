@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
- <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-  
- 	<context:component-scan base-package="com.excilys.validator" /> 
-  
-    <bean id="computerDAO" class="com.excilys.persistence.ComputerDAO">
+
+	<context:component-scan base-package="com.excilys.validator" />
+	<context:component-scan base-package="com.excilys.core" />
+
+	<bean id="computerDAO" class="com.excilys.persistence.ComputerDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	 <bean id="companyDAO" class="com.excilys.persistence.CompanyDAO">
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="MYSQL" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
 	</bean>
-	
-	 <bean id="logDAO" class="com.excilys.persistence.LogDAO">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
+
 </beans>
     

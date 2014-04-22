@@ -25,17 +25,17 @@ public class DeleteComputer
 									 @RequestParam(value="currentPage", required=false) String currentPage, 
 									 ModelMap model) 
 	{		
-		String redirect = Page.urlVerifyIdExist(id, "delete", computerService.size(search));
+		String redirect = Page.urlVerifyIdExist(id, "delete", computerService.lastId());
 		
 		try
 		{	
 			Long numId = Long.parseLong(id);
 			ComputerDTO computerDTO = computerService.find(numId);
-			computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
-			computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
 			
 			if(computerDTO!=null)
 			{
+				computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
+				computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
 				computerService.delete(computerDTO);
 				redirect = "index";
 			}

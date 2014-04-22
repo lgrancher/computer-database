@@ -47,12 +47,20 @@ public class UpdateComputer
 		{	
 			Long numId = Long.parseLong(id);
 			ComputerDTO computerDTO = computerService.find(numId);
-			computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
-			computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
 				 
 			if(computerDTO!=null)
 			{	
-				model.addAttribute("companySelect",computerDTO.getCompanyDTO().getId());
+				computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
+				computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
+				
+				CompanyDTO companyDTO = computerDTO.getCompanyDTO();
+				String idCompany = "0";
+				
+				if(companyDTO!=null)
+				{
+					idCompany = companyDTO.getId();
+				}
+				model.addAttribute("companySelect", idCompany);
 				mav = new ModelAndView("updateComputer", "computerDTO", computerDTO);
 			}
 		}

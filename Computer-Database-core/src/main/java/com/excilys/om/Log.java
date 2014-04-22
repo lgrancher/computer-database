@@ -1,14 +1,37 @@
 package com.excilys.om;
 
-import org.joda.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Enumerated;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
+
+@Entity
+@Table(name = "log")
 public class Log 
 {
+	@Id   @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="id")
 	private Long id;
-	private Type typeLog;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="type_log")
+	private TypeLog typeLog;
+	
+	@Column(name="operation")
 	private String operation;
-	private LocalDate dateLog;
-	public enum Type {create, retrieve, find, delete, update, size, error};
+	
+	@Column(name="date_log")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime dateLog;
+	
+	public enum TypeLog {create, retrieve, find, delete, update, size, error};
 	
 	public static class Builder
 	{
@@ -27,7 +50,7 @@ public class Log
 			return this;
 		}
 		
-		public Builder typeLog(Type typeLog)
+		public Builder typeLog(TypeLog typeLog)
 		{
 			this.log.typeLog = typeLog;
 			return this;
@@ -39,7 +62,7 @@ public class Log
 			return this;
 		}
 		
-		public Builder dateLog(LocalDate dateLog)
+		public Builder dateLog(LocalDateTime dateLog)
 		{
 			this.log.dateLog = dateLog;
 			return this;
@@ -68,12 +91,12 @@ public class Log
 		this.id = id;
 	}
 
-	public Type getTypeLog() 
+	public TypeLog getTypeLog() 
 	{
 		return typeLog;
 	}
 
-	public void setTypeLog(Type typeLog) 
+	public void setTypeLog(TypeLog typeLog) 
 	{
 		this.typeLog = typeLog;
 	}
@@ -88,12 +111,12 @@ public class Log
 		this.operation = operation;
 	}
 
-	public LocalDate getDateLog() 
+	public LocalDateTime getDateLog() 
 	{
 		return dateLog;
 	}
 
-	public void setDateLog(LocalDate dateLog) 
+	public void setDateLog(LocalDateTime dateLog) 
 	{
 		this.dateLog = dateLog;
 	}

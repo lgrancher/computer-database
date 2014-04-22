@@ -2,22 +2,26 @@ package com.excilys.persistence;
 
 import java.util.List;
 
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 
 import com.excilys.DTO.CompanyDTO;
-import com.excilys.mapper.CompanyRowMapper;
-
+import com.excilys.mapper.CompanyMapper;
+import com.excilys.om.Company;
 
 @Repository
-public class CompanyDAO extends JdbcDaoSupport
+public class CompanyDAO 
 {			
+	@PersistenceContext
+	protected EntityManager entityManager;
+	
+	@SuppressWarnings("unchecked")
 	public List<CompanyDTO> retrieveAll() 
-	{		
-		String sql = "select * from company";
+	{				
+		List<Company> listCompanies = entityManager.createQuery("SELECT c FROM Company c").getResultList();
 		
-		List<CompanyDTO> listCompaniesDTO = getJdbcTemplate().query(sql.toString(), new CompanyRowMapper());
-		
-		return listCompaniesDTO;
+		return CompanyMapper.companyToDTO(listCompanies);
 	}
 }

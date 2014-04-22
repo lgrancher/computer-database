@@ -11,7 +11,7 @@
   
   	<!--   scanne les annotations   -->
  	<context:annotation-config />
-  
+
   	<import resource="classpath:/contextBinding.xml"/>
   	<import resource="classpath:/contextCore.xml"/>
   	<import resource="classpath:/contextPersistence.xml"/>
