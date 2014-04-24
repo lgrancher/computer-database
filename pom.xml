@@ -21,6 +21,7 @@
 		</plugins>
 	</build>
 
+
 	<modules>
 		<module>Computer-Database-core</module>
 		<module>Computer-Database-service</module>
@@ -46,6 +47,7 @@
 		<hibernate>4.2.4.Final</hibernate>
 		<hibernate-jpa>1.0.1.Final</hibernate-jpa>
 		<jadira>3.0.0.CR1</jadira>
+		<querydsl>3.3.2</querydsl>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -57,7 +59,7 @@
 				<version>${bonecp}</version>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.google.guava </groupId>
 				<artifactId>guava</artifactId>
@@ -111,7 +113,7 @@
 				<artifactId>commons-validator</artifactId>
 				<version>${validator}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.core</artifactId>
@@ -183,12 +185,26 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate}</version>
 			</dependency>
-			
+
 			<dependency>
-		        <groupId>org.hibernate.javax.persistence</groupId>
-		        <artifactId>hibernate-jpa-2.0-api</artifactId>
-		        <version>${hibernate-jpa}</version>
-   			 </dependency>
+				<groupId>org.hibernate.javax.persistence</groupId>
+				<artifactId>hibernate-jpa-2.0-api</artifactId>
+				<version>${hibernate-jpa}</version>
+			</dependency>
+
+			<!-- querydsl -->
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>${querydsl}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>${querydsl}</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>

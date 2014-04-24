@@ -5,12 +5,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-
 import org.springframework.stereotype.Repository;
 
 import com.excilys.om.Company;
+import com.excilys.om.QCompany;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository
 public class CompanyDAO 
@@ -19,12 +18,11 @@ public class CompanyDAO
 	protected EntityManager entityManager;
 	
 	public List<Company> retrieveAll() 
-	{		
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Company> q = cb.createQuery(Company.class);
-		q.from(Company.class);
-		List<Company> listCompanies = entityManager.createQuery(q).getResultList();
+	{	
+		JPAQuery query = new JPAQuery(entityManager);
+		QCompany company = QCompany.company;
 		
+		List<Company> listCompanies = query.from(company).list(company);
 		return listCompanies;
 	}
 }
