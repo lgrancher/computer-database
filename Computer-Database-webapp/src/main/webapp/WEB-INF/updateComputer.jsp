@@ -69,7 +69,7 @@
 						<select name="companyDTO" class="form-control">
 							<option value="0"></option>
 							<c:forEach var="companies" items="${listeCompany}">
-								<c:if test="${companies.id == companySelect}">
+								<c:if test="${companies.id == computerDTO.companyDTO.id}">
 									<option value="${companies.id}" selected>${companies.name}</option>
 								</c:if>
 								<c:if test="${companies.id != companySelect}">

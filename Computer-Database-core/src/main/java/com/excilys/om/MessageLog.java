@@ -2,11 +2,11 @@ package com.excilys.om;
 
 public class MessageLog 
 {
-	public static String getRetrieve(Page<?> page, boolean erreur, boolean log)
+	public static String getRetrieve(Page<?> page)
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(page.getSearch().equals("") && !erreur && log)
+		if(page.getSearch().equals(""))
 		{
 			builder.append("Listing de tous les computers page ");
 			builder.append(page.getCurrentPage());
@@ -14,7 +14,7 @@ public class MessageLog
 			builder.append(page.getNoOfPages());
 		}
 		
-		else if(!page.getSearch().equals("") && !erreur && log)
+		else
 		{
 			builder.append("Listing des computers avec la recherche ");
 			builder.append(page.getSearch());
@@ -22,29 +22,6 @@ public class MessageLog
 			builder.append(page.getCurrentPage());
 			builder.append("/");
 			builder.append(page.getNoOfPages());
-		}
-		
-		else if(page.getSearch().equals("") && erreur && log)
-		{
-			builder.append("Erreur du listing de tous les computers page ");
-			builder.append(page.getCurrentPage());
-			builder.append("/");
-			builder.append(page.getNoOfPages());
-		}
-		
-		else if(!page.getSearch().equals("") && erreur && log)
-		{
-			builder.append("Erreur du listing des computers avec la recherche ");
-			builder.append(page.getSearch());
-			builder.append(" page ");
-			builder.append(page.getCurrentPage());
-			builder.append("/");
-			builder.append(page.getNoOfPages());
-		}
-		
-		else
-		{
-			builder.append("Erreur de l'enregistrement du log en base lors du retrieve");
 		}
 		
 		return builder.toString();
@@ -85,123 +62,51 @@ public class MessageLog
 	}
 
 	
-	public static String getCreate(String name, Long id, boolean rollback)
+	public static String getCreate(String name, long id)
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(id==0 && rollback)
-		{
-			builder.append("Erreur de l'ajout du computer ");
-			builder.append(name);
-		}
+		builder.append("Ajout du computer ");
+		builder.append(name);
+		builder.append(", id = ");
+		builder.append(id);
+
+		return builder.toString();
+	}
+	
+	public static String getFind(long id)
+	{
+		StringBuilder builder = new StringBuilder();
 		
-		else if(id==0 && !rollback)
-		{
-			builder.append("Erreur du rollback de l'ajout du computer ");
-			builder.append(name);
-		}
-		
-		else
-		{
-			builder.append("Ajout du computer ");
-			builder.append(name);
-			builder.append(", id = ");
-			builder.append(id);
-		}
+		builder.append("Recherche du computer n° ");
+		builder.append(id);
 		
 		return builder.toString();
 	}
 	
-	public static String getFind(Long id, boolean error, boolean log)
+	public static String getUpdate(long id)
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(!error && log)
-		{
-			builder.append("Recherche du computer n° ");
-			builder.append(id);
-		}
-		
-		else if(error && log)
-		{
-			builder.append("Erreur de recherche sur le computer n°");
-			builder.append(id);
-		}
-		
-		else
-		{
-			builder.append("Erreur de l'enregistrement du log en base lors du find");
-		}
+		builder.append("Mise à jour du computer n° ");
+		builder.append(id);
 		
 		return builder.toString();
 	}
 	
-	public static String getUpdate(String id, boolean error, boolean log)
+	public static String getDelete(long id)
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(!error && log)
-		{
-			builder.append("Mise à jour du computer n° ");
-			builder.append(id);
-		}
-		
-		else if(error && log)
-		{
-			builder.append("Erreur de mise à jour sur le computer n°");
-			builder.append(id);
-		}
-		
-		else
-		{
-			builder.append("Erreur de l'enregistrement du log en base lors de l'update");
-		}
+		builder.append("Suppression du computer n° ");
+		builder.append(id);
 		
 		return builder.toString();
 	}
 	
-	public static String getDelete(String id, boolean error, boolean log)
+	public static String getLastId()
 	{
-		StringBuilder builder = new StringBuilder();
-		
-		if(!error && log)
-		{
-			builder.append("Suppression du computer n° ");
-			builder.append(id);
-		}
-		
-		else if(error && log)
-		{
-			builder.append("Erreur de suppression du computer n°");
-			builder.append(id);
-		}
-		
-		else
-		{
-			builder.append("Erreur de l'enregistrement du log en base lors du delete");
-		}
-		
-		return builder.toString();
-	}
-	
-	public static String getLastId(boolean erreur, boolean log)
-	{
-		StringBuilder builder = new StringBuilder();
-		
-		if(!erreur && log)
-		{
-			builder.append("Recherche de l'id du dernier computer");
-		}
-		
-		else if(erreur && log)
-		{
-			builder.append("Erreur de la recherche de l'id du dernier computer");
-		}
-		
-		else
-		{
-			builder.append("Erreur de l'enregistrement du log en base lors du lastId");
-		}
+		StringBuilder builder = new StringBuilder("Recherche de l'id du dernier computer");
 		
 		return builder.toString();
 	}

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.DTO.*;
+import com.excilys.mapper.CompanyMapper;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.om.Page;
 import com.excilys.service.*;
 import com.excilys.validator.ComputerValidator;
@@ -37,7 +39,7 @@ public class AddComputer
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView showForm(ModelMap model)
  	{
-	 	ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
+	 	ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyMapper.companyToDTO(companyService.retrieveAll());
 
 		model.addAttribute("listeCompany", listeCompany);
 		
@@ -52,15 +54,13 @@ public class AddComputer
 		  
 	      if(result.hasErrors())
 	      {	  			
-	  			ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) companyService.retrieveAll();
+	    	  	ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyMapper.companyToDTO(companyService.retrieveAll());
 	  			model.addAttribute("listeCompany", listeCompany);
-	    	  
-	  			model.addAttribute("companySelect", computerDTO.getCompanyDTO().getId());
 	      }
 	      
 	      else
 	      {
-	    	  	computerService.create(computerDTO);
+	    	  	computerService.create(ComputerMapper.dtoToComputer(computerDTO));
 	    	  	
 	    	  	Page<?> page = new Page<ComputerDTO>();
 	    	  	page.setNoOfRecords(computerService.size(""));

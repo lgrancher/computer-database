@@ -15,8 +15,6 @@ import javax.persistence.criteria.Root;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.DTO.ComputerDTO;
-import com.excilys.mapper.ComputerMapper;
 import com.excilys.om.Computer;
 import com.excilys.om.Company;
 import com.excilys.om.Page;
@@ -27,7 +25,7 @@ public class ComputerDAO extends JdbcDaoSupport
 	@PersistenceContext
 	protected EntityManager entityManager;
 	
-	public List<ComputerDTO> retrieve(Page<?> page) 
+	public List<Computer> retrieve(Page<?> page) 
 	{				
 		String search;
 	
@@ -80,54 +78,45 @@ public class ComputerDAO extends JdbcDaoSupport
 													.setMaxResults(Page.getRecordsPerPages())
 													.getResultList();	
 
-		List<ComputerDTO> listComputerDTO = ComputerMapper.computerToDTO(listComputers);
 		
-		page.setListeElements(listComputerDTO);
-		
-		return listComputerDTO;
+		return listComputers;
 	}
 	
-	public Long create(ComputerDTO computerDTO) 
+	public Long create(Computer computer) 
 	{
-		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
-			
 		entityManager.persist(computer);
 			
 		return computer.getId();
 	}
 	
-	public ComputerDTO find(Long id) 
+	public Computer find(Long id) 
 	{			
 		String sql = "SELECT computer FROM Computer computer LEFT JOIN computer.company company WHERE computer.id=:idComputer";
-		ComputerDTO computerDTO;
+		Computer computer;
 		
 		try
 		{
 			Query q = entityManager.createQuery(sql.toString());
 			q.setParameter("idComputer", id);
 			
-			computerDTO = ComputerMapper.computerToDTO((Computer) q.getSingleResult());
+			computer = (Computer) q.getSingleResult();
 		}
 		
 		catch(NoResultException e)
 		{
-			computerDTO = null;
+			computer = null;
 	    }
 		
-		return computerDTO;
+		return computer;
 	}
 	
-	public void update(ComputerDTO computerDTO) 
+	public void update(Computer computer) 
 	{
-		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
-		
 		entityManager.merge(computer);
 	}
 	
-	public void delete(ComputerDTO computerDTO) 
+	public void delete(Computer computer) 
 	{		
-		Computer computer = ComputerMapper.dtoToComputer(computerDTO);
-		
 		computer = entityManager.merge(computer);
 		entityManager.remove(computer);
 	}

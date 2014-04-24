@@ -38,14 +38,15 @@
 			<tbody>
 				<c:forEach var="computer" items="${page.listeElements}">
 					<tr>
+						<spring:message code="date" var="dateValid"/>
 						<td class="id">${computer.id}</td>
 						<td class="name">${computer.name}</td>
 						<td class="date">
-						 <joda:parseDateTime var="introduced" pattern="yyyy-MM-dd" value="${computer.introduced}" />
+						 <joda:parseDateTime var="introduced" pattern="${dateValid}" value="${computer.introduced}" />
  						 <joda:format value="${introduced}" />
  						</td>
 						<td class="date">
-						 <joda:parseDateTime var="discontinued" pattern="yyyy-MM-dd" value="${computer.discontinued}" />
+						 <joda:parseDateTime var="discontinued" pattern="${dateValid}" value="${computer.discontinued}" />
  						 <joda:format value="${discontinued}" />
  						</td>
 						<td class="name">${computer.companyDTO.name}</td>

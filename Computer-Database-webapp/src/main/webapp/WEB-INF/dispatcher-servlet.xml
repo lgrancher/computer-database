@@ -12,6 +12,7 @@
  
 	<context:component-scan base-package="com.excilys.servlets" />
  
+ 	<!--                 internationalisation                 -->
  	<mvc:interceptors>
 		<bean id="localeChangeInterceptor"
 			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
@@ -28,6 +29,7 @@
         <property name="basename" value="langage" />
     </bean>
 	
+	<!--                 emplacement des jsp                -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">

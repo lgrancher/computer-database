@@ -34,7 +34,7 @@ public class DateMapper
 
 		if(local!=null)
 		{
-			introduced = local.toString();
+			introduced = DateMapper.formatDBVersWeb(local.toString());
 		}
 
 		return introduced;	

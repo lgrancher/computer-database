@@ -10,8 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.springframework.stereotype.Repository;
 
-import com.excilys.DTO.CompanyDTO;
-import com.excilys.mapper.CompanyMapper;
 import com.excilys.om.Company;
 
 @Repository
@@ -20,13 +18,13 @@ public class CompanyDAO
 	@PersistenceContext
 	protected EntityManager entityManager;
 	
-	public List<CompanyDTO> retrieveAll() 
+	public List<Company> retrieveAll() 
 	{		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Company> q = cb.createQuery(Company.class);
 		q.from(Company.class);
 		List<Company> listCompanies = entityManager.createQuery(q).getResultList();
 		
-		return CompanyMapper.companyToDTO(listCompanies);
+		return listCompanies;
 	}
 }

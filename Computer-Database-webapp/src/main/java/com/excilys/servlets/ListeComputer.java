@@ -1,13 +1,18 @@
 package com.excilys.servlets;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import com.excilys.DTO.ComputerDTO;
 import com.excilys.DTO.PageDTO;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.mapper.PageMapper;
 import com.excilys.om.Page;
+import com.excilys.om.Computer;
 import com.excilys.service.ComputerService;
 
 @Controller
@@ -52,12 +57,13 @@ public class ListeComputer
 			page.update(computerService.size(page.getSearch()));
 		}
 		
-		computerService.retrieve(page);			
+		List<Computer> listComputers = computerService.retrieve(page);
+		List<ComputerDTO> listComputersDTO = ComputerMapper.computerToDTO(listComputers);
+		page.setListeElements(listComputersDTO);	
 		
 		model.addAttribute("page",page);
 		model.addAttribute("erreur", erreur);
 		model.addAttribute("type", type);
-		model.addAttribute("search",search);
 		
 		return "affichage";	
 	}

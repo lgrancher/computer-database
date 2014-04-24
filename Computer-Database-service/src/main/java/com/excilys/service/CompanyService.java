@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.DTO.CompanyDTO;
+import com.excilys.om.Company;
 import com.excilys.om.Log;
 import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
@@ -28,7 +28,7 @@ public class CompanyService
 	@Autowired
 	private LogDAO logDAO;
 	
-	public List<CompanyDTO> retrieveAll()
+	public List<Company> retrieveAll()
 	{
 		Log log = Log.builder()
 				 .typeLog(TypeLog.retrieve)
@@ -36,12 +36,12 @@ public class CompanyService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		List<CompanyDTO> listCompanyDTO = companyDAO.retrieveAll();
+		List<Company> listCompany = companyDAO.retrieveAll();
 		
 		logDAO.create(log);
 		logger.info("Listing des company");
 	
-		return listCompanyDTO;
+		return listCompany;
 	}
 	
 	public CompanyDAO getCompanyDAO() 

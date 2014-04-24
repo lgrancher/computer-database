@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import com.excilys.DTO.ComputerDTO;
-import com.excilys.mapper.DateMapper;
+import com.excilys.om.Computer;
 import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 
@@ -25,23 +24,26 @@ public class DeleteComputer
 									 @RequestParam(value="currentPage", required=false) String currentPage, 
 									 ModelMap model) 
 	{		
-		String redirect = Page.urlVerifyIdExist(id, "delete", computerService.lastId());
+		String redirect = null;
 		
 		try
 		{	
 			Long numId = Long.parseLong(id);
-			ComputerDTO computerDTO = computerService.find(numId);
+			Computer computer = computerService.find(numId);
 			
-			if(computerDTO!=null)
+			if(computer!=null)
 			{
-				computerDTO.setIntroduced(DateMapper.formatDBVersWeb(computerDTO.getIntroduced()));
-				computerDTO.setDiscontinued(DateMapper.formatDBVersWeb(computerDTO.getDiscontinued()));
-				computerService.delete(computerDTO);
+				computerService.delete(computer);
 				redirect = "index";
 			}
 		}
 		
 		catch(NumberFormatException e){}
+		
+		if(redirect==null)
+		{
+			redirect = Page.urlVerifyIdExist(id, "delete", computerService.lastId());
+		}
 		
 		return "redirect:"+redirect;
 	}

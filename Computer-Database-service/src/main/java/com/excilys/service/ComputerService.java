@@ -1,5 +1,7 @@
 package com.excilys.service;
 
+import java.util.List;
+
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.DTO.ComputerDTO;
+import com.excilys.om.Computer;
 import com.excilys.om.Log.TypeLog;
 import com.excilys.om.MessageLog;
 import com.excilys.om.Page;
@@ -27,11 +29,11 @@ public class ComputerService
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 		
-	public Page<?> retrieve(Page<?> page)
+	public List<Computer> retrieve(Page<?> page)
 	{
-		computerDAO.retrieve(page);
+		List<Computer> listComputers = computerDAO.retrieve(page);
 		
-		String operation = MessageLog.getRetrieve(page, false, true);
+		String operation = MessageLog.getRetrieve(page);
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.retrieve)
@@ -43,14 +45,14 @@ public class ComputerService
 		
 		logger.info(operation);
 	
-		return page;
+		return listComputers;
 	}
 	
-	public void create(ComputerDTO computerDTO) 
+	public void create(Computer computer) 
 	{			
-		Long idAdd = computerDAO.create(computerDTO);
+		Long idAdd = computerDAO.create(computer);
 		
-		String operation = MessageLog.getCreate(computerDTO.getName(), idAdd, false);
+		String operation = MessageLog.getCreate(computer.getName(), idAdd);
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.create)
@@ -62,11 +64,11 @@ public class ComputerService
 		logger.info(operation);
 	}
 	
-	public ComputerDTO find(Long id)
+	public Computer find(Long id)
 	{		
-		ComputerDTO computerDTO = computerDAO.find(id);
+		Computer computer = computerDAO.find(id);
 		
-		String operation = MessageLog.getFind(id, false, true);
+		String operation = MessageLog.getFind(id);
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.find)
@@ -77,14 +79,14 @@ public class ComputerService
 		logDAO.create(log);
 		logger.info(operation);
 
-		return computerDTO;
+		return computer;
 	}
 	
-	public void update(ComputerDTO computerDTO) 
+	public void update(Computer computer) 
 	{		
-		computerDAO.update(computerDTO);
+		computerDAO.update(computer);
 			
-		String operation = MessageLog.getUpdate(computerDTO.getId(), false, true);
+		String operation = MessageLog.getUpdate(computer.getId());
 		Log log = Log.builder()
 				 .typeLog(TypeLog.update)
 				 .operation(operation)
@@ -96,10 +98,10 @@ public class ComputerService
 		logger.info(operation);
 	}
 	
-	public void delete(ComputerDTO computerDTO)
+	public void delete(Computer computer)
 	{		
-		computerDAO.delete(computerDTO);
-		String operation = MessageLog.getDelete(computerDTO.getId(), false, true);
+		computerDAO.delete(computer);
+		String operation = MessageLog.getDelete(computer.getId());
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.delete)
@@ -133,7 +135,7 @@ public class ComputerService
 	{
 		long lastId = computerDAO.lastId();
 			
-		String operation = MessageLog.getLastId(false, true);
+		String operation = MessageLog.getLastId();
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.size)
