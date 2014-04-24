@@ -44,7 +44,7 @@
 		<persistence>1.0.2</persistence>
 		<jsp-api>2.0</jsp-api>
 		<hibernate>4.2.4.Final</hibernate>
-		<persistence>1.0.2</persistence>
+		<hibernate-jpa>1.0.1.Final</hibernate-jpa>
 		<jadira>3.0.0.CR1</jadira>
 	</properties>
 	<dependencyManagement>
@@ -185,10 +185,10 @@
 			</dependency>
 			
 			<dependency>
-		 		<groupId>javax.persistence</groupId>
-		  		<artifactId>persistence-api</artifactId>
-		  		<version>${persistence}</version>
-			</dependency>
+		        <groupId>org.hibernate.javax.persistence</groupId>
+		        <artifactId>hibernate-jpa-2.0-api</artifactId>
+		        <version>${hibernate-jpa}</version>
+   			 </dependency>
 
 		</dependencies>
 	</dependencyManagement>

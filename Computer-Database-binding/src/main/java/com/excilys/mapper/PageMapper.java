@@ -45,32 +45,9 @@ public class PageMapper
 	
 	public static String findSort(String sort)
 	{		
-		if(sort==null || sort=="")
+		if(sort==null || sort.equals(""))
 		{
 			sort="id";
-		}
-		
-		switch(sort)
-		{
-			case "name" :
-				sort = "computer.name";
-				break;
-				
-			case "introduced" :
-				sort = "computer.introduced , computer.name";
-				break;
-			
-			case "discontinued" :
-				sort = "computer.discontinued, computer.name";
-				break;
-				
-			case "company" :
-				sort = "company.name, computer.name";
-				break;
-				
-			case "id" :
-				sort = "computer.id";	
-				break;
 		}
 		
 		return sort;

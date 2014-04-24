@@ -88,12 +88,6 @@
 				<artifactId>validation-api</artifactId>
 				<scope>compile</scope>
 			</dependency>
-
-			
-			<dependency>
-		 		<groupId>javax.persistence</groupId>
-		  		<artifactId>persistence-api</artifactId>
-			</dependency>
 		
 	</dependencies>
 	<build>
