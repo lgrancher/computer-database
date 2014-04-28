@@ -1,5 +1,7 @@
 package com.excilys.service;
 
+import java.util.List;
+
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +27,13 @@ public class ComputerService
 	@Autowired
 	private LogDAO logDAO;
 		
-	public Page<Computer> retrieve(PageGenerator pageGen, String search)
+	public Page<Computer> retrieve(PageGenerator pageGen)
 	{
-		Pageable pageRequest = pageGen.getPage();
+		Pageable pageRequest = pageGen.retrievePageable();
 		
-		Page<Computer> page = computerDAO.findAll(pageGen.getSearch(), pageRequest);
+		Page<Computer> page = computerDAO.findAll(pageGen.retrieveSearch(), pageRequest);
 		
-		String operation = MessageLog.getRetrieve(page, search);
+		String operation = MessageLog.getRetrieve(page, pageGen.getSearch());
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.retrieve)
@@ -42,6 +44,11 @@ public class ComputerService
 	    logDAO.save(log);
 	    
 		return page;
+	}
+	
+	public List<Computer> findAll()
+	{
+		return computerDAO.findAll();
 	}
 	
 	public void create(Computer computer) 

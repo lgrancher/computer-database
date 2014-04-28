@@ -28,6 +28,7 @@
 		<module>Computer-Database-persistence</module>
 		<module>Computer-Database-binding</module>
 		<module>Computer-Database-webapp</module>
+		<module>Computer-Database-webservice</module>
 	</modules>
 
 	<properties>
@@ -52,6 +53,11 @@
 		<jadira>3.0.0.CR1</jadira>
 		<querydsl>3.3.2</querydsl>
 		<mysql>5.1.6</mysql>
+		<jaxws-rt>2.2.8</jaxws-rt>
+		<jaxb-core>2.2.7</jaxb-core>
+		<jaxb-impl>2.2.7</jaxb-impl>
+		<policy>2.3.1</policy>
+		<jaxws-spring.version>1.9</jaxws-spring.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -240,7 +246,7 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
@@ -267,6 +273,20 @@
 				<version>${querydsl}</version>
 			</dependency>
 
+			<!-- web service -->
+
+			<dependency>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-rt</artifactId>
+				<version>${jaxws-rt}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+				<artifactId>jaxws-spring</artifactId>
+				<version>${jaxws-spring.version}</version>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 </project>

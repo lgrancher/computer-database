@@ -62,7 +62,7 @@ public class AddComputer
 	      else
 	      {
 	    	  	computerService.create(ComputerMapper.dtoToComputer(computerDTO));
-	    	  	Page<Computer> page = computerService.retrieve(new PageGenerator(),"");
+	    	  	Page<Computer> page = computerService.retrieve(new PageGenerator());
 
 	    	  	mav.setViewName("redirect:index?currentPage="+(page.getTotalPages()-1));
 	      }	  

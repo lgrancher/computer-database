@@ -11,28 +11,26 @@ import org.springframework.data.domain.Sort.Order;
 
 public class PageGenerator 
 {
-	private Pageable page;
+	private String sort;
 	private String search;
+	public String currentPage;
+	
 	
 	public PageGenerator()
 	{
-		Sort sort = new Sort(getOrders("id"));
-		Pageable pageRequest = new PageRequest(getCurrentPage("0"), 14, sort);
-		
-		this.setPage(pageRequest);
-		this.setSearch("");
+		this.sort="id";
+		this.search="";
+		this.currentPage="0";
 	}
 	
-	public PageGenerator(String search, String order, String currentPage)
+	public PageGenerator(String search, String sort, String currentPage)
 	{
-		Sort sort = new Sort(getOrders(order));
-		Pageable pageRequest = new PageRequest(getCurrentPage(currentPage), 14, sort);
-		
-		this.setPage(pageRequest);
-		this.setSearch(search);
+		this.search = search;
+		this.sort = sort;
+		this.currentPage = currentPage;
 	}
 	
-	private void setSearch(String search)
+	public String retrieveSearch()
 	{
 		StringBuilder searchBuild = new StringBuilder("%");
 		
@@ -42,7 +40,7 @@ public class PageGenerator
 			searchBuild.append("%");
 		}
 		
-		this.search = searchBuild.toString();
+		return searchBuild.toString();
 	}
 	
 	public String getSearch()
@@ -50,7 +48,7 @@ public class PageGenerator
 		return search;
 	}
 	
-	private int getCurrentPage(String currentPage)
+	private int retrieveCurrentPage()
 	{
 		int currPage=0;
 		
@@ -67,85 +65,55 @@ public class PageGenerator
 		return currPage;
 	}
 	
-	private List<Order> getOrders(String ord)
+	private Sort retrieveSort()
 	{
-		String sort = "id";
+		String ord = "id";
 		
-		if(ord!=null && !ord.equals(""))
+		if(sort!=null && !sort.equals(""))
 		{
-			sort=ord;
+			ord=sort;
 		}
 		
 		List<Order> listOrders = new ArrayList<Order>();
 		Order order;
 		
-		if(sort.equals("company"))
+		if(ord.equals("company"))
 		{
 			order = new Order(Direction.ASC, "company.name");
 		}
 		
 		else
 		{
-			order = new Order(Direction.ASC, sort);
+			order = new Order(Direction.ASC, ord);
 		}
 		
 		listOrders.add(order);
 		
-		if(sort.equals("introduced") || sort.equals("discontinued") || sort.equals("company"))
+		if(ord.equals("introduced") || ord.equals("discontinued") || ord.equals("company"))
 		{
 			Order order2 = new Order(Direction.ASC, "name");
 			listOrders.add(order2);
 		}
 		
-		return listOrders;
+		return new Sort(listOrders);
 	}
-
-	public Pageable getPage() 
+	
+	public Pageable retrievePageable()
 	{
-		return page;
+		Pageable pageable = new PageRequest(retrieveCurrentPage(), 14, retrieveSort());
+		
+		return pageable;
 	}
-
-	public void setPage(Pageable page) 
+	
+	public void previous()
 	{
-		this.page = page;
+		try
+		{
+			int page = Integer.parseInt(currentPage);
+			page--;
+			currentPage = page+"";
+		}
+		
+		catch(NumberFormatException e){}
 	}
-
-	@Override
-	public int hashCode() 
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((page == null) ? 0 : page.hashCode());
-		result = prime * result + ((search == null) ? 0 : search.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) 
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PageGenerator other = (PageGenerator) obj;
-		if (page == null) {
-			if (other.page != null)
-				return false;
-		} else if (!page.equals(other.page))
-			return false;
-		if (search == null) {
-			if (other.search != null)
-				return false;
-		} else if (!search.equals(other.search))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() 
-	{
-		return "PageGenerator [page=" + page + ", search=" + search + "]";
-	}	
 }

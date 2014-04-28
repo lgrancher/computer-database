@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +34,8 @@ public class ListeComputer
 			   						 @RequestParam(value="type", required=false) String type,
 			   						 @RequestParam(value="erreur", required=false) String erreur,
 			   						 ModelMap model) 
-	{		
-		PageGenerator pageGen;
-		
+	{	PageGenerator pageGen;
+	
 		if(search!=null || sort!=null || currentPage!=null || !model.containsAttribute("pageGen"))
 		{
 			pageGen = new PageGenerator(search, sort, currentPage);
@@ -48,13 +46,12 @@ public class ListeComputer
 			pageGen =  (PageGenerator) model.get("pageGen");
 		}
 		
-		Page<Computer> page = computerService.retrieve(pageGen, search);
+		Page<Computer> page = computerService.retrieve(pageGen);
 		
 		if(page.getNumber()==page.getTotalPages())
 		{
-			Pageable pageable = page.previousPageable();
-			pageGen.setPage(pageable);
-			page = computerService.retrieve(pageGen, pageGen.getSearch());
+			pageGen.previous();
+			page = computerService.retrieve(pageGen);
 		}
 		
 		List<ComputerDTO> listComputersDTO = ComputerMapper.computerToDTO(page.getContent());
