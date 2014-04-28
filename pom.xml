@@ -42,11 +42,13 @@
 		<logback>1.1.1</logback>
 		<spring>4.0.2.RELEASE</spring>
 		<spring-data-jpa>1.5.1.RELEASE</spring-data-jpa>
+		<spring-security>3.2.3.RELEASE</spring-security>
 		<validation>1.1.0.Final</validation>
 		<persistence>1.0.2</persistence>
 		<jsp-api>2.0</jsp-api>
 		<hibernate>4.3.5.Final</hibernate>
 		<hibernate-jpa>1.0.1.Final</hibernate-jpa>
+		<hibernate-validator>5.1.0.Final</hibernate-validator>
 		<jadira>3.0.0.CR1</jadira>
 		<querydsl>3.3.2</querydsl>
 		<mysql>5.1.6</mysql>
@@ -73,7 +75,7 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql}</version>
 			</dependency>
-			
+
 			<!-- Affichage jsp -->
 			<dependency>
 				<groupId>taglibs</groupId>
@@ -177,6 +179,46 @@
 				<version>${spring-data-jpa}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring-security}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-tx</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-aop</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring-security}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-tx</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-aop</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
 
 			<!-- gere la validation -->
 			<dependency>
@@ -197,6 +239,12 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate-validator}</version>
 			</dependency>
 
 			<dependency>

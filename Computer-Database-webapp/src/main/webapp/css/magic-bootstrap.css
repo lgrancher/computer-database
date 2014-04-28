@@ -6386,4 +6386,14 @@ table.computers .header a {
 
 }
 
+.logout
+{
+	padding:20px;
+	color: #F2F0ED;
+}
 
+.error
+{
+	color:#ff0000;
+	padding:20px;
+}

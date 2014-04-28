@@ -42,17 +42,16 @@ public class UpdateComputer
 		ArrayList<CompanyDTO> listeCompany = (ArrayList<CompanyDTO>) CompanyMapper.companyToDTO(companyService.retrieveAll());
 		model.addAttribute("listeCompany", listeCompany);
 		
-		Computer computer = computerService.find(id);
-		ModelAndView mav=null;
+		ModelAndView mav = new ModelAndView("redirect:index");
 		
-		if(computer!=null)
+		if(id!=null)
 		{
-			mav = new ModelAndView("updateComputer", "computerDTO", ComputerMapper.computerToDTO(computer));
-		}
-		
-		else
-		{
-			mav = new ModelAndView("redirect:index");
+			Computer computer = computerService.find(id);
+			
+			if(computer!=null)
+			{
+				mav = new ModelAndView("updateComputer", "computerDTO", ComputerMapper.computerToDTO(computer));
+			}
 		}
 
 		return mav;

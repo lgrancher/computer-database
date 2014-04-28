@@ -5,7 +5,7 @@
 <%@ taglib prefix="import" tagdir="/WEB-INF/tags"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
+<%@page session="true"%>
 <section id="main">
 	<h2 id="homeTitle">${page.totalElements} <spring:message code="computers"/></h2>
 	<div id="actions">

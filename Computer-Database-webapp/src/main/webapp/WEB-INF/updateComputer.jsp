@@ -4,6 +4,7 @@
 <%@ taglib prefix="import" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
+<%@page session="true"%>
 <section id="main">
 
 	<div class="col-lg-6 col-lg-offset-3">
