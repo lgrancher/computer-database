@@ -1,27 +1,29 @@
 package com.excilys.om;
 
+import org.springframework.data.domain.Page;
+
 public class MessageLog 
 {
-	public static String getRetrieve(Page<?> page)
+	public static String getRetrieve(Page<?> page, String search)
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		if(page.getSearch().equals(""))
+		if(search == null || search.equals(""))
 		{
 			builder.append("Listing de tous les computers page ");
-			builder.append(page.getCurrentPage());
+			builder.append(page.getNumber()+1);
 			builder.append("/");
-			builder.append(page.getNoOfPages());
+			builder.append(page.getTotalPages());
 		}
 		
 		else
 		{
 			builder.append("Listing des computers avec la recherche ");
-			builder.append(page.getSearch());
+			builder.append(search);
 			builder.append(" page ");
-			builder.append(page.getCurrentPage());
+			builder.append(page.getNumber()+1);
 			builder.append("/");
-			builder.append(page.getNoOfPages());
+			builder.append(page.getTotalPages());
 		}
 		
 		return builder.toString();

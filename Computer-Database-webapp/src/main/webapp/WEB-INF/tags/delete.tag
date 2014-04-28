@@ -3,6 +3,6 @@
 
 <spring:message code="delete" var="deleteComputer"/>
 <a type="button" class="btn btn-danger" id="supp"
-	href="DeleteComputer?id=${computer.id}&sort=${page.sort}&currentPage=${page.currentPage}&search=${page.search}"
+	href="DeleteComputer?id=${computer.id}&sort=${page.sort}&currentPage=${page.number}&search=${search}"
 	OnClick="return confirm('${deleteComputer} ${computer.name} ?')"><span
 	class="glyphicon glyphicon-remove"></span></a>

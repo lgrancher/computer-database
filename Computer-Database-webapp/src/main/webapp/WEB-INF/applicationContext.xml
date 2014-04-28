@@ -17,6 +17,6 @@
   	<import resource="classpath:/contextPersistence.xml"/>
   	<import resource="classpath:/contextService.xml"/>
   	<import resource="classpath:/datasource.xml"/>
-  				
+  		
 </beans>
     

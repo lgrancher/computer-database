@@ -13,10 +13,18 @@ create table company (
 create table computer (
   id                        bigint not null auto_increment,
   name                      varchar(255),
-  introduced                timestamp,
-  discontinued              timestamp,
+  introduced                datetime,
+  discontinued              datetime,
   company_id                bigint,
   constraint pk_computer primary key (id))
+;
+
+create table log (
+id                        bigint not null auto_increment,
+type_log				  varchar(255),
+operation				  varchar(255),
+date_log				  datetime,
+constraint pk_log primary key (id))
 ;
 
 alter table computer add constraint fk_computer_company_1 foreign key (company_id) references company (id) on delete restrict on update restrict;

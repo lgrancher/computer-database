@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <section id="main">
-	<div class="col-lg-4 col-lg-offset-4">
+	<div class="col-lg-6 col-lg-offset-3">
 		<form:form class="form-horizontal" modelAttribute="computerDTO" method="POST" action="AddComputer">
 			<div class="text-center">
 				<h2><span class="label label-default"><spring:message code="add"/></span></h2>

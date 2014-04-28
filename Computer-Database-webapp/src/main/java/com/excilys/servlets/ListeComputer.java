@@ -3,20 +3,20 @@ package com.excilys.servlets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.excilys.DTO.ComputerDTO;
-import com.excilys.DTO.PageDTO;
 import com.excilys.mapper.ComputerMapper;
-import com.excilys.mapper.PageMapper;
-import com.excilys.om.Page;
 import com.excilys.om.Computer;
+import com.excilys.om.PageGenerator;
 import com.excilys.service.ComputerService;
 
 @Controller
-@SessionAttributes("page")
+@SessionAttributes("pageGen")
 public class ListeComputer 
 {	
 	@Autowired
@@ -27,7 +27,7 @@ public class ListeComputer
 	{
 		return "redirect:index";
 	}
-	
+
 	@RequestMapping(value="/index", method = RequestMethod.GET)
 	protected String listeComputer( @RequestParam(value="search", required=false) String search, 
 			   						 @RequestParam(value="sort", required=false) String sort, 
@@ -36,35 +36,35 @@ public class ListeComputer
 			   						 @RequestParam(value="erreur", required=false) String erreur,
 			   						 ModelMap model) 
 	{		
-		Page<?> page;
+		PageGenerator pageGen;
 		
-		// pour le changement de page et l'ajout
-		if(search!=null || sort!=null || currentPage!=null || !model.containsAttribute("page"))
+		if(search!=null || sort!=null || currentPage!=null || !model.containsAttribute("pageGen"))
 		{
-			PageDTO pageDTO = PageDTO.builder()
-									 .search(search)
-									 .sort(sort)
-									 .currentPage(currentPage)
-									 .build();
-
-			page = PageMapper.dtoToPage(pageDTO, computerService.size(search));	
+			pageGen = new PageGenerator(search, sort, currentPage);
 		}
 		
-		// pour la modif et la suppression
 		else
-		{			
-			page = (Page<?>) model.get("page");
-			page.update(computerService.size(page.getSearch()));
+		{
+			pageGen =  (PageGenerator) model.get("pageGen");
 		}
 		
-		List<Computer> listComputers = computerService.retrieve(page);
-		List<ComputerDTO> listComputersDTO = ComputerMapper.computerToDTO(listComputers);
-		page.setListeElements(listComputersDTO);	
+		Page<Computer> page = computerService.retrieve(pageGen, search);
 		
+		if(page.getNumber()==page.getTotalPages())
+		{
+			Pageable pageable = page.previousPageable();
+			pageGen.setPage(pageable);
+			page = computerService.retrieve(pageGen, pageGen.getSearch());
+		}
+		
+		List<ComputerDTO> listComputersDTO = ComputerMapper.computerToDTO(page.getContent());
+		
+		model.addAttribute("pageGen",pageGen);
 		model.addAttribute("page",page);
-		model.addAttribute("erreur", erreur);
-		model.addAttribute("type", type);
+		model.addAttribute("listComputersDTO", listComputersDTO);
+		model.addAttribute("search", search);
+		model.addAttribute("sort", sort);
 		
-		return "affichage";	
+		return "affichage";
 	}
 }

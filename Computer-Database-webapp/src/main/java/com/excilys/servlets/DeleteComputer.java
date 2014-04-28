@@ -6,45 +6,29 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.excilys.om.Computer;
-import com.excilys.om.Page;
 import com.excilys.service.ComputerService;
 
 @Controller
 @RequestMapping("/DeleteComputer")
-@SessionAttributes("page")
 public class DeleteComputer
 {	
 	@Autowired
 	private ComputerService computerService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected String deleteComputer(@RequestParam(value="id", required=false) String id,
+	protected String deleteComputer(@RequestParam(value="id", required=false) long id,
 									 @RequestParam(value="search", required=false) String search, 
 									 @RequestParam(value="sort", required=false) String sort, 
 									 @RequestParam(value="currentPage", required=false) String currentPage, 
 									 ModelMap model) 
-	{		
-		String redirect = null;
+	{			
+		Computer computer = computerService.find(id);
 		
-		try
-		{	
-			Long numId = Long.parseLong(id);
-			Computer computer = computerService.find(numId);
-			
-			if(computer!=null)
-			{
-				computerService.delete(computer);
-				redirect = "index";
-			}
-		}
-		
-		catch(NumberFormatException e){}
-		
-		if(redirect==null)
+		if(computer!=null)
 		{
-			redirect = Page.urlVerifyIdExist(id, "delete", computerService.lastId());
+			computerService.delete(computer);
 		}
 		
-		return "redirect:"+redirect;
+		return "redirect:index";
 	}
 }

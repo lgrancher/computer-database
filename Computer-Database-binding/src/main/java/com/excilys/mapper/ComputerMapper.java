@@ -3,6 +3,8 @@ package com.excilys.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import com.excilys.DTO.ComputerDTO;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
@@ -28,11 +30,23 @@ public class ComputerMapper
 		
 		Company company = CompanyMapper.dtoTOCompany(computerDTO.getCompanyDTO());
 		
+		LocalDate introduced = null, discontinued = null;
+		
+		if(!computerDTO.getIntroduced().equals(""))
+		{
+			introduced = DateMapper.stringToLocalDate(computerDTO.getIntroduced());
+		}
+		
+		if(!computerDTO.getDiscontinued().equals(""))
+		{
+			discontinued = DateMapper.stringToLocalDate(computerDTO.getDiscontinued());
+		}
+		
 		Computer computer = Computer.builder()
 									.id(id)
 									.name(name)
-									.introduced(DateMapper.stringToLocalDate(computerDTO.getIntroduced()))
-									.discontinued(DateMapper.stringToLocalDate(computerDTO.getDiscontinued()))
+									.introduced(introduced)
+									.discontinued(discontinued)
 									.company(company)
 									.build();		
 		return computer;

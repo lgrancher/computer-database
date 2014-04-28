@@ -6,13 +6,12 @@
 <%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <section id="main">
 
-	<div class="col-lg-4 col-lg-offset-4">
+	<div class="col-lg-6 col-lg-offset-3">
 		<form:form class="form-horizontal" modelAttribute="computerDTO"
 			id="form" method="POST" action="UpdateComputer">
 			<div class="text-center">
-				<h2>
-					<span class="label label-default"><spring:message
-							code="update" /></span>
+				<h2><span class="label label-default"><spring:message
+							code="update"/></span>
 				</h2>
 			</div>
 			<fieldset>
@@ -72,7 +71,7 @@
 								<c:if test="${companies.id == computerDTO.companyDTO.id}">
 									<option value="${companies.id}" selected>${companies.name}</option>
 								</c:if>
-								<c:if test="${companies.id != companySelect}">
+								<c:if test="${companies.id !=  computerDTO.companyDTO.id}">
 									<option value="${companies.id}">${companies.name}</option>
 								</c:if>
 							</c:forEach>

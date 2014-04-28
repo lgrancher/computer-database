@@ -7,7 +7,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <section id="main">
-	<h2 id="homeTitle">${page.noOfRecords} <spring:message code="computers"/></h2>
+	<h2 id="homeTitle">${page.totalElements} <spring:message code="computers"/></h2>
 	<div id="actions">
 		<form action="index" method="GET">
 			<div class="row">
@@ -28,7 +28,7 @@
 		<import:add />
 	</div>
 	<c:choose>
-		<c:when test="${fn:length(page.listeElements)>0}">
+		<c:when test="${fn:length(listComputersDTO)>0}">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -36,7 +36,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="computer" items="${page.listeElements}">
+				<c:forEach var="computer" items="${listComputersDTO}">
 					<tr>
 						<spring:message code="date" var="dateValid"/>
 						<td class="id">${computer.id}</td>
@@ -63,8 +63,6 @@
 		</c:otherwise>
 	</c:choose>
 	<import:pagination />
-	<input type="hidden" id="erreur" value="${erreur}" />
-	<input type="hidden" id="type" value="${type}" />
 	
 </section>
 <spring:message code="computer" var="comp"/>

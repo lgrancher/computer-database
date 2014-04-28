@@ -41,13 +41,15 @@
 		<joda-time-jsptags>1.1.1</joda-time-jsptags>
 		<logback>1.1.1</logback>
 		<spring>4.0.2.RELEASE</spring>
+		<spring-data-jpa>1.5.1.RELEASE</spring-data-jpa>
 		<validation>1.1.0.Final</validation>
 		<persistence>1.0.2</persistence>
 		<jsp-api>2.0</jsp-api>
-		<hibernate>4.2.4.Final</hibernate>
+		<hibernate>4.3.5.Final</hibernate>
 		<hibernate-jpa>1.0.1.Final</hibernate-jpa>
 		<jadira>3.0.0.CR1</jadira>
 		<querydsl>3.3.2</querydsl>
+		<mysql>5.1.6</mysql>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -66,7 +68,12 @@
 				<version>${guava}</version>
 			</dependency>
 
-
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql}</version>
+			</dependency>
+			
 			<!-- Affichage jsp -->
 			<dependency>
 				<groupId>taglibs</groupId>
@@ -162,6 +169,12 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring-data-jpa}</version>
 			</dependency>
 
 

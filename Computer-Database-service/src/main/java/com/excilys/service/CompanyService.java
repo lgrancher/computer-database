@@ -3,8 +3,6 @@ package com.excilys.service;
 import java.util.List;
 
 import org.joda.time.LocalDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.om.Company;
 import com.excilys.om.Log;
 import com.excilys.persistence.CompanyDAO;
-import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.LogDAO;
 import com.excilys.om.Log.TypeLog;
 
@@ -20,8 +17,6 @@ import com.excilys.om.Log.TypeLog;
 @Transactional
 public class CompanyService 
 {
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-	
 	@Autowired
 	private CompanyDAO companyDAO;
 
@@ -36,10 +31,9 @@ public class CompanyService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		List<Company> listCompany = companyDAO.retrieveAll();
+		List<Company> listCompany = companyDAO.findAll();
 		
-		logDAO.create(log);
-		logger.info("Listing des company");
+		logDAO.save(log);
 	
 		return listCompany;
 	}

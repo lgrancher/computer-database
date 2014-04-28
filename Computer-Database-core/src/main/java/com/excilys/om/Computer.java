@@ -2,6 +2,7 @@ package com.excilys.om;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class Computer
 	private LocalDate discontinued;
 	
 	@JoinColumn(name="company_id")
-	@ManyToOne(targetEntity=Company.class)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Company company;
 	
 	 public static class Builder 

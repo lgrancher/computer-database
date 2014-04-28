@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,13 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.excilys.DTO.*;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.mapper.ComputerMapper;
-import com.excilys.om.Page;
+import com.excilys.om.Computer;
+import com.excilys.om.PageGenerator;
 import com.excilys.service.*;
 import com.excilys.validator.ComputerValidator;
 
 @Controller
 @RequestMapping("/AddComputer")
-@SessionAttributes("companyDTO")
 public class AddComputer
 {
 	@Autowired
@@ -61,11 +62,9 @@ public class AddComputer
 	      else
 	      {
 	    	  	computerService.create(ComputerMapper.dtoToComputer(computerDTO));
-	    	  	
-	    	  	Page<?> page = new Page<ComputerDTO>();
-	    	  	page.setNoOfRecords(computerService.size(""));
-	    	  	
-	    	  	mav.setViewName("redirect:index?currentPage="+page.getNoOfPages());
+	    	  	Page<Computer> page = computerService.retrieve(new PageGenerator(),"");
+
+	    	  	mav.setViewName("redirect:index?currentPage="+(page.getTotalPages()-1));
 	      }	  
 	        
 	      return mav;

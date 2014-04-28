@@ -7,24 +7,5 @@
   		  <class>com.excilys.om.Company</class>
   		  <class>com.excilys.om.Computer</class>
   		  <class>com.excilys.om.Log</class>
-        <properties>
-        
-            <property name="hibernate.archive.autodetection" value="class" />
-            <!-- <property name="hibernate.show_sql" value="true" /> -->
-            <property name="hibernate.format_sql" value="true" />
- 
-            <!-- Configuration de la  BDD -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="excilys" />
- 			
-            <!-- Spécifie le 'dialecte' SQL utilisé pour communiquer avec la BDD -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
- 
-            <!-- Indique a Hibernate de (re-)créer la BDD au lancement de l'application -->
-            <property name="hibernate.hbm2ddl.auto" value="create" />
-        </properties>
- 
     </persistence-unit>
 </persistence>

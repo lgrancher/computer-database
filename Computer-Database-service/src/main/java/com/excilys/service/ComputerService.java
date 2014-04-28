@@ -1,19 +1,17 @@
 package com.excilys.service;
 
-import java.util.List;
-
 import org.joda.time.LocalDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.excilys.om.Computer;
+import com.excilys.om.Log;
 import com.excilys.om.Log.TypeLog;
 import com.excilys.om.MessageLog;
-import com.excilys.om.Page;
-import com.excilys.om.Log;
+import com.excilys.om.PageGenerator;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.persistence.LogDAO;
 
@@ -26,14 +24,14 @@ public class ComputerService
 	
 	@Autowired
 	private LogDAO logDAO;
-	
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 		
-	public List<Computer> retrieve(Page<?> page)
+	public Page<Computer> retrieve(PageGenerator pageGen, String search)
 	{
-		List<Computer> listComputers = computerDAO.retrieve(page);
+		Pageable pageRequest = pageGen.getPage();
 		
-		String operation = MessageLog.getRetrieve(page);
+		Page<Computer> page = computerDAO.findAll(pageGen.getSearch(), pageRequest);
+		
+		String operation = MessageLog.getRetrieve(page, search);
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.retrieve)
@@ -41,18 +39,17 @@ public class ComputerService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-	    logDAO.create(log);
-		
-		logger.info(operation);
-	
-		return listComputers;
+	    logDAO.save(log);
+	    
+		return page;
 	}
 	
 	public void create(Computer computer) 
 	{			
-		Long idAdd = computerDAO.create(computer);
+		computerDAO.save(computer);
+		long id = computer.getId();
 		
-		String operation = MessageLog.getCreate(computer.getName(), idAdd);
+		String operation = MessageLog.getCreate(computer.getName(), id);
 		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.create)
@@ -60,31 +57,28 @@ public class ComputerService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		logDAO.create(log);
-		logger.info(operation);
+		logDAO.save(log);
 	}
 	
 	public Computer find(Long id)
 	{		
-		Computer computer = computerDAO.find(id);
-		
+		Computer computer = computerDAO.findOne(id);
+
 		String operation = MessageLog.getFind(id);
-		
 		Log log = Log.builder()
 				 .typeLog(TypeLog.find)
 				 .operation(operation)
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		logDAO.create(log);
-		logger.info(operation);
+		logDAO.save(log);
 
 		return computer;
 	}
 	
 	public void update(Computer computer) 
 	{		
-		computerDAO.update(computer);
+		computerDAO.save(computer);
 			
 		String operation = MessageLog.getUpdate(computer.getId());
 		Log log = Log.builder()
@@ -93,9 +87,7 @@ public class ComputerService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		logDAO.create(log);
-		
-		logger.info(operation);
+		logDAO.save(log);
 	}
 	
 	public void delete(Computer computer)
@@ -109,44 +101,7 @@ public class ComputerService
 				 .dateLog(LocalDateTime.now())
 				 .build();
 		
-		logDAO.create(log);
-		logger.info(operation);
-	}
-	
-	public int size(String search)
-	{		
-		int size = computerDAO.size(search);
-			
-		String operation = MessageLog.getSize(search, false, true);
-		
-		Log log = Log.builder()
-				 .typeLog(TypeLog.size)
-				 .operation(operation)
-				 .dateLog(LocalDateTime.now())
-				 .build();
-		
-		logDAO.create(log);
-		logger.info(operation);
-	
-		return size;
-	}
-	
-	public long lastId()
-	{
-		long lastId = computerDAO.lastId();
-			
-		String operation = MessageLog.getLastId();
-		
-		Log log = Log.builder()
-				 .typeLog(TypeLog.size)
-				 .operation(operation)
-				 .dateLog(LocalDateTime.now())
-				 .build();
-		
-		logDAO.create(log);
-		logger.info(operation);			
-		
-		return lastId;
+		logDAO.save(log);
 	}
 
 	public ComputerDAO getComputerDAO() 

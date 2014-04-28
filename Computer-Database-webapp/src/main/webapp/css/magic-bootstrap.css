@@ -1572,7 +1572,7 @@ table td[class*="col-"],table th[class*="col-"] {
 
 .table>thead>tr>td.operations,.table>tbody>tr>td.operations,.table>tfoot>tr>td.operations,.table>thead>tr>th.operations,.table>tbody>tr>th.operations,.table>tfoot>tr>th.operations,.table>thead>tr.operations>td,.table>tbody>tr.operations>td,.table>tfoot>tr.operations>td,.table>thead>tr.operations>th,.table>tbody>tr.operations>th,.table>tfoot>tr.operations>th
 	{
-	width: 5%;
+	width: 10%;
 }
 
 .table-hover>tbody>tr>td.info:hover,.table-hover>tbody>tr>th.info:hover,.table-hover>tbody>tr.info:hover>td,.table-hover>tbody>tr.info:hover>th
