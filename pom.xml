@@ -58,6 +58,7 @@
 		<jaxb-impl>2.2.7</jaxb-impl>
 		<policy>2.3.1</policy>
 		<jaxws-spring.version>1.9</jaxws-spring.version>
+		<cxf>2.7.11</cxf>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -286,7 +287,14 @@
 				<artifactId>jaxws-spring</artifactId>
 				<version>${jaxws-spring.version}</version>
 			</dependency>
-			
+
+			<!-- Jax RS -->
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+				<version>${cxf}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 </project>
